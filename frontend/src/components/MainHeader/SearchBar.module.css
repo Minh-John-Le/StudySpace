@@ -13,7 +13,7 @@
 .control label {
   font-weight: bold;
   flex: 1;
-  color: #464646;
+  color: #8b8b8b;
   margin-bottom: 0.5rem;
 }
 
@@ -27,18 +27,15 @@
   width: 24rem;
   padding: 0.5rem 2rem; /* Increase the padding to make it bigger */
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid #696d97;
+  background: #51546e;
+  color: #e5e5e5;
 }
 
 .control input:focus {
   outline: none;
-  border-color: #4f005f;
-  background: #f6dbfc;
-}
-
-.control.invalid input {
-  border-color: red;
-  background: #fbdada;
+  border-color: #71c6dd;
+  background: #51546e;
 }
 
 .searchIcon {
@@ -46,7 +43,7 @@
   top: 50%;
   left: 10px; /* Adjust the right positioning as needed */
   transform: translateY(-50%);
-  color: #464646; /* Change the icon color as needed */
+  color: #8b8b8b; /* Change the icon color as needed */
   cursor: pointer;
   pointer-events: none;
 }

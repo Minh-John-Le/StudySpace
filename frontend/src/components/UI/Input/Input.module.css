@@ -14,8 +14,7 @@
 .control label {
   font-weight: bold;
   flex: 1;
-  color: #464646;
-  margin-bottom: 0.5rem;
+  color: var(--color-light-gray);
 }
 
 .control input {
@@ -23,18 +22,21 @@
   font: inherit;
   padding: 0.35rem 0.35rem;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid #696d97;
+  background: #51546e;
+  color: #e5e5e5;
 }
 
 .control input:focus {
   outline: none;
-  border-color: #4f005f;
-  background: #f6dbfc;
+  border-color: #71c6dd;
+  background: #51546e;
 }
 
 .control.invalid input {
-  border-color: red;
+  border-color: var(--color-error);
   background: #fbdada;
+  color: black
 }
 
 @media (min-width: 768px) {
