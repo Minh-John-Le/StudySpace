@@ -7,10 +7,25 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #741188;
+  background: #3f4156;
   padding: 0 2rem;
 }
 
 .main-header h1 {
   color: white;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+}
+
+.header-content h1{
+  margin-right: 10rem;
+}
+
+.starship-icon {
+  color: #fff; /* Change the color as needed */
+  font-size: 24px; /* Adjust the font size as needed */
+  margin-right: 1rem; /* Add margin to separate the icon from the text */
 }

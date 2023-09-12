@@ -1,0 +1,59 @@
+.control {
+  margin: 1rem 0;
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+}
+
+.control label,
+.control input {
+  display: block;
+}
+
+.control label {
+  font-weight: bold;
+  flex: 1;
+  color: #464646;
+  margin-bottom: 0.5rem;
+}
+
+.control .searchContainer {
+  position: relative;
+}
+
+.control input {
+  flex: 3;
+  font: inherit;
+  width: 24rem;
+  padding: 0.5rem 2rem; /* Increase the padding to make it bigger */
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.control input:focus {
+  outline: none;
+  border-color: #4f005f;
+  background: #f6dbfc;
+}
+
+.control.invalid input {
+  border-color: red;
+  background: #fbdada;
+}
+
+.searchIcon {
+  position: absolute;
+  top: 50%;
+  left: 10px; /* Adjust the right positioning as needed */
+  transform: translateY(-50%);
+  color: #464646; /* Change the icon color as needed */
+  cursor: pointer;
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .control {
+    align-items: center;
+    flex-direction: row;
+  }
+}
