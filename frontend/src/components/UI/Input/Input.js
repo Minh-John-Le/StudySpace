@@ -4,7 +4,7 @@ import classes from "./Input.module.css";
 const Input = (props) => {
   return (
     <React.Fragment>
-      <div className = {classes.control}>
+      <div className={classes.control}>
         <label htmlFor={props.id}>{props.label}</label>
       </div>
       <div
@@ -19,6 +19,10 @@ const Input = (props) => {
           onChange={props.onChange}
           onBlur={props.onBlur}
         />
+      </div>
+
+      <div className={classes["error-text"]}>
+        {!props.isValid && <p className="error-text">{props.errorMessage}</p>}
       </div>
     </React.Fragment>
   );
