@@ -13,7 +13,7 @@ class Rooms(models.Model):
         verbose_name_plural = "Rooms"
 
     def __str__(self):
-        return "Room: " + str(self.id) + " Host: " + str(self.host.username)
+        return "Room " + str(self.id) + " by " + str(self.host.username)
 
 
 class Rooms_Members(models.Model):
@@ -24,3 +24,6 @@ class Rooms_Members(models.Model):
     class Meta:
         unique_together = ('room', 'member')
         verbose_name_plural = "Rooms_Members"
+
+    def __str__(self):
+        return str(self.member) + " in Room " + str(self.room.id)
