@@ -6,6 +6,7 @@ import Button from "../UI/Button/Button";
 import AuthContext from "../../store/auth-context";
 import Input from "../UI/Input/Input";
 import useInput from "../../hooks/use-input";
+import {useNavigate} from "react-router-dom";
 
 const Login = (props) => {
   // const [enteredEmail, setEnteredEmail] = useState('');
@@ -13,6 +14,7 @@ const Login = (props) => {
   // const [enteredPassword, setEnteredPassword] = useState('');
   // const [passwordIsValid, setPasswordIsValid] = useState();
   const authCtx = useContext(AuthContext);
+  const nagivate = useNavigate();
 
   const {
     value: enteredEmail,
@@ -35,6 +37,7 @@ const Login = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
     authCtx.onLogin("", "");
+    nagivate("/");
   };
 
   const formIsValid = enteredEmailIsValid && enteredPasswordIsValid;

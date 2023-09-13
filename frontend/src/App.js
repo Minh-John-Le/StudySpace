@@ -5,17 +5,21 @@ import Home from "./components/Home/Home";
 import MainHeader from "./components/MainHeader/MainHeader";
 import AuthContext from "./store/auth-context";
 
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
 function App() {
   const ctx = useContext(AuthContext);
+
   return (
-    
-    <React.Fragment>
+    <Router>
       <MainHeader />
       <main>
-        {!ctx.isLoggedIn && <Login />}
-        {ctx.isLoggedIn && <Home />}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
       </main>
-    </React.Fragment>
+    </Router>
   );
 }
 

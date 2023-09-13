@@ -10,9 +10,9 @@ const MainHeader = (props) => {
     <header className={classes["main-header"]}>
       <div className={classes["header-content"]}>
         <span className={classes["starship-icon"]}>
-          <SiStarship size={48} /> {/* Adjust the size as needed */}
+          <SiStarship size={36} /> {/* Adjust the size as needed */}
         </span>
-        <h1>Study Space</h1>
+        <h2>Study Space</h2>
         <SearchBar></SearchBar>
       </div>
       <Navigation />

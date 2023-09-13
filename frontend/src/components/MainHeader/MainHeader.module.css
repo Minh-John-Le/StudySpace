@@ -11,7 +11,7 @@
   padding: 0 2rem;
 }
 
-.main-header h1 {
+.main-header h2 {
   color: white;
 }
 
@@ -20,7 +20,7 @@
   align-items: center;
 }
 
-.header-content h1{
+.header-content h2{
   margin-right: 10rem;
 }
 
