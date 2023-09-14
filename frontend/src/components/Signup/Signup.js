@@ -1,14 +1,14 @@
 import React, { useContext } from "react";
 
 import Card from "../UI/Card/Card";
-import classes from "./Login.module.css";
+import classes from "./Signup.module.css";
 import Button from "../UI/Button/Button";
 import AuthContext from "../../store/auth-context";
 import Input from "../UI/Input/Input";
 import useInput from "../../hooks/use-input";
 import { useNavigate } from "react-router-dom";
 
-const Login = (props) => {
+const Signup = (props) => {
   // const [enteredEmail, setEnteredEmail] = useState('');
   // const [emailIsValid, setEmailIsValid] = useState();
   // const [enteredPassword, setEnteredPassword] = useState('');
@@ -34,6 +34,15 @@ const Login = (props) => {
     reset: resetPasswordInput,
   } = useInput((value) => value.trim().length > 8);
 
+  const {
+    value: enteredRepeatedPassword,
+    isValid: enteredRepeatedPasswordIsValid,
+    hasError: repatedPasswordInputHasError,
+    valueChangeHandler: repeatedPasswordChangedHandler,
+    inputBlurHandler: repeatedPasswordBlurHandler,
+    reset: resetRepeatedPasswordInput,
+  } = useInput((value) => value.trim().length > 8);
+
   const submitHandler = (event) => {
     event.preventDefault();
     authCtx.onLogin("", "");
@@ -44,7 +53,7 @@ const Login = (props) => {
   return (
     <React.Fragment>
       <Card className={classes.header}>
-        <h2>Login</h2>
+        <h2>Signup</h2>
       </Card>
       <Card className={classes.login}>
         <form onSubmit={submitHandler}>
@@ -70,13 +79,25 @@ const Login = (props) => {
               errorMessage={"Password must be length 6 or more"}
             ></Input>
           }
+          {
+            <Input
+              id="repeat_password"
+              label="Reapeat Password"
+              type="password"
+              isValid={!repatedPasswordInputHasError}
+              value={enteredRepeatedPassword}
+              onChange={repeatedPasswordChangedHandler}
+              onBlur={repeatedPasswordBlurHandler}
+              errorMessage={"Password must be length 6 or more"}
+            ></Input>
+          }
           <div className={classes.actions}>
             <Button
               type="submit"
               className={classes.btn}
               disabled={!formIsValid}
             >
-              <div>Login</div>
+              <div>Signup</div>
             </Button>
           </div>
         </form>
@@ -85,4 +106,4 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+export default Signup;

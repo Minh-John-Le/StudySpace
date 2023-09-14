@@ -7,25 +7,32 @@ import { TbUsers } from "react-icons/tb";
 const RoomCard = (props) => {
   return (
     <Card className={classes["roomcard"]}>
+      <div className={classes["roomcard-header"]}>
+        <div className={classes["roomcard-header-left"]}>
+          <Link
+            to={"/user/" + props.host_id}
+            className={classes.roomcard__avatarLink}
+          >
+            <div className={classes["roomcard__avatar-container"]}>
+              <img
+                src="https://placebear.com/250/250"
+                alt="Avatar"
+                className={classes["roomcard__avatar-container__img"]}
+              />
+              <span
+                to={"/user/" + props.host_id}
+                className={classes["roomcard__avatar-container__link"]}
+              >
+                Host@{props.host}
+              </span>
+            </div>
+          </Link>
+        </div>
+        <div className={classes["roomcard-header-right"]}>
+          <span>{props.created_ago} ago</span>
+        </div>
+      </div>
       <div>
-        <Link
-          to={"/user/" + props.host_id}
-          className={classes.roomcard__avatarLink}
-        >
-          <div className={classes["roomcard__avatar-container"]}>
-            <img
-              src="https://placebear.com/250/250"
-              alt="Avatar"
-              className={classes["roomcard__avatar-container__img"]}
-            />
-            <span
-              to={"/user/" + props.host_id}
-              className={classes["roomcard__avatar-container__link"]}
-            >
-              Host@{props.host}
-            </span>
-          </div>
-        </Link>
         <Link
           to={"/room/" + props.room_id}
           className={classes["roomcard__room-link"]}

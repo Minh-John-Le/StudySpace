@@ -1,0 +1,39 @@
+.actions {
+    text-align: center;
+  }
+  
+  .actions div{
+    margin-left: -20px;
+    margin-top: -4px;
+  }
+  
+  .btn{
+    text-align: center;
+  }
+  
+  .login {
+    width: 90%;
+    max-width: 40rem;
+    margin: 0rem auto;
+    padding: 2rem 2rem;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+  }
+  
+  .header {
+    background-color: var(--color-dark-light);
+    width: 90%;
+    max-width: 40rem;
+    margin-top: 8rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: .1rem 1rem;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
+  
+  .header h2 {
+    text-align: center;
+    color: var(--color-light);
+  }
+  

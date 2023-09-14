@@ -21,6 +21,11 @@
   position: relative;
 }
 
+.control .searchContainer input{
+  text-align: left;
+}
+
+
 .control input {
   flex: 3;
   font: inherit;

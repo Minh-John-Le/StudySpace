@@ -18,7 +18,6 @@ const Home = (props) => {
     // </Card>
     <React.Fragment>
       <RoomCardList></RoomCardList>
-      <RoomPagination></RoomPagination>
     </React.Fragment>
   );
 };

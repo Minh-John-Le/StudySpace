@@ -15,7 +15,7 @@ from .serializers import RoomsSerializer, RoomCardSerializer
 # ------------ All Rooms------------------
 class RoomCardAPI(APIView):
     def get(self, request):
-        page_number = request.query_params.get('page', 1)
+        page_number = request.query_params.get('page', '1')
         topic = request.query_params.get('topic')
 
         if topic:

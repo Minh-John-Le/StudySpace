@@ -6,6 +6,24 @@
   text-align: center;
 }
 
+.roomcard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.roomcard-header-left {
+  text-align: left; 
+  margin-top: -2rem; 
+ 
+}
+
+.roomcard-header-right {
+  text-align: right;
+  margin-top: -0.5rem; 
+  color: var(--color-light-gray);
+}
+
 .roomcard__avatar-container {
   display: flex; /* Add flex display to make children align horizontally */
   align-items: center; /* Vertically center-align children */

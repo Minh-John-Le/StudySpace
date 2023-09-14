@@ -11,6 +11,24 @@
   padding: 0 2rem;
 }
 
+.main-header__home-link {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.main-header__home-link span {
+  color: #fff; /* Change the color as needed */
+  font-size: 24px; /* Adjust the font size as needed */
+  margin-right: 1rem; /* Add margin to separate the icon from the text */
+}
+
+.main-header__home-link h2 {
+  color: #fff; /* Change the color as needed */
+  font-size: 24px; /* Adjust the font size as needed */
+  margin-right: 1rem; /* Add margin to separate the icon from the text */
+}
+
 .main-header h2 {
   color: white;
 }
@@ -20,12 +38,8 @@
   align-items: center;
 }
 
-.header-content h2{
+.header-content h2 {
   margin-right: 10rem;
 }
 
-.starship-icon {
-  color: #fff; /* Change the color as needed */
-  font-size: 24px; /* Adjust the font size as needed */
-  margin-right: 1rem; /* Add margin to separate the icon from the text */
-}
+

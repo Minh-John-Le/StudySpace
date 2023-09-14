@@ -2,6 +2,11 @@
   text-align: center;
 }
 
+.actions div{
+  margin-left: -20px;
+  margin-top: -4px;
+}
+
 .btn{
   text-align: center;
 }

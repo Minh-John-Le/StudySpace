@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import RoomCard from "./RoomCard";
 import { useLocation } from "react-router-dom";
+import Card from "../UI/Card/Card";
+import classes from "./RoomCardList.module.css";
+import RoomPagination from "./RoomPagination";
 
 const RoomCardList = () => {
   const [data, setData] = useState([]);
@@ -24,7 +27,6 @@ const RoomCardList = () => {
   }
 
   const apiUrl = `http://localhost:8000/api/database/room-card/?topic=${topic}&page=${page}`;
-  
 
   useEffect(() => {
     async function fetchRoomHandler() {
@@ -38,19 +40,31 @@ const RoomCardList = () => {
   }, [topic, page]); // Include all dependencies in the array
 
   return (
-    <div>
-      {data.map((room, index) => (
-        <RoomCard
-          key={room.id}
-          room_id={room.id}
-          host_id={room.host}
-          host={room["host_display_name"]}
-          totalMember={room.total_member}
-          description={room.description}
-          topic={room.topic}
-        />
-      ))}
-    </div>
+    <React.Fragment>
+      {data.length === 0 && (
+        <div>
+          <Card className={classes["roomcard"]}>
+            <h2>Opps there is no room!!</h2>
+          </Card>
+        </div>
+      )}
+      <div>
+        {data.map((room, index) => (
+          <RoomCard
+            key={room.id}
+            room_id={room.id}
+            host_id={room.host}
+            host={room["host_display_name"]}
+            totalMember={room.total_member}
+            description={room.description}
+            topic={room.topic}
+            created_ago ={room.created_ago}
+          />
+        ))}
+      </div>
+
+      {data.length !== 0 && <RoomPagination></RoomPagination>}
+    </React.Fragment>
   );
 };
 

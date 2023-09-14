@@ -1,8 +1,8 @@
 .button {
   text-align: center;
   font: inherit;
-  border: 1px solid #4f005f;
-  background: #4f005f;
+  border: 1px solid var(--color-dark);
+  background: var(--color-main);
   color: white;
   padding: 0.75rem 3.5rem;
   cursor: pointer;
@@ -13,8 +13,8 @@
 .button:hover,
 .button:active {
   text-align: center;
-  background: #741188;
-  border-color: #741188;
+  background: var(--color-main);
+  border-color: var(--color-dark-light);
 }
 
 .button:focus {
@@ -27,8 +27,8 @@ button:focus:disabled,
 button:hover:disabled,
 button:active:disabled {
   text-align: center;
-  background: #ccc;
-  border-color: #ccc;
-  color: #666666;
+  background: var(--color-light);
+  border-color: var(--color-light);
+  color: var(--color-gray);
   cursor: not-allowed;
 }
