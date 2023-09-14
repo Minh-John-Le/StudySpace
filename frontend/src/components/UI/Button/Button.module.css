@@ -1,4 +1,5 @@
 .button {
+  text-align: center;
   font: inherit;
   border: 1px solid #4f005f;
   background: #4f005f;
@@ -11,11 +12,13 @@
 
 .button:hover,
 .button:active {
+  text-align: center;
   background: #741188;
   border-color: #741188;
 }
 
 .button:focus {
+  text-align: center;
   outline: none;
 }
 
@@ -23,6 +26,7 @@ button:disabled,
 button:focus:disabled,
 button:hover:disabled,
 button:active:disabled {
+  text-align: center;
   background: #ccc;
   border-color: #ccc;
   color: #666666;

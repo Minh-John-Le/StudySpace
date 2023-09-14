@@ -6,6 +6,7 @@ import classes from "./Home.module.css";
 import AuthContext from "../../store/auth-context";
 import RoomCard from "./RoomCard";
 import RoomCardList from "./RoomCardList";
+import RoomPagination from "./RoomPagination";
 
 const Home = (props) => {
   const authCtx = useContext(AuthContext);
@@ -15,7 +16,10 @@ const Home = (props) => {
     //   <h1>Welcome back!</h1>
     //   <Button onClick={authCtx.onLogout}>Logout</Button>
     // </Card>
-    <RoomCardList></RoomCardList>
+    <React.Fragment>
+      <RoomCardList></RoomCardList>
+      <RoomPagination></RoomPagination>
+    </React.Fragment>
   );
 };
 

@@ -17,7 +17,7 @@ const SearchBar = ({ onSearch }) => {
   // Event handler to handle form submission when Enter is pressed
   const handleFormSubmit = (event) => {
     event.preventDefault(); // Prevent the default form submission
-    navigate("/?topic=" + searchQuery + "&?page=1");
+    navigate("/?topic=" + searchQuery + "&page=1");
   };
 
   return (

@@ -32,9 +32,17 @@ class RoomCardAPI(APIView):
         # Set the number of items per page (e.g., 10)
         paginator = Paginator(items, per_page=5)
 
+        # Process page
+        if page_number == "last":
+            page_number = int(paginator.num_pages)
+        elif page_number == "first" or not page_number.isdigit():
+            page_number = int(1)
+        else:
+            page_number = int(page_number)
+
+
         try:
-            page = paginator.page(
-                min(page_number, paginator.num_pages))
+            page = paginator.page(min(page_number, paginator.num_pages))
         except:
             return Response([], status=status.HTTP_404_NOT_FOUND)
 

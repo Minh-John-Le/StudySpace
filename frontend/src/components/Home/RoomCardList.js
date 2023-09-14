@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 
 const RoomCardList = () => {
   const [data, setData] = useState([]);
+
   // Get the current location object
   const location = useLocation();
 
@@ -22,15 +23,13 @@ const RoomCardList = () => {
     page = "1";
   }
 
-  const apiUrl =
-    "http://localhost:8000/api/database/room-card/?topic=" +
-    topic.toString() +
-    "&?page=" +
-    page.toString();
+  const apiUrl = `http://localhost:8000/api/database/room-card/?topic=${topic}&page=${page}`;
+  
 
   useEffect(() => {
     async function fetchRoomHandler() {
       const respond = await fetch(apiUrl);
+      console.log(apiUrl);
       const room = await respond.json();
       setData(room);
     }

@@ -18,6 +18,7 @@
 }
 
 .control input {
+  text-align: left;
   flex: 3;
   font: inherit;
   padding: 0.35rem 0.35rem;
@@ -28,12 +29,14 @@
 }
 
 .control input:focus {
+  text-align: left;
   outline: none;
   border-color: #71c6dd;
   background: #51546e;
 }
 
 .control.invalid input {
+  text-align: left;
   border-color: var(--color-error);
   background: #fbdada;
   color: black
