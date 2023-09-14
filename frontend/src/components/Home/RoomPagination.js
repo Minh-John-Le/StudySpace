@@ -24,7 +24,8 @@ const RoomPagination = (props) => {
 
   // Update the page number from the URL
   useEffect(() => {
-    setPageNumberFromURL(pageNumberFromQueryParam);
+    setPageNumberInput(pageNumberFromQueryParam);
+    setPageNumberFromURL(pageNumberFromQueryParam); // Update pageNumberFromURL as well
   }, [pageNumberFromQueryParam]);
 
   // Event handler to handle form submission when Enter is pressed
@@ -33,6 +34,7 @@ const RoomPagination = (props) => {
     const newPageNumber = parseInt(pageNumberInput);
     if (!isNaN(newPageNumber)) {
       navigate(`/?topic=${topic}&page=${newPageNumber}`);
+      setPageNumberFromURL(newPageNumber); // Update pageNumberFromURL
     }
   };
 
@@ -41,6 +43,7 @@ const RoomPagination = (props) => {
     const newPageNumber = pageNumberFromURL + 1;
     setPageNumberInput(newPageNumber);
     navigate(`/?topic=${topic}&page=${newPageNumber}`);
+    setPageNumberFromURL(newPageNumber); // Update pageNumberFromURL
   };
 
   // Event handler to decrement the page number
@@ -49,6 +52,7 @@ const RoomPagination = (props) => {
       const newPageNumber = pageNumberFromURL - 1;
       setPageNumberInput(newPageNumber);
       navigate(`/?topic=${topic}&page=${newPageNumber}`);
+      setPageNumberFromURL(newPageNumber); // Update pageNumberFromURL
     }
   };
 
