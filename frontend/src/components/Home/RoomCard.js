@@ -2,26 +2,45 @@ import React from "react";
 import Card from "../UI/Card/Card";
 import { Link } from "react-router-dom";
 import classes from "./RoomCard.module.css";
+import { TbUsers } from "react-icons/tb";
 
 const RoomCard = (props) => {
   return (
-    <Card className={classes["room-card"]}>
-      <Link to="/" className={classes.avatarLink}>
-        <div className={classes.avatarContainer}>
-          <img
-            src="https://placebear.com/250/250"
-            alt="Avatar"
-            className={classes.avatar}
-          />
-        </div>
-        <span>Host@{props.host}</span>
-      </Link>
-      <Link to="/1">
-        <h2>{props.title}</h2>
-      </Link>
-    
-      <div>{props.totalMember} Joined</div>
-      <div>{props.topic}</div>
+    <Card className={classes["roomcard"]}>
+      <div>
+        <Link
+          to={"/user/" + props.host_id}
+          className={classes.roomcard__avatarLink}
+        >
+          <div className={classes["roomcard__avatar-container"]}>
+            <img
+              src="https://placebear.com/250/250"
+              alt="Avatar"
+              className={classes["roomcard__avatar-container__img"]}
+            />
+            <span
+              to={"/user/" + props.host_id}
+              className={classes["roomcard__avatar-container__link"]}
+            >
+              Host@{props.host}
+            </span>
+          </div>
+        </Link>
+        <Link
+          to={"/room/" + props.room_id}
+          className={classes["roomcard__room-link"]}
+        >
+          <h2>{props.description}</h2>
+        </Link>
+      </div>
+
+      <div className={classes["roomcard__meta"]}>
+        <p className={classes["roomcard__member"]}>
+          <TbUsers className={classes["roomcard__member-icon"]}></TbUsers>
+          {props.totalMember} Joined
+        </p>
+        <p className={classes["roomcard__topic"]}>{props.topic}</p>
+      </div>
     </Card>
   );
 };

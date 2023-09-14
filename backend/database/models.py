@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 class Rooms(models.Model):
     host = models.ForeignKey(User, on_delete=models.CASCADE)
-    description = models.TextField()
+    description = models.CharField(max_length=32)
     topic = models.CharField(max_length=32)
 
     class Meta:

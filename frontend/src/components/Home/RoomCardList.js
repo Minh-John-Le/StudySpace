@@ -28,16 +28,18 @@ const RoomCardList = () => {
     }
 
     fetchRoomHandler(); // Call the function here
-  }, [topic, apiUrl]); // Include all dependencies in the array
+  }, [topic]); // Include all dependencies in the array
 
   return (
     <div>
       {data.map((room, index) => (
         <RoomCard
-          key={room.id} // Make sure to use a unique key for each component
+          key={room.id} 
+          room_id = {room.id}
+          host_id = {room.host}
           host={room["host_display_name"]}
           totalMember={room.total_member}
-          title={room.topic}
+          description={room.description}
           topic={room.topic}
         />
       ))}
