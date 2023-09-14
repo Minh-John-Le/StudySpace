@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.db.models import Count
 from django.db import models
 from django.shortcuts import render
@@ -14,6 +15,7 @@ from .serializers import RoomsSerializer, RoomCardSerializer
 # ------------ All Rooms------------------
 class RoomCardAPI(APIView):
     def get(self, request):
+        page_number = request.query_params.get('page', 1)
         topic = request.query_params.get('topic')
 
         if topic:
@@ -21,14 +23,22 @@ class RoomCardAPI(APIView):
         else:
             items = Rooms.objects.all()
 
-
         # Annotate the queryset with the total_member count
         items = items.annotate(total_member=Count('rooms_members'))
-        
+
         # Sort the queryset by 'total_member' in ascending order
         items = items.order_by('-total_member')
 
-        serialized_item = RoomCardSerializer(items, many=True)
+        # Set the number of items per page (e.g., 10)
+        paginator = Paginator(items, per_page=5)
+
+        try:
+            page = paginator.page(
+                min(page_number, paginator.num_pages))
+        except:
+            return Response([], status=status.HTTP_404_NOT_FOUND)
+
+        serialized_item = RoomCardSerializer(page, many=True)
 
         return Response(serialized_item.data, status=status.HTTP_200_OK)
 

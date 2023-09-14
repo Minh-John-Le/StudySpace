@@ -11,14 +11,22 @@ const RoomCardList = () => {
   const searchParams = new URLSearchParams(location.search);
 
   // Extract the 'topic' parameter value
-  const topic = searchParams.get("topic");
-
-  let apiUrl = "http://localhost:8000/api/database/room-card/";
-
-  if (topic !== null) {
-    apiUrl =
-      "http://localhost:8000/api/database/room-card/?topic=" + topic.toString();
+  let topic = searchParams.get("topic");
+  if (topic === null) {
+    topic = "";
   }
+
+  let page = searchParams.get("page");
+
+  if (page === null) {
+    page = "1";
+  }
+
+  const apiUrl =
+    "http://localhost:8000/api/database/room-card/?topic=" +
+    topic.toString() +
+    "&?page=" +
+    page.toString();
 
   useEffect(() => {
     async function fetchRoomHandler() {
@@ -28,15 +36,15 @@ const RoomCardList = () => {
     }
 
     fetchRoomHandler(); // Call the function here
-  }, [topic]); // Include all dependencies in the array
+  }, [topic, page]); // Include all dependencies in the array
 
   return (
     <div>
       {data.map((room, index) => (
         <RoomCard
-          key={room.id} 
-          room_id = {room.id}
-          host_id = {room.host}
+          key={room.id}
+          room_id={room.id}
+          host_id={room.host}
           host={room["host_display_name"]}
           totalMember={room.total_member}
           description={room.description}
