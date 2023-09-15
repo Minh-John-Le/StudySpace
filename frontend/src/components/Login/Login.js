@@ -36,7 +36,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    authCtx.onLogin("", "");
+    authCtx.onLogin(enteredUsername, enteredPassword);
     nagivate("/");
   };
 

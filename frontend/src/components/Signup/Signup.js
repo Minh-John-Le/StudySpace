@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Signup.module.css";
@@ -14,7 +14,19 @@ const Signup = (props) => {
   // const [enteredPassword, setEnteredPassword] = useState('');
   // const [passwordIsValid, setPasswordIsValid] = useState();
   const authCtx = useContext(AuthContext);
-  const nagivate = useNavigate();
+  const navigate = useNavigate();
+
+  const [errorMessage, setErrorMessage] = useState("Please fill in the form!");
+  const [hasSubmitError, setHasSubmitError] = useState(false);
+
+  const {
+    value: enteredEmail,
+    isValid: enteredEmailIsValid,
+    hasError: emailInputHasError,
+    valueChangeHandler: emailChangedHandler,
+    inputBlurHandler: emailBlurHandler,
+    reset: resetEmailInput,
+  } = useInput((value) => value.includes("@"));
 
   const {
     value: enteredUsername,
@@ -32,7 +44,7 @@ const Signup = (props) => {
     valueChangeHandler: passwordChangedHandler,
     inputBlurHandler: passwordBlurHandler,
     reset: resetPasswordInput,
-  } = useInput((value) => value.trim().length > 8);
+  } = useInput((value) => value.trim().length >= 6);
 
   const {
     value: enteredRepeatedPassword,
@@ -41,22 +53,95 @@ const Signup = (props) => {
     valueChangeHandler: repeatedPasswordChangedHandler,
     inputBlurHandler: repeatedPasswordBlurHandler,
     reset: resetRepeatedPasswordInput,
-  } = useInput((value) => value.trim().length > 8);
+  } = useInput((value) => value.trim().length >= 6);
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
-    authCtx.onLogin("", "");
-    nagivate("/");
-  };
+    const user = {
+      username: enteredUsername,
+      email: enteredEmail,
+      password: enteredPassword,
+      repeat_password: enteredRepeatedPassword,
+    };
 
-  const formIsValid = enteredUsernameIsValid && enteredPasswordIsValid;
+    try {
+      const response = await fetch("http://localhost:8000/api/auth/signup/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json(); // Parse the error response
+
+        // Create an array to store error messages
+        const errorMessages = [];
+
+        // Format all error messages dynamically
+        Object.keys(errorData).forEach((key) => {
+          if (Array.isArray(errorData[key])) {
+            errorData[key].forEach((error) => {
+              errorMessages.push(`${key}: ${error}`);
+            });
+          } else {
+            errorMessages.push(`${key}: ${errorData[key]}`);
+          }
+        });
+
+        setErrorMessage(errorMessages); // Set as an array of error messages
+        throw new Error(errorMessages);
+      }
+
+      const data = await response.json();
+      // Clear input fields and reset error state
+      resetEmailInput();
+      resetUsernameInput();
+      resetPasswordInput();
+      resetRepeatedPasswordInput();
+      setHasSubmitError(false);
+
+      navigate("/login");
+    } catch (error) {
+      // Handle signup failure
+      setHasSubmitError(true);
+    }
+  };
+  const formIsValid = true;
   return (
     <React.Fragment>
+      {hasSubmitError && (
+        <div>
+          <Card className={classes.header}>
+            <h2>Error</h2>
+          </Card>
+          <Card className={classes.login}>
+            {
+              <ul>
+                {errorMessage.map((err, index) => (
+                  <li key={index}>{err}</li>
+                ))}
+              </ul>
+            }
+          </Card>
+        </div>
+      )}
       <Card className={classes.header}>
         <h2>Signup</h2>
       </Card>
       <Card className={classes.login}>
         <form onSubmit={submitHandler}>
+          <Input
+            id="email"
+            label="Email"
+            type="email"
+            isValid={!emailInputHasError}
+            value={enteredEmail}
+            onChange={emailChangedHandler}
+            onBlur={emailBlurHandler}
+            errorMessage={"Email must include @"}
+          ></Input>
           <Input
             id="username"
             label="Username"

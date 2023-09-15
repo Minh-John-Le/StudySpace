@@ -4,6 +4,8 @@ from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from .models import UserProfile  # Import your UserProfile model
+from django.http import Http404
+
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -16,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if data['password'] != data['repeat_password']:
-            raise serializers.ValidationError("Passwords do not match.")
+            raise serializers.ValidationError({"password_validation_errors": "Passwords do not match."})
         return data
 
     def create(self, validated_data):
