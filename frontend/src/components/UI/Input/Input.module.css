@@ -1,4 +1,3 @@
-
 .control {
   margin: 1rem 0;
   display: flex;
@@ -7,7 +6,8 @@
 }
 
 .control label,
-.control input {
+.control input,
+.control textarea {
   display: block;
 }
 
@@ -17,7 +17,8 @@
   color: var(--color-light-gray);
 }
 
-.control input {
+.control input,
+.control textarea {
   text-align: left;
   flex: 3;
   font: inherit;
@@ -28,22 +29,28 @@
   color: #e5e5e5;
 }
 
-.control input:focus {
+.control input:focus,
+.control textarea:focus {
   text-align: left;
   outline: none;
   border-color: #71c6dd;
   background: #51546e;
 }
 
-.control.invalid input {
+.control.invalid input,
+.control.invalid textarea {
   text-align: left;
   border-color: var(--color-error);
   background: #fbdada;
-  color: black
+  color: black;
 }
 
-.error-text p{
+.error-text p {
   color: var(--color-error);
+}
+
+.textarea {
+  height: 10rem; 
 }
 
 @media (min-width: 768px) {

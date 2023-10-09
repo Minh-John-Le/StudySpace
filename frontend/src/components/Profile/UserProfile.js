@@ -12,6 +12,11 @@ const UserProfile = () => {
   const [profile, setProfile] = useState([]);
   const navigate = useNavigate();
 
+  const editProfileHandler = (event) => {
+    event.preventDefault();
+    navigate("/profile-setting");
+  };
+
   useEffect(() => {
     const apiUrl = `http://localhost:8000/api/auth/user/${id}/`;
 
@@ -42,7 +47,8 @@ const UserProfile = () => {
     console.log(profile);
   }, [authToken, id]);
 
-  const logoutHandler = () => {
+  const logoutHandler = (event) => {
+    event.preventDefault();
     Cookies.remove("authToken");
     navigate("/");
   };
@@ -64,7 +70,10 @@ const UserProfile = () => {
 
       {profile.is_auth_user && (
         <div className={classes["btn"]}>
-          <button className={classes["btn__actions"]}>
+          <button
+            className={classes["btn__actions"]}
+            onClick={editProfileHandler}
+          >
             <div>{"Edit Profile"}</div>
           </button>
 
@@ -86,7 +95,7 @@ const UserProfile = () => {
       <div className={classes.description}>{profile.bio}</div>
       <br></br>
       <div className={classes.subtitle}>
-        STUDY ROOMS Minh Hung Le PARTICIPATES IN
+        STUDY ROOMS {profile.display_name} PARTICIPATES IN
       </div>
     </React.Fragment>
   );

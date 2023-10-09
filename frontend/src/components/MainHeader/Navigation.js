@@ -14,7 +14,7 @@ const Navigation = (props) => {
   const [profile, setProfile] = useState([]);
 
   useEffect(() => {
-    const apiUrl = `http://localhost:8000/api/auth/personal-profile/`;
+    const apiUrl = `http://localhost:8000/api/auth/profile/`;
 
     async function fetchProfile() {
       try {

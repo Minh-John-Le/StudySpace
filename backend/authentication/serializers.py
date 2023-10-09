@@ -35,9 +35,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(source='user.email')
+    username = serializers.CharField(source='user.username')
+    
     class Meta:
         model = UserProfile
-        fields = ['user', 'display_name', 'profile_image_url']
+        fields = ['user', 'bio', 'display_name', 'profile_image_url', 'email', 'username']
 
 class SingleUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
