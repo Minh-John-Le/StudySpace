@@ -14,6 +14,7 @@ const ProfileSetting = (props) => {
   // const [emailIsValid, setEmailIsValid] = useState();
   // const [enteredPassword, setEnteredPassword] = useState('');
   // const [passwordIsValid, setPasswordIsValid] = useState();
+  const [profile, setProfile] = useState([]);
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -54,7 +55,35 @@ const ProfileSetting = (props) => {
   } = useInput((value) => true);
 
   const submitHandler = async (event) => {
-    event.preventDefault();
+    const profileData = {
+      bio: enteredBio,
+      display_name: enteredDisplayName,
+    };
+
+    try {
+      // Send a POST request to your backend login endpoint
+      const response = await fetch("http://localhost:8000/api/auth/profile/", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${authToken}`,
+        },
+        body: JSON.stringify(profileData),
+      });
+
+      if (!response.ok) {
+        // Handle login error here (e.g., show an error message)
+        console.error("Update profile fail");
+        return;
+      }
+
+      // Assuming your backend responds with a JSON object containing a "token" field
+      const data = await response.json();
+      setProfile(profile);
+    } catch (error) {
+      // Handle any other errors (e.g., network issues)
+      console.error("An error occurred:", error);
+    }
   };
 
   const formIsValid = enteredUsernameIsValid;
@@ -62,8 +91,6 @@ const ProfileSetting = (props) => {
   //=================================================================================
 
   const authToken = Cookies.get("authToken");
-
-  const [profile, setProfile] = useState([]);
 
   useEffect(() => {
     const apiUrl = `http://localhost:8000/api/auth/profile/`;
@@ -91,9 +118,10 @@ const ProfileSetting = (props) => {
     if (authToken) {
       fetchProfile(); // Call the function here if authToken is available
     }
-
     console.log(profile);
-  }, [authToken]);
+    resetDisplayNameInput(profile.display_name);
+    resetBioInput(profile.bio);
+  }, [authToken, profile.display_name, profile.bio]);
 
   //===============================================================================
   return (
