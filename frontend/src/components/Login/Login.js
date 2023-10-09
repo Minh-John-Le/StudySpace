@@ -6,7 +6,8 @@ import Button from "../UI/Button/Button";
 import AuthContext from "../../store/auth-context";
 import Input from "../UI/Input/Input";
 import useInput from "../../hooks/use-input";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Login = (props) => {
   // const [enteredEmail, setEnteredEmail] = useState('');
@@ -14,7 +15,7 @@ const Login = (props) => {
   // const [enteredPassword, setEnteredPassword] = useState('');
   // const [passwordIsValid, setPasswordIsValid] = useState();
   const authCtx = useContext(AuthContext);
-  const nagivate = useNavigate();
+  const navigate = useNavigate();
 
   const {
     value: enteredUsername,
@@ -34,10 +35,45 @@ const Login = (props) => {
     reset: resetPasswordInput,
   } = useInput((value) => value.trim().length > 8);
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
-    authCtx.onLogin(enteredUsername, enteredPassword);
-    nagivate("/");
+    // Create an object with the login data
+    const loginData = {
+      username: enteredUsername,
+      password: enteredPassword,
+    };
+
+    try {
+      // Send a POST request to your backend login endpoint
+      const response = await fetch("http://localhost:8000/api/auth/login/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      if (!response.ok) {
+        // Handle login error here (e.g., show an error message)
+        console.error("Login failed");
+        return;
+      }
+
+      // Assuming your backend responds with a JSON object containing a "token" field
+      const data = await response.json();
+
+      // Store the token in a cookie
+      Cookies.set("authToken", data.token, { expires: 7 });
+
+      // Update the authentication context to indicate the user is logged in
+      //authCtx.onLogin();
+
+      // Redirect the user
+      navigate("/");
+    } catch (error) {
+      // Handle any other errors (e.g., network issues)
+      console.error("An error occurred:", error);
+    }
   };
 
   const formIsValid = enteredUsernameIsValid && enteredPasswordIsValid;
@@ -70,14 +106,24 @@ const Login = (props) => {
               errorMessage={"Password must be length 6 or more"}
             ></Input>
           }
+
           <div className={classes.actions}>
             <Button
               type="submit"
               className={classes.btn}
-              disabled={!formIsValid}
+              // disabled={!formIsValid}
             >
               <div>Login</div>
             </Button>
+          </div>
+          
+          <br></br>
+          <div className={classes.signup}>
+            Haven't signed up yet?
+            <br></br>
+            <Link to="/signup/" className={classes.signupLink}>
+              Sign up
+            </Link>
           </div>
         </form>
       </Card>

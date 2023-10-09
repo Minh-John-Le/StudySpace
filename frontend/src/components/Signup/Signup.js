@@ -8,6 +8,8 @@ import Input from "../UI/Input/Input";
 import useInput from "../../hooks/use-input";
 import { useNavigate } from "react-router-dom";
 
+import { Link } from "react-router-dom";
+
 const Signup = (props) => {
   // const [enteredEmail, setEnteredEmail] = useState('');
   // const [emailIsValid, setEmailIsValid] = useState();
@@ -184,6 +186,15 @@ const Signup = (props) => {
             >
               <div>Signup</div>
             </Button>
+          </div>
+
+          <br></br>
+          <div className={classes.loginPrompt}>
+            Have already signed up?
+            <br></br>
+            <Link to="/login/" className={classes.loginLink}>
+              Log in
+            </Link>
           </div>
         </form>
       </Card>

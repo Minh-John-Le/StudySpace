@@ -1,16 +1,57 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 import classes from "./Navigation.module.css";
 import AuthContext from "../../store/auth-context";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
-const Navigation = () => {
+const Navigation = (props) => {
   const ctx = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const authToken = Cookies.get("authToken");
+
+  const [profile, setProfile] = useState([]);
+
+  const logoutHandler = () => {
+    Cookies.remove("authToken");
+    navigate("/");
+  };
+
+  useEffect(() => {
+    const apiUrl = `http://localhost:8000/api/auth/personal-profile/`;
+
+    async function fetchProfile() {
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${authToken}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const profile = await response.json();
+        setProfile(profile);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    }
+
+    if (authToken) {
+      fetchProfile(); // Call the function here if authToken is available
+    }
+
+    console.log(profile);
+  }, [authToken]);
 
   return (
     <nav className={classes.nav}>
       <ul>
-        {!ctx.isLoggedIn && (
+        {!authToken && (
           <li>
             <Link to="/login/" className={classes.avatarLink}>
               <div className={classes.avatarContainer}>
@@ -24,19 +65,21 @@ const Navigation = () => {
             </Link>
           </li>
         )}
-        {ctx.isLoggedIn && (
+
+        {authToken && (
           <li>
-            <a href="/">Users</a>
-          </li>
-        )}
-        {ctx.isLoggedIn && (
-          <li>
-            <a href="/">Admin</a>
-          </li>
-        )}
-        {ctx.isLoggedIn && (
-          <li>
-            <button onClick={ctx.onLogout}>Logout</button>
+            <Link to={`/user/${profile.user}/`} className={classes.avatarLink}>
+              <div className={classes.avatarContainer}>
+                <img
+                  src={profile.profile_image_url}
+                  alt="Avatar"
+                  className={classes.avatar}
+                />
+              </div>
+              <span className={classes["roomcard__avatar-container__link"]}>
+                {profile.display_name}
+              </span>
+            </Link>
           </li>
         )}
       </ul>

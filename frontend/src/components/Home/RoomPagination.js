@@ -16,7 +16,10 @@ const RoomPagination = (props) => {
   const searchParams = new URLSearchParams(location.search);
 
   // Extract the 'topic' and 'page' parameters from the URL
-  const topic = searchParams.get("topic");
+  let topic = searchParams.get("topic");
+  if (topic === null) {
+    topic = "";
+  }
   const pageParam = searchParams.get("page");
 
   // Parse the 'page' parameter to an integer

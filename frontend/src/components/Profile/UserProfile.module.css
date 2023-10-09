@@ -1,0 +1,59 @@
+.profile-info {
+  display: flex;
+  justify-content: center; /* Horizontal centering */
+  align-items: center; /* Vertical centering */
+  height: 100%; /* Ensure the container takes the full height of its parent */
+}
+
+.profile-info__avatar-container {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.profile-info__avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.display-name {
+  margin-top: 0.5rem;
+  font-size: large;
+  color: var(--color-main-light);
+  display: flex;
+  justify-content: center; /* Horizontal centering */
+}
+
+.follower {
+  font-size: medium;
+  color: var(--color-light-gray);
+  display: flex;
+  justify-content: center; /* Horizontal centering */
+  align-items: center; /* Vertical centering */
+}
+
+.btn {
+  display: flex;
+  justify-content: center; /* Center the buttons horizontally */
+  margin-top: 0.5rem; /* Add spacing between followers and buttons */
+  gap: 2rem;
+}
+.btn__actions {
+  font: inherit;
+  border: 2px solid var(--color-main);
+  background: transparent;
+  color: var(--color-main);
+  padding: 0.5rem 4rem; /* Adjust padding as needed */
+  cursor: pointer;
+  font-size: 1rem; /* Adjust font size as needed */
+  border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center; /* Center the text horizontally within the button */
+  white-space: nowrap;
+}
+
+

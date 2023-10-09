@@ -7,7 +7,6 @@ from .models import UserProfile  # Import your UserProfile model
 from django.http import Http404
 
 
-
 class UserSerializer(serializers.ModelSerializer):
     repeat_password = serializers.CharField(write_only=True, required=True)
 
@@ -18,7 +17,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if data['password'] != data['repeat_password']:
-            raise serializers.ValidationError({"password_validation_errors": "Passwords do not match."})
+            raise serializers.ValidationError(
+                {"password_validation_errors": "Passwords do not match."})
         return data
 
     def create(self, validated_data):
@@ -32,3 +32,10 @@ class UserSerializer(serializers.ModelSerializer):
         token, _ = Token.objects.get_or_create(user=user)
         user.token = token.key
         return user
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['user', 'display_name', 'profile_image_url']
+
