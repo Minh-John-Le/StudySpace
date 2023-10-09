@@ -5,17 +5,96 @@ import Button from "../UI/Button/Button";
 import Cookies from "js-cookie";
 import { useParams, useNavigate } from "react-router-dom";
 
+async function fetchFollowStatus(id, authToken, setFollowStatus) {
+  const apiUrl = `http://localhost:8000/api/database/follow-status/${id}/`;
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${authToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const followStatusRs = await response.json();
+    setFollowStatus(followStatusRs);
+  } catch (error) {
+    console.error("Error fetching follow status:", error);
+  }
+}
+
 const UserProfile = () => {
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
 
   const [profile, setProfile] = useState([]);
+  const [followStatus, setFollowStatus] = useState([]);
   const navigate = useNavigate();
 
   const editProfileHandler = (event) => {
     event.preventDefault();
     navigate("/profile-setting");
   };
+  const followHandler = async (event) => {
+    event.preventDefault();
+
+    const apiUrl = `http://localhost:8000/api/database/follow-status/${id}/`;
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${authToken}`,
+        },
+        body: JSON.stringify({}),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // Assuming you want to update the followStatus in your component state,
+      // you can call the fetchFollowStatus function again to update it.
+
+      fetchFollowStatus(id, authToken, setFollowStatus);
+    } catch (error) {
+      console.error("Error following user:", error);
+    }
+  };
+
+  const unfollowHandler = async (event) => {
+    event.preventDefault();
+
+    // Send a DELETE request to the API to unfollow the user
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/database/follow-status/${id}/`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Token ${authToken}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      fetchFollowStatus(id, authToken, setFollowStatus);
+    } catch (error) {
+      console.error("Error unfollowing user:", error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchFollowStatus(id, authToken, setFollowStatus);
+  }, [authToken, id]);
 
   useEffect(() => {
     const apiUrl = `http://localhost:8000/api/auth/user/${id}/`;
@@ -43,8 +122,6 @@ const UserProfile = () => {
     if (authToken) {
       fetchProfile(); // Call the function here if authToken is available
     }
-
-    console.log(profile);
   }, [authToken, id]);
 
   const logoutHandler = (event) => {
@@ -85,9 +162,18 @@ const UserProfile = () => {
 
       {!profile.is_auth_user && (
         <div className={classes["btn"]}>
-          <button className={classes["btn__actions"]}>
-            <div>{"Follow"}</div>
-          </button>
+          {followStatus.followStatus ? (
+            <button
+              className={classes["btn__actions"]}
+              onClick={unfollowHandler}
+            >
+              <div>{"Unfollow"}</div>
+            </button>
+          ) : (
+            <button className={classes["btn__actions"]} onClick={followHandler}>
+              <div>{"Follow"}</div>
+            </button>
+          )}
         </div>
       )}
 
