@@ -7,18 +7,39 @@ import AuthContext from "../../store/auth-context";
 import RoomCard from "./RoomCard";
 import RoomCardList from "./RoomCardList";
 import RoomPagination from "./RoomPagination";
+import SideCard from "../Profile/SideCard";
+import { useNavigate } from "react-router-dom";
 
 const Home = (props) => {
   const authCtx = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const addRoomHandler = (event) => {
+    navigate("/add-room");
+  };
 
   return (
-    // <Card className={classes.home}>
-    //   <h1>Welcome back!</h1>
-    //   <Button onClick={authCtx.onLogout}>Logout</Button>
-    // </Card>
-    <React.Fragment>
-      <RoomCardList></RoomCardList>
-    </React.Fragment>
+    <div className={classes["home-container"]}>
+      <div className={classes["side-card"]}>
+        <SideCard></SideCard>
+      </div>
+      <div className={classes["room"]}>
+        <div className={classes.actions}>
+          <Button
+            type="button"
+            className={classes.btn}
+            onClick={addRoomHandler}
+          >
+            <div>+ New Room</div>
+          </Button>
+        </div>
+        <RoomCardList></RoomCardList>
+      </div>
+
+      <div className={classes["side-card"]}>
+        <SideCard title={"TOP HOSTS"}></SideCard>
+      </div>
+    </div>
   );
 };
 

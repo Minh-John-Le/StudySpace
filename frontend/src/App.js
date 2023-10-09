@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Signup from "./components/Signup/Signup";
 import Profile from "./components/Profile/Profile";
 import ProfileSetting from "./components/Profile/ProfileSetting";
+import NewRoom from "./components/Home/NewRoom";
 
 function App() {
   const ctx = useContext(AuthContext);
@@ -22,7 +23,11 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup></Signup>} />
           <Route path="/user/:id" element={<Profile></Profile>} />
-          <Route path="/profile-setting" element={<ProfileSetting></ProfileSetting>} />
+          <Route
+            path="/profile-setting"
+            element={<ProfileSetting></ProfileSetting>}
+          />
+          <Route path="/new-room" element={<NewRoom></NewRoom>} />
         </Routes>
       </main>
     </Router>
