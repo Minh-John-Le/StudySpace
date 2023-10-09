@@ -25,10 +25,24 @@ class Rooms_Members(models.Model):
     is_host = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_created=True)
 
-
     class Meta:
         unique_together = ('room', 'member')
         verbose_name_plural = "Rooms_Members"
 
     def __str__(self):
         return str(self.member) + " in Room " + str(self.room.id)
+
+
+class Followers(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='following')
+    follower = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='followers')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'follower')
+        verbose_name_plural = "Followers"
+
+    def __str__(self):
+        return str(self.user) + " followed by " + str(self.follower)

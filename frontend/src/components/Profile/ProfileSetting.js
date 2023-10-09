@@ -14,7 +14,7 @@ const ProfileSetting = (props) => {
   // const [emailIsValid, setEmailIsValid] = useState();
   // const [enteredPassword, setEnteredPassword] = useState('');
   // const [passwordIsValid, setPasswordIsValid] = useState();
-  const [profile, setProfile] = useState([]);
+  const [profile, setProfile] = useState([""]);
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -53,6 +53,11 @@ const ProfileSetting = (props) => {
     inputBlurHandler: bioBlurHandler,
     reset: resetBioInput,
   } = useInput((value) => true);
+
+  const cancelHandler = (event) => {
+    event.preventDefault();
+    navigate(`/user/${profile.user}`);
+  };
 
   const submitHandler = async (event) => {
     const profileData = {
@@ -178,7 +183,11 @@ const ProfileSetting = (props) => {
           ></Input>
 
           <div className={classes.actions}>
-            <Button type="button" className={classes.btn}>
+            <Button
+              type="button"
+              className={classes.btn}
+              onClick={cancelHandler}
+            >
               <div>Cancel</div>
             </Button>
             <Button

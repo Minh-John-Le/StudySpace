@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.utils.timesince import timesince
 from rest_framework import serializers
-from .models import Rooms, Rooms_Members
+from .models import Rooms, Rooms_Members, Followers
 from authentication.models import UserProfile
 
 
@@ -50,3 +50,57 @@ class RoomCardSerializer(serializers.ModelSerializer):
             return time_difference
 
         return ""
+
+
+class FollowStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Followers
+        fields = '__all__'
+
+
+class FollowerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Followers
+        fields = '__all__'
+
+
+class FollowerSerializer(serializers.ModelSerializer):
+    display_name = serializers.SerializerMethodField()
+    profile_image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Followers
+        fields = '__all__'
+
+    def get_display_name(self, obj):
+        # Check if UserProfile exists for the follower
+        if hasattr(obj.follower, 'userprofile'):
+            return obj.follower.userprofile.display_name
+        return None
+
+    def get_profile_image_url(self, obj):
+        # Check if UserProfile exists for the follower
+        if hasattr(obj.follower, 'userprofile'):
+            return obj.follower.userprofile.profile_image_url
+        return None
+    
+class FollowingSerializer(serializers.ModelSerializer):
+    display_name = serializers.SerializerMethodField()
+    profile_image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Followers
+        fields = '__all__'
+
+    def get_display_name(self, obj):
+        # Check if UserProfile exists for the follower
+        if hasattr(obj.user, 'userprofile'):
+            return obj.user.userprofile.display_name
+        return None
+
+    def get_profile_image_url(self, obj):
+        # Check if UserProfile exists for the follower
+        if hasattr(obj.user, 'userprofile'):
+            return obj.user.userprofile.profile_image_url
+        return None
+
