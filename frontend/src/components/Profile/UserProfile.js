@@ -29,9 +29,10 @@ const UserProfile = () => {
           <div>{"Logout"}</div>
         </button>
       </div>
-      <div>ABOUT</div>
-      <div> Hello My namme is Little Chicken I love to Study Django</div>
-      <div>STUDY ROOMS Minh Hung Le PARTICIPATES IN</div>
+      <div className={classes.subtitle}>ABOUT</div>
+      <div className={classes.description}> Hello My namme is Little Chicken I love to Study Django Hello My namme is Little Chicken I love to Study Django Hello My namme is Little Chicken I love to Study Django</div>
+      <br></br>
+      <div className={classes.subtitle}>STUDY ROOMS Minh Hung Le PARTICIPATES IN</div>
     </React.Fragment>
   );
 };
