@@ -13,11 +13,6 @@ const Navigation = (props) => {
 
   const [profile, setProfile] = useState([]);
 
-  const logoutHandler = () => {
-    Cookies.remove("authToken");
-    navigate("/");
-  };
-
   useEffect(() => {
     const apiUrl = `http://localhost:8000/api/auth/personal-profile/`;
 

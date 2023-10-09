@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import UserProfile
-from .serializers import UserProfileSerializer
+from .serializers import UserProfileSerializer, SingleUserProfileSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
@@ -32,3 +32,24 @@ class UserProfileView(APIView):
         user_profile = UserProfile.objects.get(user=request.user)
         serializer = UserProfileSerializer(user_profile)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class SingleUserProfileView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id):
+        try:
+            user_profile = UserProfile.objects.get(user=id)
+        except UserProfile.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Check if the user being searched for is the same as the authenticated user
+        is_authenticated_user = False
+        if request.user.id == id:
+            is_authenticated_user = True
+        
+        serializer = SingleUserProfileSerializer(user_profile)
+        data = serializer.data
+        data['is_auth_user'] = is_authenticated_user
+        return Response(data, status=status.HTTP_200_OK)
+

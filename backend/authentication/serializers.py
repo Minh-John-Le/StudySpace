@@ -39,3 +39,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = ['user', 'display_name', 'profile_image_url']
 
+class SingleUserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['user', 'bio','display_name', 'profile_image_url']
+
