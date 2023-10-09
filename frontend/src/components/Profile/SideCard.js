@@ -11,31 +11,20 @@ const SideCard = (props) => {
       </Card>
 
       <Card className={classes.body}>
-        <Link to={`/user/`} className={classes.avatarLink}>
-          <div className={classes.avatarContainer}>
-            <img
-              src={"https://placebear.com/250/250"}
-              alt="Avatar"
-              className={classes.avatar}
-            />
-          </div>
-          <span className={classes["avatarLink__display-name"]}>
-            {"Minh Hung Le"}
-          </span>
-        </Link>
-
-        <Link to={`/user/`} className={classes.avatarLink}>
-          <div className={classes.avatarContainer}>
-            <img
-              src={"https://placebear.com/250/250"}
-              alt="Avatar"
-              className={classes.avatar}
-            />
-          </div>
-          <span className={classes["avatarLink__display-name"]}>
-            {"Minh Hung Le"}
-          </span>
-        </Link>
+        {props.data && props.data.map((user, index) => (
+          <Link to={`/user/${user.profile_id}`} className={classes.avatarLink}>
+            <div className={classes.avatarContainer}>
+              <img
+                src={user.profile_image_url}
+                alt="Avatar"
+                className={classes.avatar}
+              />
+            </div>
+            <span className={classes["avatarLink__display-name"]}>
+              {user.display_name}
+            </span>
+          </Link>
+        ))}
       </Card>
     </React.Fragment>
   );

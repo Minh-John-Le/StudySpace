@@ -67,6 +67,7 @@ class FollowerSerializer(serializers.ModelSerializer):
 class FollowerSerializer(serializers.ModelSerializer):
     display_name = serializers.SerializerMethodField()
     profile_image_url = serializers.SerializerMethodField()
+    profile_id = serializers.ReadOnlyField(source='follower.id')
 
     class Meta:
         model = Followers
@@ -83,10 +84,12 @@ class FollowerSerializer(serializers.ModelSerializer):
         if hasattr(obj.follower, 'userprofile'):
             return obj.follower.userprofile.profile_image_url
         return None
-    
+
+
 class FollowingSerializer(serializers.ModelSerializer):
     display_name = serializers.SerializerMethodField()
     profile_image_url = serializers.SerializerMethodField()
+    profile_id = serializers.ReadOnlyField(source="user.id")
 
     class Meta:
         model = Followers
@@ -103,4 +106,3 @@ class FollowingSerializer(serializers.ModelSerializer):
         if hasattr(obj.user, 'userprofile'):
             return obj.user.userprofile.profile_image_url
         return None
-
