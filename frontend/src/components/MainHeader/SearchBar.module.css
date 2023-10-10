@@ -13,7 +13,7 @@
 .control label {
   font-weight: bold;
   flex: 1;
-  color: #8b8b8b;
+  color: var(--color-light-gray);
   margin-bottom: 0.5rem;
 }
 
@@ -21,10 +21,13 @@
   position: relative;
 }
 
-.control .searchContainer input{
+.control .searchContainer input {
   text-align: left;
 }
 
+.control .searchContaine input::placeholder {
+  color: var(--color-light-gray); /* Set the placeholder text color to red */
+}
 
 .control input {
   flex: 3;
@@ -33,7 +36,7 @@
   padding: 0.5rem 2rem; /* Increase the padding to make it bigger */
   border-radius: 6px;
   border: 1px solid #696d97;
-  background: #51546e;
+  background: var(--color-dark-medium);
   color: #e5e5e5;
 }
 
@@ -48,7 +51,7 @@
   top: 50%;
   left: 10px; /* Adjust the right positioning as needed */
   transform: translateY(-50%);
-  color: #8b8b8b; /* Change the icon color as needed */
+  color: var(--color-light-gray); /* Change the icon color as needed */
   cursor: pointer;
   pointer-events: none;
 }

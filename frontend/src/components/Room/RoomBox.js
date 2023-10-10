@@ -3,6 +3,7 @@ import Card from "../UI/Card/Card";
 import classes from "./RoomBox.module.css";
 import { Link } from "react-router-dom";
 import ConversationBox from "./ConversationBox";
+import MessageForm from "./MessageForm";
 
 const RoomBox = (props) => {
   return (
@@ -32,9 +33,8 @@ const RoomBox = (props) => {
             <div>{"Join"}</div>
           </button>
         </div>
-        <ConversationBox>
-          
-        </ConversationBox>
+        <ConversationBox></ConversationBox>
+        <MessageForm></MessageForm>
       </Card>
     </React.Fragment>
   );
