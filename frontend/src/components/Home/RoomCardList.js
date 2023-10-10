@@ -55,8 +55,9 @@ const RoomCardList = () => {
             room_id={room.id}
             host_id={room.host}
             host={room["host_display_name"]}
+            host_image_url = {room.host_image_url}
             totalMember={room.total_member}
-            description={room.description}
+            room_name={room.room_name}
             topic={room.topic}
             created_ago ={room.created_ago}
           />

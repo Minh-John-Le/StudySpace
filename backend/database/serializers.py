@@ -11,7 +11,13 @@ class RoomsSerializer(serializers.ModelSerializer):
         fields = '__all__'  # You can specify specific fields if needed
 
 
-class UsersRoomsSerializer(serializers.ModelSerializer):
+class SingleRoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rooms
+        fields = '__all__'  # You can specify specific fields if needed
+
+
+class RoomsMembersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rooms_Members
         fields = '__all__'  # You can specify specific fields if needed
@@ -19,6 +25,7 @@ class UsersRoomsSerializer(serializers.ModelSerializer):
 
 class RoomCardSerializer(serializers.ModelSerializer):
     host_display_name = serializers.SerializerMethodField(read_only=True)
+    host_image_url = serializers.SerializerMethodField(read_only=True)
     total_member = serializers.SerializerMethodField(read_only=True)
     created_ago = serializers.SerializerMethodField(read_only=True)
 
@@ -32,6 +39,13 @@ class RoomCardSerializer(serializers.ModelSerializer):
             return profile.display_name
         except UserProfile.DoesNotExist:
             return "StudySpace User"
+
+    def get_host_image_url(self, obj):
+        try:
+            profile = UserProfile.objects.get(user=obj.host)
+            return profile.profile_image_url
+        except UserProfile.DoesNotExist:
+            return ""
 
     def get_total_member(self, obj):
         try:

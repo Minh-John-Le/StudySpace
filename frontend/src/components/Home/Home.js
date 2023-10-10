@@ -15,7 +15,7 @@ const Home = (props) => {
   const navigate = useNavigate();
 
   const addRoomHandler = (event) => {
-    navigate("/add-room");
+    navigate("/new-room");
   };
 
   return (

@@ -15,7 +15,7 @@ const RoomCard = (props) => {
           >
             <div className={classes["roomcard__avatar-container"]}>
               <img
-                src="https://placebear.com/250/250"
+                src={props.host_image_url}
                 alt="Avatar"
                 className={classes["roomcard__avatar-container__img"]}
               />
@@ -37,7 +37,7 @@ const RoomCard = (props) => {
           to={"/room/" + props.room_id}
           className={classes["roomcard__room-link"]}
         >
-          <h2>{props.description}</h2>
+          <h2>{props.room_name}</h2>
         </Link>
       </div>
 

@@ -1,15 +1,15 @@
 from django.core.paginator import Paginator
 from django.db.models import Count
-from django.db import models
+from django.db import models, transaction
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Rooms, Followers
+from .models import Rooms, Followers, Rooms_Members
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .serializers import RoomsSerializer, RoomCardSerializer, FollowStatusSerializer, \
-    FollowerSerializer, FollowingSerializer
+    FollowerSerializer, FollowingSerializer, SingleRoomSerializer, RoomsMembersSerializer
 
 
 # Create your views here.
@@ -52,11 +52,111 @@ class RoomCardAPI(APIView):
 
         return Response(serialized_item.data, status=status.HTTP_200_OK)
 
+# ======================= REST API for New Room===================================
+class NewRoomAPI(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
-        serialized_item = RoomCardSerializer(data=request.data)
+        try:
+            with transaction.atomic():
+                topic = request.data.get('topic', '')
+                room_name = request.data.get('room_name', '')
+                description = request.data.get('description', '')
+
+                existing_data = {
+                    'topic': topic,
+                    'description': description,
+                    'room_name': room_name,
+                }
+
+                # Append additional data
+                additional_data = {
+                    "host": request.user.id
+                }
+
+                # Combine existing data and additional data
+                updated_data = {**existing_data, **additional_data}
+                serialized_item = SingleRoomSerializer(data=updated_data)
+                serialized_item.is_valid(raise_exception=True)
+                serialized_item.save()
+
+
+                # After creating the room, get the room_id
+                room_id = serialized_item.instance.id
+                print(room_id)
+
+                # Create a new entry in the Rooms_Members table
+                room_member_data = {
+                    'member': request.user.id,
+                    'room': room_id,
+                    'is_host': True,
+                }
+                room_member_serializer = RoomsMembersSerializer(data=room_member_data)
+                room_member_serializer.is_valid(raise_exception=True)
+                room_member_serializer.save()
+
+                return Response(serialized_item.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': 'An error occurred'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class SingleMemberInRoomAPI(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, room_id):
+        member_id = request.user.id
+
+        is_host = False
+        is_member = False
+
+        rooms_members = Rooms_Members.objects.filter(
+            room=room_id, member=member_id).first()
+        print(rooms_members)
+
+        if rooms_members:
+            is_host = rooms_members.is_host
+            is_member = True
+
+        return Response({
+            "is_host": is_host,
+            "is_member": is_member
+        }, status=status.HTTP_200_OK)
+
+    def post(self, request, room_id):
+        is_host = request.data.get('is_host', False)
+        member_id = request.user.id
+
+        # Check if the room-member pair already exists
+        if Rooms_Members.objects.filter(room=room_id, member=member_id).exists():
+            return Response({"detail": "This room-member pair already exists."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # If it doesn't exist, add the pair
+        data = {
+            'is_host': is_host,
+            'room': room_id,
+            'member': member_id,
+        }
+
+        serialized_item = RoomsMembersSerializer(data=data)
         serialized_item.is_valid(raise_exception=True)
         serialized_item.save()
         return Response(serialized_item.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, room_id):
+        member_id = request.user.id
+
+        # Check if the room-member pair exists
+        try:
+            rooms_member = Rooms_Members.objects.get(
+                room=room_id, member=member_id)
+        except Rooms_Members.DoesNotExist:
+            return Response({"detail": "This room-member pair does not exist."}, status=status.HTTP_400_BAD_REQUEST)
+
+        rooms_member.delete()
+
+        return Response({"detail": "Data has been successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
 
     # ======================= REST API for Followers ===================================
 
