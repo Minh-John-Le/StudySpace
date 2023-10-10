@@ -46,7 +46,7 @@
 }
 
 .avatarLink__display-name {
-  color: var(--color-light-gray);
+  color: var(--color-main);
 }
 
 .btn__actions {
@@ -63,4 +63,37 @@
   align-items: center;
   text-align: center; /* Center the text horizontally within the button */
   white-space: nowrap;
+}
+
+.subtitle {
+  color: var(--color-gray);
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 80%;
+}
+
+.description {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-light-gray);
+}
+
+.roomInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -.5rem;
+}
+
+.room-name {
+  color: var(--color-main);
+  flex-grow: 1; /* Allow the room name to take up remaining space */
+  font-size: 150%;
+}
+
+.button-group {
+  margin-left: 1rem; /* Adjust spacing between room name and button as needed */
+  display: flex;
+  gap: 10px; /* Adjust the gap size as needed */
 }

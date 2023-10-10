@@ -74,10 +74,10 @@
 
 .roomcard__meta {
   border-top: 1px solid var(--color-dark-medium);
-  padding-top: 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: -2rem;
 }
 
 .roomcard__topic {

@@ -1,25 +1,48 @@
 from datetime import datetime
 from django.utils.timesince import timesince
 from rest_framework import serializers
-from .models import Rooms, Rooms_Members, Followers
+from .models import Rooms, Rooms_Members, Followers, Messages
 from authentication.models import UserProfile
 
 
-class RoomsSerializer(serializers.ModelSerializer):
+# ================================= ROOM Serializer =================================
+class RoomMetaContentSerializer(serializers.ModelSerializer):
+    host_display_name = serializers.SerializerMethodField(read_only=True)
+    host_image_url = serializers.SerializerMethodField(read_only=True)
+    created_ago = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Rooms
-        fields = '__all__'  # You can specify specific fields if needed
+        fields = '__all__'
+
+    def get_host_display_name(self, obj):
+        try:
+            profile = UserProfile.objects.get(user=obj.host)
+            return profile.display_name
+        except UserProfile.DoesNotExist:
+            return "StudySpace User"
+
+    def get_host_image_url(self, obj):
+        try:
+            profile = UserProfile.objects.get(user=obj.host)
+            return profile.profile_image_url
+        except UserProfile.DoesNotExist:
+            return ""
+
+    def get_created_ago(self, obj):
+        if obj.created_at:
+            created_at = datetime.fromisoformat(str(obj.created_at))
+
+            time_difference = timesince(created_at)
+
+            return time_difference
+
+        return ""
 
 
 class SingleRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rooms
-        fields = '__all__'  # You can specify specific fields if needed
-
-
-class RoomsMembersSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Rooms_Members
         fields = '__all__'  # You can specify specific fields if needed
 
 
@@ -65,14 +88,18 @@ class RoomCardSerializer(serializers.ModelSerializer):
 
         return ""
 
+# ================================ Room Member ==========================================
 
-class FollowStatusSerializer(serializers.ModelSerializer):
+
+class RoomsMembersSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Followers
+        model = Rooms_Members
         fields = '__all__'
 
+# ================================= FOllOWERS Serializer =================================
 
-class FollowerSerializer(serializers.ModelSerializer):
+
+class FollowStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Followers
         fields = '__all__'
@@ -119,4 +146,27 @@ class FollowingSerializer(serializers.ModelSerializer):
         # Check if UserProfile exists for the follower
         if hasattr(obj.user, 'userprofile'):
             return obj.user.userprofile.profile_image_url
+        return None
+
+# ================================= MESSAGE Serializer =================================
+
+
+class RoomMessageSerializer(serializers.ModelSerializer):
+    writer_image_url = serializers.SerializerMethodField()
+    writer_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Messages
+        fields = '__all__'
+
+    def get_writer_name(self, obj):
+        # Check if UserProfile exists for the follower
+        if hasattr(obj.writer, 'userprofile'):
+            return obj.writer.userprofile.display_name
+        return None
+
+    def get_writer_image_url(self, obj):
+        # Check if UserProfile exists for the follower
+        if hasattr(obj.writer, 'userprofile'):
+            return obj.writer.userprofile.profile_image_url
         return None

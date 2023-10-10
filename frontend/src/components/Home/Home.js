@@ -1,17 +1,15 @@
-import React, { useContext } from "react";
+import React, { } from "react";
 
-import Card from "../UI/Card/Card";
 import Button from "../UI/Button/Button";
 import classes from "./Home.module.css";
-import AuthContext from "../../store/auth-context";
-import RoomCard from "./RoomCard";
+//import AuthContext from "../../store/auth-context";
 import RoomCardList from "./RoomCardList";
-import RoomPagination from "./RoomPagination";
-import SideCard from "../Profile/SideCard";
+import SideCard from "../UI/SideCard/SideCard";
 import { useNavigate } from "react-router-dom";
+import ScrollableSideCard from "../UI/SideCard/ScrollableSideCard";
 
 const Home = (props) => {
-  const authCtx = useContext(AuthContext);
+  //const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
 
   const addRoomHandler = (event) => {
@@ -37,7 +35,7 @@ const Home = (props) => {
       </div>
 
       <div className={classes["side-card"]}>
-        <SideCard title={"TOP HOSTS"}></SideCard>
+        <ScrollableSideCard title={"TOP HOSTS"}></ScrollableSideCard>
       </div>
     </div>
   );

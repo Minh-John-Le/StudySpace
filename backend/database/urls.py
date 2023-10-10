@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.authtoken.views import obtain_auth_token
 from .views import RoomCardAPI, FollowStatusAPI, FollowerAPI, FollowingAPI, \
-    NewRoomAPI, SingleMemberInRoomAPI
+    NewRoomAPI, SingleMemberInRoomAPI, RoomMessageAPI, RoomMetaContentAPI
 
 urlpatterns = [
     path('room-card/', RoomCardAPI.as_view()),
@@ -10,5 +10,7 @@ urlpatterns = [
     path('following/<int:id>/', FollowingAPI.as_view()),
     path('new-room/', NewRoomAPI.as_view()),
     path('member-in-room/<int:room_id>/', SingleMemberInRoomAPI.as_view()),
-    
+    path('room-message/<int:room_id>/', RoomMessageAPI.as_view()),
+    path('room-meta-content/<int:room_id>/', RoomMetaContentAPI.as_view()),
+
 ]

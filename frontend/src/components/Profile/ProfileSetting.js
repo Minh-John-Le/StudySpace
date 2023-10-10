@@ -6,7 +6,7 @@ import Button from "../UI/Button/Button";
 import AuthContext from "../../store/auth-context";
 import Input from "../UI/Input/Input";
 import useInput from "../../hooks/use-input";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const ProfileSetting = (props) => {
@@ -83,7 +83,7 @@ const ProfileSetting = (props) => {
       }
 
       // Assuming your backend responds with a JSON object containing a "token" field
-      const data = await response.json();
+      //const data = await response.json();
       setProfile(profile);
     } catch (error) {
       // Handle any other errors (e.g., network issues)
@@ -91,7 +91,7 @@ const ProfileSetting = (props) => {
     }
   };
 
-  const formIsValid = enteredUsernameIsValid;
+  //const formIsValid = enteredUsernameIsValid;
 
   //=================================================================================
 
@@ -123,7 +123,6 @@ const ProfileSetting = (props) => {
     if (authToken) {
       fetchProfile(); // Call the function here if authToken is available
     }
-    console.log(profile);
     resetDisplayNameInput(profile.display_name);
     resetBioInput(profile.bio);
   }, [authToken, profile.display_name, profile.bio]);

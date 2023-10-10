@@ -1,6 +1,6 @@
 import React from "react";
 import RoomBox from "./RoomBox";
-import SideCard from "../Profile/SideCard";
+import SideCard from "../UI/SideCard/SideCard";
 import classes from "./Room.module.css";
 
 const Room = () => {

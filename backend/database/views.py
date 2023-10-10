@@ -1,21 +1,21 @@
 from django.core.paginator import Paginator
 from django.db.models import Count
 from django.db import models, transaction
+from django.forms import ValidationError
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Rooms, Followers, Rooms_Members
+from .models import Rooms, Followers, Rooms_Members, Messages
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from .serializers import RoomsSerializer, RoomCardSerializer, FollowStatusSerializer, \
-    FollowerSerializer, FollowingSerializer, SingleRoomSerializer, RoomsMembersSerializer
+from .serializers import RoomMetaContentSerializer, RoomCardSerializer, FollowStatusSerializer, \
+    FollowerSerializer, FollowingSerializer, SingleRoomSerializer, RoomsMembersSerializer, \
+    RoomMessageSerializer
 
 
 # Create your views here.
-# ======================= REST API for RoomCard ===================================
-
-# ------------ All Rooms------------------
+# ======================= REST API for RoomCard Display ===================================
 class RoomCardAPI(APIView):
     def get(self, request):
         page_number = request.query_params.get('page', '1')
@@ -52,7 +52,27 @@ class RoomCardAPI(APIView):
 
         return Response(serialized_item.data, status=status.HTTP_200_OK)
 
-# ======================= REST API for New Room===================================
+
+class RoomMetaContentAPI(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, room_id):
+        try:
+            item = Rooms.objects.get(id=room_id)
+        except Rooms.DoesNotExist:
+            return Response(
+                {"error": "Room Content not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serialized_item = RoomMetaContentSerializer(item)
+        return Response(serialized_item.data, status=status.HTTP_200_OK)
+
+
+# ======================= REST API for Room Creation===================================
+
+
 class NewRoomAPI(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -81,7 +101,6 @@ class NewRoomAPI(APIView):
                 serialized_item.is_valid(raise_exception=True)
                 serialized_item.save()
 
-
                 # After creating the room, get the room_id
                 room_id = serialized_item.instance.id
                 print(room_id)
@@ -92,13 +111,16 @@ class NewRoomAPI(APIView):
                     'room': room_id,
                     'is_host': True,
                 }
-                room_member_serializer = RoomsMembersSerializer(data=room_member_data)
+                room_member_serializer = RoomsMembersSerializer(
+                    data=room_member_data)
                 room_member_serializer.is_valid(raise_exception=True)
                 room_member_serializer.save()
 
                 return Response(serialized_item.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': 'An error occurred'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# ======================= REST API for Single Member In Single Room ===================================
 
 
 class SingleMemberInRoomAPI(APIView):
@@ -158,7 +180,7 @@ class SingleMemberInRoomAPI(APIView):
 
         return Response({"detail": "Data has been successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
 
-    # ======================= REST API for Followers ===================================
+# ======================= REST API for Followers/ Following ===================================
 
 
 class FollowStatusAPI(APIView):
@@ -227,3 +249,36 @@ class FollowingAPI(APIView):
         serializer = FollowingSerializer(user_followers, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+# ======================= REST API for Message In Room================================================
+
+
+class RoomMessageAPI(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, room_id):
+        messages = Messages.objects.filter(
+            room=room_id).order_by('-created_at')[:100]
+
+        serializer = RoomMessageSerializer(messages, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, room_id):
+        writer = request.user  # Assuming the user is authenticated
+
+        content = request.data.get('content', '').strip()
+
+        # Validate the content
+        if not content:
+            raise ValidationError("Message content is required")
+
+        # Create a new message
+        message = Messages.objects.create(
+            writer=writer,
+            room_id=room_id,
+            content=content
+        )
+
+        serializer = RoomMessageSerializer(message)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

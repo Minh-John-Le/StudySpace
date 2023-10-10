@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import UserProfile from "./UserProfile";
-import SideCard from "./SideCard";
+import SideCard from "../UI/SideCard/SideCard";
 import classes from "./Profile.module.css";
 import Cookies from "js-cookie";
 import { useParams } from "react-router-dom";
