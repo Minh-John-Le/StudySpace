@@ -96,6 +96,28 @@ class RoomsMembersSerializer(serializers.ModelSerializer):
         model = Rooms_Members
         fields = '__all__'
 
+
+class AllMembersInRoomSerializer(serializers.ModelSerializer):
+    display_name = serializers.SerializerMethodField()
+    profile_image_url = serializers.SerializerMethodField()
+    profile_id = serializers.ReadOnlyField(source='member.id')
+
+    class Meta:
+        model = Rooms_Members
+        fields = '__all__'
+
+    def get_display_name(self, obj):
+        # Check if UserProfile exists for the follower
+        if hasattr(obj.member, 'userprofile'):
+            return obj.member.userprofile.display_name
+        return None
+
+    def get_profile_image_url(self, obj):
+        # Check if UserProfile exists for the follower
+        if hasattr(obj.member, 'userprofile'):
+            return obj.member.userprofile.profile_image_url
+        return None
+
 # ================================= FOllOWERS Serializer =================================
 
 

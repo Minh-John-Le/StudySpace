@@ -61,6 +61,7 @@ const RoomBox = (props) => {
       const data = await response.json();
 
       setMemberStatus(data);
+      props.changeMemberStatus(data);
 
       // Format the created_at property for each message
     } catch (error) {
@@ -86,6 +87,84 @@ const RoomBox = (props) => {
     return formattedDate;
   }
 
+  const joinRoom = async (roomId, authToken) => {};
+
+  const leaveRoom = async (roomId, authToken) => {
+    const apiUrl = `http://localhost:8000/api/database/member-in-room/${roomId}/`;
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "DELETE", // You might need to adjust this depending on your API
+        headers: {
+          Authorization: `Token ${authToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // You can optionally handle the response data if the backend returns any
+      const responseData = await response.json();
+
+      // Return the response data or perform any other necessary actions
+      return responseData;
+    } catch (error) {
+      console.error("Error joining room:", error);
+      // Handle the error as needed, e.g., show an error message to the user
+      throw error; // You can re-throw the error to handle it at the component level
+    }
+  };
+  const onJoinRoomHandler = async (event) => {
+    event.preventDefault();
+    const apiUrl = `http://localhost:8000/api/database/member-in-room/${id}/`;
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST", // You might need to adjust this depending on your API
+        headers: {
+          Authorization: `Token ${authToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      fetchMemberStatus(id, authToken);
+    } catch (error) {
+      console.error("Error joining room:", error);
+      // Handle the error as needed, e.g., show an error message to the user
+      throw error; // You can re-throw the error to handle it at the component level
+    }
+  };
+
+  const onLeaveRoomHandler = async (event) => {
+    event.preventDefault();
+    const apiUrl = `http://localhost:8000/api/database/member-in-room/${id}/`;
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "DELETE", // You might need to adjust this depending on your API
+        headers: {
+          Authorization: `Token ${authToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      fetchMemberStatus(id, authToken);
+    } catch (error) {
+      console.error("Error joining room:", error);
+      // Handle the error as needed, e.g., show an error message to the user
+      throw error; // You can re-throw the error to handle it at the component level
+    }
+  };
   useEffect(() => {
     fetchRoomMessage(id, authToken);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -135,9 +214,19 @@ const RoomBox = (props) => {
           {!memberStatus.is_host && (
             <div className={classes["button-group"]}>
               {memberStatus.is_member ? (
-                <button className={classes["btn__actions"]}>{"Leave"}</button>
+                <button
+                  className={classes["btn__actions"]}
+                  onClick={onLeaveRoomHandler}
+                >
+                  {"Leave"}
+                </button>
               ) : (
-                <button className={classes["btn__actions"]}>{"Join"}</button>
+                <button
+                  className={classes["btn__actions"]}
+                  onClick={onJoinRoomHandler}
+                >
+                  {"Join"}
+                </button>
               )}
             </div>
           )}

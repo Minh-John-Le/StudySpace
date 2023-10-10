@@ -24,8 +24,40 @@
   border-top-right-radius: 0px;
   border-top-left-radius: 0px;
   height: 400px;
-  background:var(--color-dark);
+  background: var(--color-dark);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+}
+
+/* Style the scrollbar */
+.body::-webkit-scrollbar {
+  width: 10px;
+  background: var(
+    --color-dark-light
+  ); /* Background color of the scrollbar track */
+  border-radius: 10px;
+}
+
+.body::-webkit-scrollbar-thumb {
+  background: var(
+    --color-dark-medium
+  ); /* Color of the scrollbar thumb (drag handle) */
+  border-radius: 10px; /* Rounded corners for the thumb */
+}
+.body::-webkit-scrollbar-thumb:hover {
+  background: var(--color-dark-medium); /* Color of the thumb on hover */
+  border-radius: 10px;
+}
+
+/* Style the scrollbar track when it's not actively being scrolled */
+.body::-webkit-scrollbar-track {
+  background: var(--color-dark); /* Background color of the scrollbar track */
+  border-radius: 10px;
+}
+
+/* Style the scrollbar when it's in a "corner" (e.g., bottom-right) */
+.body::-webkit-scrollbar-corner {
+  background: var(--color-dark);
+  border-radius: 10px;
 }
 
 .avatarContainer {

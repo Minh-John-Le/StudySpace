@@ -11,7 +11,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .serializers import RoomMetaContentSerializer, RoomCardSerializer, FollowStatusSerializer, \
     FollowerSerializer, FollowingSerializer, SingleRoomSerializer, RoomsMembersSerializer, \
-    RoomMessageSerializer
+    RoomMessageSerializer, AllMembersInRoomSerializer
 
 
 # Create your views here.
@@ -179,6 +179,24 @@ class SingleMemberInRoomAPI(APIView):
         rooms_member.delete()
 
         return Response({"detail": "Data has been successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
+
+# ======================= REST API for All Member In Single Room ===================================
+
+
+class AllMembersInRoomAPI(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, room_id):
+        # Get the user's followers based on the 'id' parameter
+        members = Rooms_Members.objects.filter(
+            room=room_id).order_by("created_at")
+
+        # Serialize the followers' data
+        serializer = AllMembersInRoomSerializer(members, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 # ======================= REST API for Followers/ Following ===================================
 
