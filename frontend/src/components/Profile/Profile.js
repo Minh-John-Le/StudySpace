@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 const Profile = () => {
   const [follower, setFollower] = useState([]);
   const [following, setFollowing] = useState([]);
+  const [followStatus, setFollowStatus] = useState([]);
 
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
@@ -38,7 +39,7 @@ const Profile = () => {
     if (authToken) {
       fetchFollower(); // Call the function here if authToken is available
     }
-  }, [authToken, id]);
+  }, [authToken, id, followStatus]);
 
   useEffect(() => {
     const apiUrl = `http://localhost:8000/api/database/following/${id}/`;
@@ -74,10 +75,10 @@ const Profile = () => {
         <SideCard title={"FOLLOWERS"} data={follower} />
       </div>
       <div className={classes["user-profile"]}>
-        <UserProfile />
+        <UserProfile changeFollowStatus={setFollowStatus} />
       </div>
       <div className={classes["side-card"]}>
-        <SideCard title={"FOLLOWING"} data = {following}/>
+        <SideCard title={"FOLLOWING"} data={following} />
       </div>
     </div>
   );

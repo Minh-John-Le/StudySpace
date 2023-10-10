@@ -10,6 +10,7 @@ import Signup from "./components/Signup/Signup";
 import Profile from "./components/Profile/Profile";
 import ProfileSetting from "./components/Profile/ProfileSetting";
 import NewRoom from "./components/Home/NewRoom";
+import Room from "./components/Room/Room";
 
 function App() {
   const ctx = useContext(AuthContext);
@@ -28,6 +29,7 @@ function App() {
             element={<ProfileSetting></ProfileSetting>}
           />
           <Route path="/new-room" element={<NewRoom></NewRoom>} />
+          <Route path="/room/:id" element={<Room></Room>} />
         </Routes>
       </main>
     </Router>

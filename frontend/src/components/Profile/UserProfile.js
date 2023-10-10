@@ -5,29 +5,7 @@ import Button from "../UI/Button/Button";
 import Cookies from "js-cookie";
 import { useParams, useNavigate } from "react-router-dom";
 
-async function fetchFollowStatus(id, authToken, setFollowStatus) {
-  const apiUrl = `http://localhost:8000/api/database/follow-status/${id}/`;
-
-  try {
-    const response = await fetch(apiUrl, {
-      method: "GET",
-      headers: {
-        Authorization: `Token ${authToken}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const followStatusRs = await response.json();
-    setFollowStatus(followStatusRs);
-  } catch (error) {
-    console.error("Error fetching follow status:", error);
-  }
-}
-
-const UserProfile = () => {
+const UserProfile = (props) => {
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
 
@@ -39,6 +17,30 @@ const UserProfile = () => {
     event.preventDefault();
     navigate("/profile-setting");
   };
+
+  async function fetchFollowStatus(id, authToken) {
+    const apiUrl = `http://localhost:8000/api/database/follow-status/${id}/`;
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${authToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const followStatusRs = await response.json();
+      setFollowStatus(followStatusRs);
+      props.changeFollowStatus(followStatusRs);
+    } catch (error) {
+      console.error("Error fetching follow status:", error);
+    }
+  }
+
   const followHandler = async (event) => {
     event.preventDefault();
 
@@ -61,7 +63,7 @@ const UserProfile = () => {
       // Assuming you want to update the followStatus in your component state,
       // you can call the fetchFollowStatus function again to update it.
 
-      fetchFollowStatus(id, authToken, setFollowStatus);
+      fetchFollowStatus(id, authToken);
     } catch (error) {
       console.error("Error following user:", error);
     }
@@ -86,14 +88,14 @@ const UserProfile = () => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      fetchFollowStatus(id, authToken, setFollowStatus);
+      fetchFollowStatus(id, authToken);
     } catch (error) {
       console.error("Error unfollowing user:", error);
     }
   };
-  
+
   useEffect(() => {
-    fetchFollowStatus(id, authToken, setFollowStatus);
+    fetchFollowStatus(id, authToken);
   }, [authToken, id]);
 
   useEffect(() => {

@@ -1,8 +1,7 @@
 .header {
   background-color: var(--color-dark-light);
   width: 90%;
-  max-width: 40rem;
-  min-width: 18rem;
+  max-width: 100rem;
   margin-left: auto;
   margin-right: auto;
   padding: 0.1rem 1rem;
@@ -17,8 +16,7 @@
 
 .body {
   width: 90%;
-  max-width: 40rem;
-  min-width: 18rem;
+  max-width: 100rem;
   margin: 0rem auto;
   padding: 2rem 2rem;
   border-top-right-radius: 0px;
@@ -49,4 +47,20 @@
 
 .avatarLink__display-name {
   color: var(--color-light-gray);
+}
+
+.btn__actions {
+  font: inherit;
+  border: 2px solid var(--color-main);
+  background: transparent;
+  color: var(--color-main);
+  padding: 0.5rem 4rem; /* Adjust padding as needed */
+  cursor: pointer;
+  font-size: 1rem; /* Adjust font size as needed */
+  border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center; /* Center the text horizontally within the button */
+  white-space: nowrap;
 }

@@ -1,0 +1,17 @@
+.room-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 50px; /* Adjust the gap as needed */
+    margin: 100px 50px; /* Adjust the left and right margin as needed */
+  }
+  
+  .side-card {
+    flex: 1; /* Takes up 25% of the available space */
+  }
+  
+  .room-box{
+    
+    flex: 3; /* Takes up 50% of the available space */
+  }
+  
