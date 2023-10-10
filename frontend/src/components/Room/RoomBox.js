@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 const RoomBox = (props) => {
   const [messages, setMessages] = useState([]);
   const [roomMetaContent, setRoomMetaContent] = useState([]);
+  const [memberStatus, setMemberStatus] = useState([]);
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
 
@@ -42,6 +43,31 @@ const RoomBox = (props) => {
     }
   }
 
+  async function fetchMemberStatus(id, authToken) {
+    const apiUrl = `http://localhost:8000/api/database/member-in-room/${id}/`;
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${authToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      setMemberStatus(data);
+
+      // Format the created_at property for each message
+    } catch (error) {
+      console.error("Error fetching member status:", error);
+    }
+  }
+
   function formatCreatedAt(created_at) {
     const date = new Date(created_at);
     // Convert to local time
@@ -63,6 +89,7 @@ const RoomBox = (props) => {
   useEffect(() => {
     fetchRoomMessage(id, authToken);
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchMemberStatus(id, authToken);
   }, [authToken, id]);
 
   useEffect(() => {
@@ -96,19 +123,35 @@ const RoomBox = (props) => {
   return (
     <React.Fragment>
       <Card className={classes.header}>
-        <h3>{"Java Best Room 123 "}</h3>
+        <h3>{roomMetaContent.room_name}</h3>
       </Card>
 
       <Card className={classes.body}>
         <div className={classes.roomInfo}>
-          <div className={classes["room-name"]}>{"Java Best Room 123 "}</div>
-          <div className={classes["button-group"]}>
-            <button className={classes["btn__actions"]}>{"Join"}</button>
-            <button className={classes["btn__actions"]}>{"Edit"}</button>
+          <div className={classes["room-name"]}>
+            {roomMetaContent.room_name}
           </div>
+
+          {!memberStatus.is_host && (
+            <div className={classes["button-group"]}>
+              {memberStatus.is_member ? (
+                <button className={classes["btn__actions"]}>{"Leave"}</button>
+              ) : (
+                <button className={classes["btn__actions"]}>{"Join"}</button>
+              )}
+            </div>
+          )}
+          {memberStatus.is_host && (
+            <div className={classes["button-group"]}>
+              <button className={classes["btn__actions"]}>{"Delete"}</button>
+              <button className={classes["btn__actions"]}>{"Edit"}</button>
+            </div>
+          )}
         </div>
 
-        <div className={classes.description}>{roomMetaContent.created_ago} {"ago"}</div>
+        <div className={classes.description}>
+          {roomMetaContent.created_ago} {"ago"}
+        </div>
         <div className={classes.subtitle}>HOSTED BY</div>
         <Link
           to={`/user/${roomMetaContent.host}`}
