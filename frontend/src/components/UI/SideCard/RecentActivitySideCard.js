@@ -12,7 +12,44 @@ const RecentActivitySideCard = (props) => {
       </Card>
 
       <ScrollableCard className={classes.body}>
-        
+        {props.data &&
+          props.data.map((message, index) => (
+            <Card className={classes["inner-body"]}>
+              <div className={classes["writer-info"]}>
+                <Link
+                  to={`/user/${message.writer}`}
+                  className={classes.avatarLink}
+                >
+                  <div className={classes.avatarContainer}>
+                    <img
+                      src={message.writer_image_url}
+                      alt="Avatar"
+                      className={classes.avatar}
+                    />
+                  </div>
+                  <span className={classes["avatarLink__display-name"]}>
+                    {message.writer_name}
+                  </span>
+                </Link>
+              </div>
+              <div className={classes["sent-date"]}>{message.created_ago}</div>
+
+              <div className={classes["sent-date"]}>
+                {`Replied to post "`}
+                <Link
+                  to={`/room/${message.room}`}
+                  className={classes["room-link"]}
+                >
+                  {message.room_name}
+                </Link>
+                {`"`}
+              </div>
+
+              <Card className={classes["message-card"]}>
+                <div>{message.content}</div>
+              </Card>
+            </Card>
+          ))}
       </ScrollableCard>
     </React.Fragment>
   );

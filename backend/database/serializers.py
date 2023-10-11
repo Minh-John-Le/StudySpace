@@ -193,10 +193,50 @@ class RoomMessageSerializer(serializers.ModelSerializer):
             return obj.writer.userprofile.profile_image_url
         return None
 
+
+class MemberRecentMessageSerializer(serializers.ModelSerializer):
+    writer_image_url = serializers.SerializerMethodField()
+    writer_name = serializers.SerializerMethodField()
+    room_name = serializers.SerializerMethodField()
+    created_ago = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Messages
+        fields = '__all__'
+
+    def get_writer_name(self, obj):
+        # Check if UserProfile exists for the follower
+        if hasattr(obj.writer, 'userprofile'):
+            return obj.writer.userprofile.display_name
+        return None
+
+    def get_writer_image_url(self, obj):
+        # Check if UserProfile exists for the follower
+        if hasattr(obj.writer, 'userprofile'):
+            return obj.writer.userprofile.profile_image_url
+        return None
+
+    def get_room_name(self, obj):
+        return obj.room.room_name
+
+    def get_created_ago(self, obj):
+        if obj.created_at:
+            created_at = datetime.fromisoformat(str(obj.created_at))
+            time_difference = timesince(created_at)
+
+            return time_difference
+
+        return ""
+
+
 # ================================= Top Member Serializer =================================
+
+
 class TopMemberSerializer(serializers.ModelSerializer):
-    display_name = serializers.CharField(source="user.userprofile.display_name")
-    profile_image_url = serializers.URLField(source="user.userprofile.profile_image_url")
+    display_name = serializers.CharField(
+        source="user.userprofile.display_name")
+    profile_image_url = serializers.URLField(
+        source="user.userprofile.profile_image_url")
     profile_id = serializers.ReadOnlyField(source="user.id")
     follower_count = serializers.IntegerField()
 

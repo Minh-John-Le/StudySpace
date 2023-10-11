@@ -12,7 +12,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .serializers import RoomMetaContentSerializer, RoomCardSerializer, FollowStatusSerializer, \
     FollowerSerializer, FollowingSerializer, SingleRoomSerializer, RoomsMembersSerializer, \
-    RoomMessageSerializer, AllMembersInRoomSerializer, TopMemberSerializer
+    RoomMessageSerializer, AllMembersInRoomSerializer, TopMemberSerializer, MemberRecentMessageSerializer
 
 
 # Create your views here.
@@ -337,3 +337,15 @@ class RoomMessageAPI(APIView):
 
         serializer = RoomMessageSerializer(message)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class MemberRecentMessageAPI(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        messages = Messages.objects.filter(
+            writer=request.user).order_by('-created_at')[:10]
+
+        serializer = MemberRecentMessageSerializer(messages, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
