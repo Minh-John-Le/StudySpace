@@ -47,7 +47,7 @@ const Room = () => {
       </div>
       <div className={classes["side-card"]}>
         <ScrollableSideCard
-          title={"Members"}
+          title={"MEMBERS"}
           data={members}
         ></ScrollableSideCard>
       </div>

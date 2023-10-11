@@ -13,7 +13,7 @@ urlpatterns = [
     path('member-in-room/<int:room_id>/', SingleMemberInRoomAPI.as_view()),
     path('all-member-in-room/<int:room_id>/', AllMembersInRoomAPI.as_view()),
     path('room-message/<int:room_id>/', RoomMessageAPI.as_view()),
-    path('recent-message/', MemberRecentMessageAPI.as_view()),
+    path('recent-message/<int:user_id>/', MemberRecentMessageAPI.as_view()),
     path('room-meta-content/<int:room_id>/', RoomMetaContentAPI.as_view()),
     path('top-member/', TopMembersAPI.as_view()),
 

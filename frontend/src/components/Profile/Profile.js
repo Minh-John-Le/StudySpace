@@ -72,7 +72,7 @@ const Profile = () => {
   }, [authToken, id]);
 
   useEffect(() => {
-    const apiUrl = `http://localhost:8000/api/database/recent-message/`;
+    const apiUrl = `http://localhost:8000/api/database/recent-message/${id}/`;
 
     async function fetchRecentMessage() {
       try {

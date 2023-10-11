@@ -202,7 +202,7 @@ const RoomBox = (props) => {
   return (
     <React.Fragment>
       <Card className={classes.header}>
-        <h3>{roomMetaContent.room_name}</h3>
+        <h3>{roomMetaContent.room_name && roomMetaContent.room_name.toUpperCase()}</h3>
       </Card>
 
       <Card className={classes.body}>

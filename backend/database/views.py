@@ -343,9 +343,9 @@ class MemberRecentMessageAPI(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
+    def get(self, request, user_id):
         messages = Messages.objects.filter(
-            writer=request.user).order_by('-created_at')[:10]
+            writer=user_id).order_by('-created_at')[:10]
 
         serializer = MemberRecentMessageSerializer(messages, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
