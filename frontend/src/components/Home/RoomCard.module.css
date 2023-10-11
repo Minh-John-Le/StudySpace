@@ -13,14 +13,13 @@
 }
 
 .roomcard-header-left {
-  text-align: left; 
-  margin-top: -2rem; 
- 
+  text-align: left;
+  margin-top: -2rem;
 }
 
 .roomcard-header-right {
   text-align: right;
-  margin-top: -0.5rem; 
+  margin-top: -0.5rem;
   color: var(--color-light-gray);
 }
 
@@ -31,25 +30,35 @@
 }
 
 .roomcard__avatar-container__img {
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   object-fit: cover;
   border-radius: 50%;
+  border-color: var(--color-main);
+  border-style: solid;
+  border-width: 1%;
 }
 
 .roomcard__avatarLink,
 .roomcard__avatar-container__link {
   text-decoration: none;
   color: var(--color-main);
-  margin-left: 1rem; /* Adjust the spacing as needed */
-  /* ... (other styles) */
+  margin-left: 0.5rem;
+  font-weight: bold;
 }
 
+.roomcard__member-avatarLink {
+  text-decoration: none;
+  color: var(--color-main);
+  margin-left: 0.25rem;
+  font-weight: bold;
+}
 .roomcard__room-link {
   display: flex;
   align-items: left;
   text-decoration: none;
   color: var(--color-main-light);
+  margin-bottom: -1rem;
 }
 
 .roomcard__room-link :hover {
@@ -87,4 +96,13 @@
   border-radius: 5rem;
   font-weight: 500;
   font-size: 1rem;
+}
+
+.roomcard_room-member {
+  display: flex;
+  align-items: left;
+  margin-left: -0.25rem;
+  row-gap: 0px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }

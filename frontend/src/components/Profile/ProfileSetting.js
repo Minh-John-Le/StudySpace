@@ -43,7 +43,7 @@ const ProfileSetting = (props) => {
     valueChangeHandler: displayNameChangedHandler,
     inputBlurHandler: displayNameBlurHandler,
     reset: resetDisplayNameInput,
-  } = useInput((value) => value.trim().length > 0 && value.trim().length <= 16);
+  } = useInput((value) => value.trim().length > 0 && value.trim().length <= 32);
 
   const {
     value: enteredBio,

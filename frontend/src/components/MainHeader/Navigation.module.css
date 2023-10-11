@@ -54,7 +54,9 @@
   height: 40px; /* Adjust the size as needed */
   border-radius: 50%;
   overflow: hidden;
-  margin-right: 1rem; /* Adjust the spacing as needed */
+  margin-right: .5rem; /* Adjust the spacing as needed */
+  border-color: var(--color-main);
+  border-style: solid;
 }
 
 .avatar {
@@ -75,8 +77,10 @@
   display: none;
 }
 
-
 .dropdown-menu.show {
   display: block;
 }
 
+.roomcard__avatar-container__link {
+  font-weight: bold;
+}

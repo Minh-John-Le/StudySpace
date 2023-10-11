@@ -192,3 +192,14 @@ class RoomMessageSerializer(serializers.ModelSerializer):
         if hasattr(obj.writer, 'userprofile'):
             return obj.writer.userprofile.profile_image_url
         return None
+
+# ================================= Top Member Serializer =================================
+class TopMemberSerializer(serializers.ModelSerializer):
+    display_name = serializers.CharField(source="user.userprofile.display_name")
+    profile_image_url = serializers.URLField(source="user.userprofile.profile_image_url")
+    profile_id = serializers.ReadOnlyField(source="user.id")
+    follower_count = serializers.IntegerField()
+
+    class Meta:
+        model = UserProfile
+        fields = '__all__'

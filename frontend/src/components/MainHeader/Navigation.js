@@ -39,8 +39,6 @@ const Navigation = (props) => {
     if (authToken) {
       fetchProfile(); // Call the function here if authToken is available
     }
-
-    console.log(profile);
   }, [authToken]);
 
   return (
@@ -56,7 +54,9 @@ const Navigation = (props) => {
                   className={classes.avatar}
                 />
               </div>
-              <span>Login</span>
+              <span className={classes["roomcard__avatar-container__link"]}>
+                {"Login"}
+              </span>
             </Link>
           </li>
         )}

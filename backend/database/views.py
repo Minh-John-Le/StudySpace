@@ -7,11 +7,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Rooms, Followers, Rooms_Members, Messages
+from authentication.models import UserProfile
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .serializers import RoomMetaContentSerializer, RoomCardSerializer, FollowStatusSerializer, \
     FollowerSerializer, FollowingSerializer, SingleRoomSerializer, RoomsMembersSerializer, \
-    RoomMessageSerializer, AllMembersInRoomSerializer
+    RoomMessageSerializer, AllMembersInRoomSerializer, TopMemberSerializer
 
 
 # Create your views here.
@@ -22,35 +23,62 @@ class RoomCardAPI(APIView):
         topic = request.query_params.get('topic')
 
         if topic:
-            items = Rooms.objects.filter(topic__icontains=topic)
+            rooms = Rooms.objects.filter(topic__icontains=topic)
         else:
-            items = Rooms.objects.all()
+            rooms = Rooms.objects.all()
 
         # Annotate the queryset with the total_member count
-        items = items.annotate(total_member=Count('rooms_members'))
+        rooms = rooms.annotate(total_member=Count('rooms_members'))
 
-        # Sort the queryset by 'total_member' in ascending order
-        items = items.order_by('-total_member')
+        # Sort the queryset by 'total_member' in descending order
+        rooms = rooms.order_by('-total_member')
 
         # Set the number of items per page (e.g., 10)
-        paginator = Paginator(items, per_page=5)
+        per_page = 5
+        paginator = Paginator(rooms, per_page)
+
+        # Get the maximum page number
+        max_page = paginator.num_pages
 
         # Process page
         if page_number == "last":
-            page_number = int(paginator.num_pages)
+            page_number = max_page
         elif page_number == "first" or not page_number.isdigit():
-            page_number = int(1)
+            page_number = 1
         else:
             page_number = int(page_number)
 
         try:
-            page = paginator.page(min(page_number, paginator.num_pages))
+            page = paginator.page(min(page_number, max_page))
         except:
             return Response([], status=status.HTTP_404_NOT_FOUND)
 
-        serialized_item = RoomCardSerializer(page, many=True)
+        # Create an empty list to store serialized room data with members
+        result = []
 
-        return Response(serialized_item.data, status=status.HTTP_200_OK)
+        for room in page:
+            members = Rooms_Members.objects.filter(
+                room=room.id).order_by("-created_at")[:10]
+
+            # Serialize the followers' data
+            members_serializer = AllMembersInRoomSerializer(members, many=True)
+
+            # Serialize the room data
+            room_serializer = RoomCardSerializer(room)
+
+            # Append the serialized room data with members to the result list
+            result.append({
+                "room_data": room_serializer.data,
+                "members": members_serializer.data,
+            })
+
+        # Include the max page number in the response
+        response_data = {
+            "result": result,
+            "max_page": max_page,
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
 
 
 class RoomMetaContentAPI(APIView):
@@ -71,8 +99,6 @@ class RoomMetaContentAPI(APIView):
 
 
 # ======================= REST API for Room Creation===================================
-
-
 class NewRoomAPI(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -268,6 +294,17 @@ class FollowingAPI(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+class TopMembersAPI(APIView):
+    def get(self, request):
+        # Query for the top 10 people with the most followers
+        top_members = UserProfile.objects.annotate(follower_count=models.Count(
+            'user__followers')).order_by('-follower_count')[:10]
+
+        # Serialize the top members using the TopMemberSerializer
+        serializer = TopMemberSerializer(top_members, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 # ======================= REST API for Message In Room================================================
 
 

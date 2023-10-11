@@ -124,7 +124,7 @@ const UserProfile = (props) => {
     if (authToken) {
       fetchProfile(); // Call the function here if authToken is available
     }
-  }, [authToken, id]);
+  }, [authToken, id, followStatus]);
 
   const logoutHandler = (event) => {
     event.preventDefault();
@@ -145,7 +145,9 @@ const UserProfile = (props) => {
       </div>
 
       <div className={classes["display-name"]}>{profile.display_name}</div>
-      <div className={classes["follower"]}> 0 Followers</div>
+      <div className={classes["follower"]}>
+        {profile.followers_count} Followers
+      </div>
 
       {profile.is_auth_user && (
         <div className={classes["btn"]}>

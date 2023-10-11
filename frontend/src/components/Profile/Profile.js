@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import UserProfile from "./UserProfile";
-import SideCard from "../UI/SideCard/SideCard";
 import classes from "./Profile.module.css";
 import Cookies from "js-cookie";
 import { useParams } from "react-router-dom";
+import ScrollableSideCard from "../UI/SideCard/ScrollableSideCard";
 
 const Profile = () => {
   const [follower, setFollower] = useState([]);
@@ -72,13 +72,13 @@ const Profile = () => {
   return (
     <div className={classes["profile-container"]}>
       <div className={classes["side-card"]}>
-        <SideCard title={"FOLLOWERS"} data={follower} />
+        <ScrollableSideCard title={"FOLLOWERS"} data={follower} />
       </div>
       <div className={classes["user-profile"]}>
         <UserProfile changeFollowStatus={setFollowStatus} />
       </div>
       <div className={classes["side-card"]}>
-        <SideCard title={"FOLLOWING"} data={following} />
+        <ScrollableSideCard title={"FOLLOWING"} data={following} />
       </div>
     </div>
   );

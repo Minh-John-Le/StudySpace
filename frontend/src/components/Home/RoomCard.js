@@ -23,7 +23,7 @@ const RoomCard = (props) => {
                 to={"/user/" + props.host_id}
                 className={classes["roomcard__avatar-container__link"]}
               >
-                Host@{props.host}
+                Host @{props.host}
               </span>
             </div>
           </Link>
@@ -40,7 +40,22 @@ const RoomCard = (props) => {
           <h2>{props.room_name}</h2>
         </Link>
       </div>
-
+      <div className={classes["roomcard_room-member"]}>
+        {props.members.map((member, index) => (
+          <Link
+            to={"/user/" + member.profile_id}
+            className={classes["roomcard__member-avatarLink"]}
+          >
+            <div className={classes["roomcard__avatar-container"]}>
+              <img
+                src={member.profile_image_url}
+                alt="Avatar"
+                className={classes["roomcard__avatar-container__img"]}
+              />
+            </div>
+          </Link>
+        ))}
+      </div>
       <div className={classes["roomcard__meta"]}>
         <p className={classes["roomcard__member"]}>
           <TbUsers className={classes["roomcard__member-icon"]}></TbUsers>

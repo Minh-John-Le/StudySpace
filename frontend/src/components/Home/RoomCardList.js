@@ -33,7 +33,7 @@ const RoomCardList = () => {
       const respond = await fetch(apiUrl);
       console.log(apiUrl);
       const room = await respond.json();
-      setData(room);
+      setData(room.result);
     }
 
     fetchRoomHandler(); // Call the function here
@@ -51,15 +51,16 @@ const RoomCardList = () => {
       <div>
         {data.map((room, index) => (
           <RoomCard
-            key={room.id}
-            room_id={room.id}
-            host_id={room.host}
-            host={room["host_display_name"]}
-            host_image_url = {room.host_image_url}
-            totalMember={room.total_member}
-            room_name={room.room_name}
-            topic={room.topic}
-            created_ago ={room.created_ago}
+            key={room.room_data.id}
+            room_id={room.room_data.id}
+            host_id={room.room_data.host}
+            host={room.room_data["host_display_name"]}
+            host_image_url={room.room_data.host_image_url}
+            totalMember={room.room_data.total_member}
+            room_name={room.room_data.room_name}
+            topic={room.room_data.topic}
+            created_ago={room.room_data.created_ago}
+            members={room.members}
           />
         ))}
       </div>

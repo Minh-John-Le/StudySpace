@@ -28,7 +28,10 @@
   height: 40px; /* Adjust the size as needed */
   border-radius: 50%;
   overflow: hidden;
-  margin-right: 1rem; /* Adjust the spacing as needed */
+  margin-right: .5rem; /* Adjust the spacing as needed */
+  border-color: var(--color-main);
+  border-style: solid;
+  border-width: 1%;
 }
 
 .avatar {
@@ -47,6 +50,7 @@
 
 .avatarLink__display-name {
   color: var(--color-main);
+  font-weight: bold;
 }
 
 .btn__actions {
@@ -83,13 +87,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: -.5rem;
+  margin-top: -0.5rem;
 }
 
 .room-name {
   color: var(--color-main);
   flex-grow: 1; /* Allow the room name to take up remaining space */
   font-size: 150%;
+  font-weight: bold;
 }
 
 .button-group {
