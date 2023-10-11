@@ -50,3 +50,7 @@
   align-items: center;
   color: var(--color-light-gray);
 }
+
+.message-content {
+  line-height: 1.5;
+}

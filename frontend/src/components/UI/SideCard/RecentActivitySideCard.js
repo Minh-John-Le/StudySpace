@@ -32,7 +32,7 @@ const RecentActivitySideCard = (props) => {
                   </span>
                 </Link>
               </div>
-              <div className={classes["sent-date"]}>{message.created_ago}</div>
+              <div className={classes["sent-date"]}>{message.created_ago} {"ago"}</div>
 
               <div className={classes["sent-date"]}>
                 {`Replied to post "`}

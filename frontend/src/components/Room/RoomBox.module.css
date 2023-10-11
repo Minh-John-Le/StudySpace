@@ -28,7 +28,7 @@
   height: 40px; /* Adjust the size as needed */
   border-radius: 50%;
   overflow: hidden;
-  margin-right: .5rem; /* Adjust the spacing as needed */
+  margin-right: 0.5rem; /* Adjust the spacing as needed */
   border-color: var(--color-main);
   border-style: solid;
   border-width: 1%;
@@ -101,4 +101,22 @@
   margin-left: 1rem; /* Adjust spacing between room name and button as needed */
   display: flex;
   gap: 10px; /* Adjust the gap size as needed */
+}
+
+.subtitle {
+  color: var(--color-gray);
+  font-weight: bold;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.description {
+  color: var(--color-main-light);
+  line-height: 1.5;
+}
+
+.room-note {
+  margin-top: 1 rem;
+  color: #e3a442;
+  margin-bottom: 3rem;
 }

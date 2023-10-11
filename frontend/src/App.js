@@ -9,8 +9,9 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Signup from "./components/Signup/Signup";
 import Profile from "./components/Profile/Profile";
 import ProfileSetting from "./components/Profile/ProfileSetting";
-import NewRoom from "./components/Home/NewRoom";
 import Room from "./components/Room/Room";
+import UpdateRoom from "./components/Room/UpdateRoom";
+import NewRoom from "./components/Room/NewRoom";
 
 function App() {
   const ctx = useContext(AuthContext);
@@ -30,6 +31,7 @@ function App() {
           />
           <Route path="/new-room" element={<NewRoom></NewRoom>} />
           <Route path="/room/:id" element={<Room></Room>} />
+          <Route path="/update-room/:id" element={<UpdateRoom></UpdateRoom>} />
         </Routes>
       </main>
     </Router>

@@ -88,6 +88,15 @@ class RoomCardSerializer(serializers.ModelSerializer):
 
         return ""
 
+
+class AllRoomHotTopicSerializer(serializers.ModelSerializer):
+    topic = serializers.CharField()
+    topic_count = serializers.IntegerField()
+
+    class Meta:
+        model = Rooms
+        fields = ['topic', 'topic_count']
+
 # ================================ Room Member ==========================================
 
 

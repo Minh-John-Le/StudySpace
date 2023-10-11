@@ -50,7 +50,9 @@
 }
 
 .textarea {
-  height: 10rem; 
+  min-height: 5rem;
+  max-height: 5rem;
+  overflow-y: auto;
 }
 
 @media (min-width: 768px) {

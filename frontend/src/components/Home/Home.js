@@ -8,10 +8,11 @@ import SideCard from "../UI/SideCard/SideCard";
 import { useNavigate } from "react-router-dom";
 import ScrollableSideCard from "../UI/SideCard/ScrollableSideCard";
 import Cookies from "js-cookie";
-
+import HotTopicSideCard from "../UI/SideCard/HotTopicSideCard";
 const Home = (props) => {
   //const authCtx = useContext(AuthContext);
   const [topMember, setTopMember] = useState([]);
+  const [topTopic, setTopTopic] = useState([]);
   const navigate = useNavigate();
 
   const addRoomHandler = (event) => {
@@ -43,9 +44,38 @@ const Home = (props) => {
     fetchTopMember(); // Call the function here if authToken is available
   }, [authToken]);
 
+  useEffect(() => {
+    const apiUrl = `http://localhost:8000/api/database/top-topic/`;
+
+    async function fetchTopTopic() {
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {},
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const topicRs = await response.json();
+        setTopTopic(topicRs);
+      } catch (error) {
+        console.error("Error fetching topic:", error);
+      }
+    }
+
+    fetchTopTopic(); // Call the function here if authToken is available
+  }, [authToken]);
+
   return (
     <div className={classes["home-container"]}>
-      <div className={classes["side-card"]}></div>
+      <div className={classes["side-card"]}>
+        <HotTopicSideCard
+          title={"HOT TOPICS"}
+          data={topTopic}
+        ></HotTopicSideCard>
+      </div>
       <div className={classes["room"]}>
         <div className={classes.actions}>
           <Button

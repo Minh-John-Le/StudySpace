@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Card from "../UI/Card/Card";
 import classes from "./RoomBox.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ConversationBox from "./ConversationBox";
 import MessageForm from "./MessageForm";
 import { useParams } from "react-router-dom";
@@ -13,6 +13,7 @@ const RoomBox = (props) => {
   const [memberStatus, setMemberStatus] = useState([]);
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
+  const navigate = useNavigate();
 
   async function fetchRoomMessage(id, authToken) {
     const apiUrl = `http://localhost:8000/api/database/room-message/${id}/`;
@@ -141,6 +142,35 @@ const RoomBox = (props) => {
     }
   };
 
+  const onDeleteRoomHandler = async (event) => {
+    event.preventDefault();
+    try {
+      // Send a PATCH request to your backend login endpoint
+      const response = await fetch(
+        `http://localhost:8000/api/database/room-manager/${id}/`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Token ${authToken}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        return;
+      }
+
+      navigate(`/`);
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
+
+  const onEditRoomHandler = (event) => {
+    event.preventDefault();
+    navigate(`/update-room/${id}`);
+  };
   const onLeaveRoomHandler = async (event) => {
     event.preventDefault();
     const apiUrl = `http://localhost:8000/api/database/member-in-room/${id}/`;
@@ -173,7 +203,7 @@ const RoomBox = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      const apiUrl = `http://localhost:8000/api/database/room-meta-content/${id}/`;
+      const apiUrl = `http://localhost:8000/api/database/room-manager/${id}/`;
 
       try {
         const response = await fetch(apiUrl, {
@@ -202,7 +232,9 @@ const RoomBox = (props) => {
   return (
     <React.Fragment>
       <Card className={classes.header}>
-        <h3>{roomMetaContent.room_name && roomMetaContent.room_name.toUpperCase()}</h3>
+        <h3>
+          {roomMetaContent.room_name && roomMetaContent.room_name.toUpperCase()}
+        </h3>
       </Card>
 
       <Card className={classes.body}>
@@ -232,8 +264,18 @@ const RoomBox = (props) => {
           )}
           {memberStatus.is_host && (
             <div className={classes["button-group"]}>
-              <button className={classes["btn__actions"]}>{"Delete"}</button>
-              <button className={classes["btn__actions"]}>{"Edit"}</button>
+              <button
+                className={classes["btn__actions"]}
+                onClick={onEditRoomHandler}
+              >
+                {"Edit"}
+              </button>
+              <button
+                className={classes["btn__actions"]}
+                onClick={onDeleteRoomHandler}
+              >
+                {"Delete"}
+              </button>
             </div>
           )}
         </div>
@@ -257,6 +299,12 @@ const RoomBox = (props) => {
             {roomMetaContent.host_display_name}
           </span>
         </Link>
+        <div className={classes.subtitle}>ROOM INFO</div>
+        <div className={classes.description}>{roomMetaContent.description}</div>
+        <div className={classes["room-note"]}>
+          NOTE: Room will only display 100 most recent messages while this
+          website is still in beta.
+        </div>
         <ConversationBox messages={messages}></ConversationBox>
         <MessageForm fetchRoomMessage={fetchRoomMessage}></MessageForm>
       </Card>

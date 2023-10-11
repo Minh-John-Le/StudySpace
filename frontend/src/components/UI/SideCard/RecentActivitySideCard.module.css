@@ -117,12 +117,14 @@
   margin-left: 1rem;
   align-items: center;
   color: var(--color-light-gray);
+  line-height: 1.5;
 }
 
 .message-card {
   background: var(--color-bg);
   color: var(--color-light-gray);
   margin: 0.5rem;
-  padding: 0.5rem 0.5rem;
+  padding: 0.5rem;
   border-radius: 2%;
+  line-height: 1.5;
 }

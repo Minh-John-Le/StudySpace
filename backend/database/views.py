@@ -10,9 +10,12 @@ from .models import Rooms, Followers, Rooms_Members, Messages
 from authentication.models import UserProfile
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.db.models.functions import Lower
 from .serializers import RoomMetaContentSerializer, RoomCardSerializer, FollowStatusSerializer, \
     FollowerSerializer, FollowingSerializer, SingleRoomSerializer, RoomsMembersSerializer, \
-    RoomMessageSerializer, AllMembersInRoomSerializer, TopMemberSerializer, MemberRecentMessageSerializer
+    RoomMessageSerializer, AllMembersInRoomSerializer, TopMemberSerializer, MemberRecentMessageSerializer, \
+    AllRoomHotTopicSerializer
+from rest_framework.exceptions import PermissionDenied
 
 
 # Create your views here.
@@ -81,7 +84,7 @@ class RoomCardAPI(APIView):
         return Response(response_data, status=status.HTTP_200_OK)
 
 
-class RoomMetaContentAPI(APIView):
+class RoomManagerAPI(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -97,8 +100,67 @@ class RoomMetaContentAPI(APIView):
         serialized_item = RoomMetaContentSerializer(item)
         return Response(serialized_item.data, status=status.HTTP_200_OK)
 
+    def patch(self, request, room_id):
+        try:
+            room_profile = Rooms.objects.get(id=room_id)
+        except Rooms.DoesNotExist:
+            return Response(
+                {"error": "Room not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
-# ======================= REST API for Room Creation===================================
+        # Check if the authenticated user is the host of the room
+        if request.user != room_profile.host:
+            raise PermissionDenied(
+                "You do not have permission to edit this room.")
+
+        data = request.data  # Assuming the request data is in JSON format
+
+        if 'room_name' in data:
+            room_profile.room_name = data['room_name']
+
+        if 'description' in data:
+            room_profile.description = data['description']
+
+        if 'topic' in data:
+            room_profile.topic = data['topic']
+
+        room_profile.save()
+        serializer = SingleRoomSerializer(room_profile)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, room_id):
+        try:
+            room_profile = Rooms.objects.get(id=room_id)
+        except Rooms.DoesNotExist:
+            return Response(
+                {"error": "Room not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # Check if the authenticated user is the host of the room
+        if request.user != room_profile.host:
+            raise PermissionDenied(
+                "You do not have permission to delete this room.")
+
+        room_profile.delete()
+
+        # Return a 204 No Content response to indicate successful deletion
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class AllRoomHotTopicAPI(APIView):
+    def get(self, request):
+        # Query the database to get the top 10 hottest topics
+        top_topics = Rooms.objects.values('topic').annotate(
+            topic_count=Count('topic')
+        ).order_by('-topic_count')[:10]
+
+        serializer = AllRoomHotTopicSerializer(top_topics, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+# ======================= REST API for Room Creation/Update/Creation===================================
+
+
 class NewRoomAPI(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -145,6 +207,7 @@ class NewRoomAPI(APIView):
                 return Response(serialized_item.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': 'An error occurred'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 # ======================= REST API for Single Member In Single Room ===================================
 

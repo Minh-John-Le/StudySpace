@@ -9,7 +9,7 @@ import AuthContext from "../../store/auth-context";
 import Cookies from "js-cookie";
 
 const NewRoom = () => {
-  const [roomId, setRoomId] = useState([""]);
+  const [roomId, setRoomId] = useState();
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
   const authToken = Cookies.get("authToken");
@@ -73,7 +73,8 @@ const NewRoom = () => {
         return;
       }
       const data = await response.json();
-      setRoomId(data.room_id);
+
+      navigate(`/room/${data.id}`);
     } catch (error) {
       // Handle any other errors (e.g., network issues)
       console.error("An error occurred:", error);
@@ -83,7 +84,7 @@ const NewRoom = () => {
   return (
     <React.Fragment>
       <Card className={classes.header}>
-        <h2>Profile Settings</h2>
+        <h2>Room Info</h2>
       </Card>
       <Card className={classes.login}>
         <form onSubmit={submitHandler}>

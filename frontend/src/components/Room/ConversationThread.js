@@ -20,8 +20,7 @@ const ConversationThread = (props) => {
         </Link>
         <div className={classes["sent-date"]}>Sent {props.created_at}</div>
       </div>
-
-      {props.content}
+      <div className={classes["message-content"]}>{props.content}</div>
     </Card>
   );
 };
