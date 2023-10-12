@@ -56,7 +56,6 @@ const NewRoom = () => {
 
     try {
       // Send a POST request to your backend login endpoint
-
       const response = await fetch(
         "http://localhost:8000/api/database/new-room/",
         {
@@ -76,8 +75,7 @@ const NewRoom = () => {
 
       navigate(`/room/${data.id}`);
     } catch (error) {
-      // Handle any other errors (e.g., network issues)
-      console.error("An error occurred:", error);
+      console.error("Create Room Error:", error);
     }
   };
 

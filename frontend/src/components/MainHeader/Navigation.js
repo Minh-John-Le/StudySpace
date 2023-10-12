@@ -1,18 +1,16 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import classes from "./Navigation.module.css";
-import AuthContext from "../../store/auth-context";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const Navigation = (props) => {
-  const ctx = useContext(AuthContext);
-  const navigate = useNavigate();
-
+  //=============================== VARIABLE =======================================
+  const [profile, setProfile] = useState([]);
   const authToken = Cookies.get("authToken");
 
-  const [profile, setProfile] = useState([]);
-
+  //=============================== GET DATA =======================================
+  // get user profile info if user is already log in
   useEffect(() => {
     const apiUrl = `http://localhost:8000/api/auth/profile/`;
 
@@ -29,18 +27,19 @@ const Navigation = (props) => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const profile = await response.json();
-        setProfile(profile);
+        const profileRS = await response.json();
+        setProfile(profileRS);
       } catch (error) {
         console.error("Error fetching profile:", error);
       }
     }
 
     if (authToken) {
-      fetchProfile(); // Call the function here if authToken is available
+      fetchProfile();
     }
   }, [authToken]);
 
+  //=============================== RETURN COMPONENT ===============================
   return (
     <nav className={classes.nav}>
       <ul>

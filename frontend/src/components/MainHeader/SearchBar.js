@@ -2,24 +2,26 @@ import classes from "./SearchBar.module.css";
 import { GoSearch } from "react-icons/go";
 
 import React, { useState } from "react";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const SearchBar = ({ onSearch }) => {
-  // State to store the search query
+const SearchBar = (props) => {
+  //============================ VARIABLE ==============================
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
-  // Event handler to update the search query
+  //============================ FUNCTION ==============================
+  // Search input function
   const handleInputChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
-  // Event handler to handle form submission when Enter is pressed
+  // perform the search
   const handleFormSubmit = (event) => {
-    event.preventDefault(); // Prevent the default form submission
+    event.preventDefault();
     navigate("/?topic=" + searchQuery + "&page=1");
   };
 
+  //============================ RETURN COMPONENTS ==============================
   return (
     <form onSubmit={handleFormSubmit}>
       <div className={classes.control}>
