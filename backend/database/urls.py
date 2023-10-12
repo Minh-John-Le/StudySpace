@@ -3,7 +3,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from .views import RoomCardAPI, FollowStatusAPI, FollowerAPI, FollowingAPI, \
     NewRoomAPI, SingleMemberInRoomAPI, RoomMessageAPI, RoomManagerAPI, \
     AllMembersInRoomAPI, TopMembersAPI, MemberRecentMessageAPI, \
-    AllRoomHotTopicAPI
+    AllRoomHotTopicAPI, ProfileRoomCardAPI
 
 urlpatterns = [
     path('room-card/', RoomCardAPI.as_view()),
@@ -18,5 +18,6 @@ urlpatterns = [
     path('room-manager/<int:room_id>/', RoomManagerAPI.as_view()),
     path('top-member/', TopMembersAPI.as_view()),
     path('top-topic/', AllRoomHotTopicAPI.as_view()),
+    path('user-room/<int:user_id>/', ProfileRoomCardAPI.as_view()),
 
 ]

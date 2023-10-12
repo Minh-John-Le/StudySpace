@@ -1,8 +1,9 @@
+from django.db.models import Q
 from django.core.paginator import Paginator
 from django.db.models import Count
 from django.db import models, transaction
 from django.forms import ValidationError
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -16,6 +17,7 @@ from .serializers import RoomMetaContentSerializer, RoomCardSerializer, FollowSt
     RoomMessageSerializer, AllMembersInRoomSerializer, TopMemberSerializer, MemberRecentMessageSerializer, \
     AllRoomHotTopicSerializer
 from rest_framework.exceptions import PermissionDenied
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -57,6 +59,79 @@ class RoomCardAPI(APIView):
             return Response([], status=status.HTTP_404_NOT_FOUND)
 
         # Create an empty list to store serialized room data with members
+        result = []
+
+        for room in page:
+            members = Rooms_Members.objects.filter(
+                room=room.id).order_by("-created_at")[:10]
+
+            # Serialize the followers' data
+            members_serializer = AllMembersInRoomSerializer(members, many=True)
+
+            # Serialize the room data
+            room_serializer = RoomCardSerializer(room)
+
+            # Append the serialized room data with members to the result list
+            result.append({
+                "room_data": room_serializer.data,
+                "members": members_serializer.data,
+            })
+
+        # Include the max page number in the response
+        response_data = {
+            "result": result,
+            "max_page": max_page,
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
+
+
+class ProfileRoomCardAPI(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, user_id):
+        page_number = request.query_params.get('page', '1')
+        topic = request.query_params.get('topic')
+
+        user = get_object_or_404(User, id=user_id)
+
+        if topic:
+            # Filter rooms by topic and where the user is a member
+            rooms = Rooms.objects.filter(
+                Q(topic__icontains=topic) &
+                Q(rooms_members__member=user)
+            )
+        else:
+            # Get rooms where the user is a member
+            rooms = Rooms.objects.filter(rooms_members__member=user)
+
+        # Annotate the queryset with the total_member count
+        rooms = rooms.annotate(total_member=Count('rooms_members'))
+
+        # Sort the queryset by 'total_member' in descending order
+        rooms = rooms.order_by('-total_member')
+
+        # Set the number of items per page (e.g., 10)
+        per_page = 2
+        paginator = Paginator(rooms, per_page)
+
+        # Get the maximum page number
+        max_page = paginator.num_pages
+
+        # Process page
+        if page_number == "last":
+            page_number = max_page
+        elif page_number == "first" or not page_number.isdigit():
+            page_number = 1
+        else:
+            page_number = int(page_number)
+
+        try:
+            page = paginator.page(min(page_number, max_page))
+        except:
+            return Response([], status=status.HTTP_404_NOT_FOUND)
+
         result = []
 
         for room in page:
@@ -377,7 +452,7 @@ class RoomMessageAPI(APIView):
 
     def get(self, request, room_id):
         messages = Messages.objects.filter(
-            room=room_id).order_by('-created_at')[:100]
+            room=room_id).order_by('created_at')[:100]
 
         serializer = RoomMessageSerializer(messages, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

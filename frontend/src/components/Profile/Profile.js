@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import { useParams } from "react-router-dom";
 import ScrollableSideCard from "../UI/SideCard/ScrollableSideCard";
 import RecentActivitySideCard from "../UI/SideCard/RecentActivitySideCard";
+import ProfileRoomCardList from "./ProfileRoomCardList";
+import ProfileSearchBar from "./ProfileSearchBar";
 
 const Profile = () => {
   //================================== VARIABLE ===================================
@@ -114,6 +116,8 @@ const Profile = () => {
       </div>
       <div className={classes["user-profile"]}>
         <ProfileInfo changeFollowStatus={setFollowStatus} />
+        <ProfileSearchBar></ProfileSearchBar>
+        <ProfileRoomCardList></ProfileRoomCardList>
       </div>
       <div className={classes["side-card"]}>
         <RecentActivitySideCard title={"RECENT POSTS"} data={recentMessage} />
