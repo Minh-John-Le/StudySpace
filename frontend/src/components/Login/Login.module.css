@@ -9,12 +9,12 @@
   text-align: center;
 }
 
-.actions div{
+.actions div {
   margin-left: -25px;
   margin-top: -4px;
 }
 
-.btn{
+.btn {
   text-align: center;
 }
 
@@ -34,7 +34,7 @@
   margin-top: 8rem;
   margin-left: auto;
   margin-right: auto;
-  padding: .1rem 1rem;
+  padding: 0.1rem 1rem;
   border-bottom-right-radius: 0px;
   border-bottom-left-radius: 0px;
 }
@@ -44,14 +44,12 @@
   color: var(--color-light);
 }
 
-
-.signupLink {
-  color: var(--color-main);; /* Set the initial color to white */
+.signup-link {
+  color: var(--color-main); /* Set the initial color to white */
   text-decoration: none; /* Remove underlines */
   transition: color 0.3s; /* Add a smooth color transition on hover */
-
 }
 
-.signupLink:hover {
-  color: var(--color-main); /* Change the color to blue on hover */
+.signup-link:hover {
+  color: var(--color-main);
 }

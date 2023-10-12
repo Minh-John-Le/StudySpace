@@ -10,10 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const Login = (props) => {
-  // const [enteredEmail, setEnteredEmail] = useState('');
-  // const [emailIsValid, setEmailIsValid] = useState();
-  // const [enteredPassword, setEnteredPassword] = useState('');
-  // const [passwordIsValid, setPasswordIsValid] = useState();
+  //==================================== VARIABLE ======================================
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -35,6 +32,8 @@ const Login = (props) => {
     reset: resetPasswordInput,
   } = useInput((value) => value.trim().length > 8);
 
+  //==================================== GET DATA ======================================
+  // Log in with user username and password
   const submitHandler = async (event) => {
     event.preventDefault();
     // Create an object with the login data
@@ -44,7 +43,6 @@ const Login = (props) => {
     };
 
     try {
-      // Send a POST request to your backend login endpoint
       const response = await fetch("http://localhost:8000/api/auth/login/", {
         method: "POST",
         headers: {
@@ -54,7 +52,6 @@ const Login = (props) => {
       });
 
       if (!response.ok) {
-        // Handle login error here (e.g., show an error message)
         console.error("Login failed");
         return;
       }
@@ -65,18 +62,14 @@ const Login = (props) => {
       // Store the token in a cookie
       Cookies.set("authToken", data.token, { expires: 7 });
 
-      // Update the authentication context to indicate the user is logged in
-      //authCtx.onLogin();
-
-      // Redirect the user
+      // Go to Home pageI
       navigate("/");
     } catch (error) {
-      // Handle any other errors (e.g., network issues)
       console.error("An error occurred:", error);
     }
   };
 
-  const formIsValid = enteredUsernameIsValid && enteredPasswordIsValid;
+  //==================================== RETURN COMPONENTS ======================================
   return (
     <React.Fragment>
       <Card className={classes.header}>
@@ -108,20 +101,16 @@ const Login = (props) => {
           }
 
           <div className={classes.actions}>
-            <Button
-              type="submit"
-              className={classes.btn}
-              // disabled={!formIsValid}
-            >
+            <Button type="submit" className={classes.btn}>
               <div>Login</div>
             </Button>
           </div>
-          
+
           <br></br>
           <div className={classes.signup}>
             Haven't signed up yet?
             <br></br>
-            <Link to="/signup/" className={classes.signupLink}>
+            <Link to="/signup/" className={classes["signup-link"]}>
               Sign up
             </Link>
           </div>
