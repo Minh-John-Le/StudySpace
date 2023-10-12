@@ -33,15 +33,13 @@ const RoomCardList = () => {
   useEffect(() => {
     async function fetchRoomHandler() {
       const respond = await fetch(apiUrl);
-      //console.log(apiUrl);
       const room = await respond.json();
       setData(room.result);
       setMaxPage(room.max_page);
-      //console.log(room);
     }
 
     fetchRoomHandler(); // Call the function here
-  }, [topic, page]); // Include all dependencies in the array
+  }, [topic, page, apiUrl]); // Include all dependencies in the array
 
   return (
     <React.Fragment>

@@ -21,6 +21,7 @@ const RoomPagination = (props) => {
     topic = "";
   }
   const pageParam = searchParams.get("page");
+  const topicParam = searchParams.get("topic");
 
   // Parse the 'page' parameter to an integer
   const pageNumberFromQueryParam = parseInt(pageParam) || 1;
@@ -29,7 +30,7 @@ const RoomPagination = (props) => {
   useEffect(() => {
     setPageNumberInput(pageNumberFromQueryParam);
     setPageNumberFromURL(pageNumberFromQueryParam);
-  }, [pageNumberFromQueryParam]);
+  }, [pageNumberFromQueryParam, topicParam]);
 
   // Event handler to handle form submission when Enter is pressed
   const handleFormSubmit = (event) => {
@@ -46,8 +47,6 @@ const RoomPagination = (props) => {
     const newPageNumber = Math.min(pageNumberFromURL + 1, props.max_page);
 
     setPageNumberInput(newPageNumber);
-    console.log(props.max_page);
-    console.log(newPageNumber);
     navigate(`/?topic=${topic}&page=${newPageNumber}`);
     setPageNumberFromURL(newPageNumber);
   };
@@ -77,9 +76,7 @@ const RoomPagination = (props) => {
             value={pageNumberInput}
             onChange={(event) => {
               const newPageNumber = parseInt(event.target.value);
-              if (!isNaN(newPageNumber)) {
-                setPageNumberInput(newPageNumber);
-              }
+              setPageNumberInput(newPageNumber);
             }}
           />
           <button type="button" onClick={handleIncrement}>
