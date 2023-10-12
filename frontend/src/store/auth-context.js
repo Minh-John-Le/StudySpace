@@ -1,41 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 const AuthContext = React.createContext({
-  isLoggedIn: false,
-  onLogout: () => {},
-  onLogin: (username, password) => {
-
-    
-  },
+  changeDisplayName: (displayName) => {},
+  displayName: "",
 });
 
 export const AuthContextProvider = (props) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [displayName, setDisplayName] = useState("");
 
-  useEffect(() => {
-    const storedUserLoggedInInformation = localStorage.getItem("isLoggedIn");
-
-    if (storedUserLoggedInInformation === "1") {
-      setIsLoggedIn(true);
-    }
-  }, []);
-
-  const logoutHandler = () => {
-    localStorage.removeItem("isLoggedIn");
-    setIsLoggedIn(false);
-  };
-
-  const loginHandler = () => {
-    localStorage.setItem("isLoggedIn", "1");
-    setIsLoggedIn(true);
+  const onChangeDisplayName = (newName) => {
+    setDisplayName(newName);
   };
 
   return (
     <AuthContext.Provider
       value={{
-        isLoggedIn: isLoggedIn,
-        onLogout: logoutHandler,
-        onLogin: loginHandler,
+        changeDisplayName: onChangeDisplayName,
+        displayName: displayName,
       }}
     >
       {props.children}

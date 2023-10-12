@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import classes from "./UserProfile.module.css";
 import Button from "../UI/Button/Button";
 import Cookies from "js-cookie";
 import { useParams, useNavigate } from "react-router-dom";
+import AuthContext from "../../store/auth-context";
 
 const UserProfile = (props) => {
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
+  const ctx = useContext(AuthContext);
 
   const [profile, setProfile] = useState([]);
   const [followStatus, setFollowStatus] = useState([]);
@@ -129,6 +131,7 @@ const UserProfile = (props) => {
   const logoutHandler = (event) => {
     event.preventDefault();
     Cookies.remove("authToken");
+    ctx.changeDisplayName("");
     navigate("/");
   };
 

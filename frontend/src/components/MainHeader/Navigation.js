@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import classes from "./Navigation.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import AuthContext from "../../store/auth-context";
 
 const Navigation = (props) => {
   //=============================== VARIABLE =======================================
+  const ctx = useContext(AuthContext);
+
+  //const navigation = useNavigate();
   const [profile, setProfile] = useState([]);
   const authToken = Cookies.get("authToken");
 
@@ -37,7 +41,7 @@ const Navigation = (props) => {
     if (authToken) {
       fetchProfile();
     }
-  }, [authToken]);
+  }, [authToken, ctx.displayName]);
 
   //=============================== RETURN COMPONENT ===============================
   return (

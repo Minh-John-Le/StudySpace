@@ -11,7 +11,7 @@ import Cookies from "js-cookie";
 
 const Login = (props) => {
   //==================================== VARIABLE ======================================
-  const authCtx = useContext(AuthContext);
+  const ctx = useContext(AuthContext);
   const navigate = useNavigate();
 
   const {
@@ -62,7 +62,8 @@ const Login = (props) => {
       // Store the token in a cookie
       Cookies.set("authToken", data.token, { expires: 7 });
 
-      // Go to Home pageI
+      // Go to Home page
+      ctx.changeDisplayName("StudySpaceUser");
       navigate("/");
     } catch (error) {
       console.error("An error occurred:", error);

@@ -15,7 +15,7 @@ const ProfileSetting = (props) => {
   // const [enteredPassword, setEnteredPassword] = useState('');
   // const [passwordIsValid, setPasswordIsValid] = useState();
   const [profile, setProfile] = useState([""]);
-  const authCtx = useContext(AuthContext);
+  const ctx = useContext(AuthContext);
   const navigate = useNavigate();
 
   const {
@@ -60,6 +60,7 @@ const ProfileSetting = (props) => {
   };
 
   const submitHandler = async (event) => {
+    event.preventDefault();
     const profileData = {
       bio: enteredBio,
       display_name: enteredDisplayName,
@@ -85,6 +86,8 @@ const ProfileSetting = (props) => {
       // Assuming your backend responds with a JSON object containing a "token" field
       //const data = await response.json();
       setProfile(profile);
+      ctx.changeDisplayName(profile.display_name);
+      navigate(`/user/${profile.user}`);
     } catch (error) {
       // Handle any other errors (e.g., network issues)
       console.error("An error occurred:", error);
