@@ -3,15 +3,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import classes from "./RoomPagination.module.css";
 
 const RoomPagination = (props) => {
-  // State to store the page number from the URL
-  const [pageNumberFromURL, setPageNumberFromURL] = useState(1);
-
-  // State to store the page number in the input field
-  const [pageNumberInput, setPageNumberInput] = useState(1);
+  //================================== VARIABLE =====================================
+  const [pageNumberFromURL, setPageNumberFromURL] = useState(1); // URL's page
+  const [pageNumberInput, setPageNumberInput] = useState(1); // entered page
 
   const navigate = useNavigate();
 
-  // Parse the search parameters
+  //================================= PREPARE PAGE AND TOPIC=========================
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
 
@@ -21,18 +19,16 @@ const RoomPagination = (props) => {
     topic = "";
   }
   const pageParam = searchParams.get("page");
-  const topicParam = searchParams.get("topic");
-
-  // Parse the 'page' parameter to an integer
   const pageNumberFromQueryParam = parseInt(pageParam) || 1;
 
-  // Update the page number from the URL
+  //================================= GET DATA=========================
+  // Ensure pagination box number will match for both URL and Enter Value
   useEffect(() => {
     setPageNumberInput(pageNumberFromQueryParam);
     setPageNumberFromURL(pageNumberFromQueryParam);
-  }, [pageNumberFromQueryParam, topicParam]);
+  }, [pageNumberFromQueryParam, topic]);
 
-  // Event handler to handle form submission when Enter is pressed
+  // Event handler to handle number submission
   const handleFormSubmit = (event) => {
     event.preventDefault();
     const newPageNumber = Math.min(parseInt(pageNumberInput), props.max_page);

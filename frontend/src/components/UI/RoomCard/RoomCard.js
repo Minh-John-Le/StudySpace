@@ -1,5 +1,5 @@
 import React from "react";
-import Card from "../UI/Card/Card";
+import Card from "../Card/Card";
 import { Link } from "react-router-dom";
 import classes from "./RoomCard.module.css";
 import { TbUsers } from "react-icons/tb";

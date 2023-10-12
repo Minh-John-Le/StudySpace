@@ -4,46 +4,25 @@ import Button from "../UI/Button/Button";
 import classes from "./Home.module.css";
 //import AuthContext from "../../store/auth-context";
 import RoomCardList from "./RoomCardList";
-import SideCard from "../UI/SideCard/SideCard";
 import { useNavigate } from "react-router-dom";
 import ScrollableSideCard from "../UI/SideCard/ScrollableSideCard";
 import Cookies from "js-cookie";
 import HotTopicSideCard from "../UI/SideCard/HotTopicSideCard";
 const Home = (props) => {
+  //======================================= VARIABLE ==============================
   //const authCtx = useContext(AuthContext);
-  const [topMember, setTopMember] = useState([]);
-  const [topTopic, setTopTopic] = useState([]);
+  const [topMember, setTopMember] = useState([]); //top members list
+  const [topTopic, setTopTopic] = useState([]); // top topic list
   const navigate = useNavigate();
+  const authToken = Cookies.get("authToken");
 
+  //======================================= Helper function ==============================
   const addRoomHandler = (event) => {
     navigate("/new-room");
   };
-  const authToken = Cookies.get("authToken");
 
-  useEffect(() => {
-    const apiUrl = `http://localhost:8000/api/database/top-member/`;
-
-    async function fetchTopMember() {
-      try {
-        const response = await fetch(apiUrl, {
-          method: "GET",
-          headers: {},
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const profile = await response.json();
-        setTopMember(profile);
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-      }
-    }
-
-    fetchTopMember(); // Call the function here if authToken is available
-  }, [authToken]);
-
+  //======================================= GET DATA =====================================
+  // Get top topic list
   useEffect(() => {
     const apiUrl = `http://localhost:8000/api/database/top-topic/`;
 
@@ -68,6 +47,32 @@ const Home = (props) => {
     fetchTopTopic(); // Call the function here if authToken is available
   }, [authToken]);
 
+  // Get top member list
+  useEffect(() => {
+    const apiUrl = `http://localhost:8000/api/database/top-member/`;
+
+    async function fetchTopMember() {
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {},
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const profile = await response.json();
+        setTopMember(profile);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    }
+
+    fetchTopMember(); // Call the function here if authToken is available
+  }, [authToken]);
+
+  //======================================= RETURN COMPONENT =====================================
   return (
     <div className={classes["home-container"]}>
       <div className={classes["side-card"]}>
@@ -88,7 +93,6 @@ const Home = (props) => {
         </div>
         <RoomCardList></RoomCardList>
       </div>
-
       <div className={classes["side-card"]}>
         <ScrollableSideCard
           title={"TOP HOSTS"}

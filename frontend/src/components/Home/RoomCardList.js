@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from "react";
-import RoomCard from "./RoomCard";
+import RoomCard from "../UI/RoomCard/RoomCard";
 import { useLocation } from "react-router-dom";
 import Card from "../UI/Card/Card";
 import classes from "./RoomCardList.module.css";
 import RoomPagination from "./RoomPagination";
 
 const RoomCardList = () => {
-  const [data, setData] = useState([]);
+  //===================================== PREPARE VARIABLE================================
 
-  const [maxPage, setMaxPage] = useState(1);
+  const [data, setData] = useState([]); // all rooms
+  const [maxPage, setMaxPage] = useState(1); // max page
 
+  //===================================== PREPARE TOPIC AND PAGE================================
   // Get the current location object
   const location = useLocation();
 
   // Parse the search parameters
   const searchParams = new URLSearchParams(location.search);
 
-  // Extract the 'topic' parameter value
   let topic = searchParams.get("topic");
   if (topic === null) {
     topic = "";
@@ -28,8 +29,11 @@ const RoomCardList = () => {
     page = "1";
   }
 
+  //===================================== GET DATA ================================
+  // Url for room match topic and page
   const apiUrl = `http://localhost:8000/api/database/room-card/?topic=${topic}&page=${page}`;
 
+  // Get new room data whenever topic or page change
   useEffect(() => {
     async function fetchRoomHandler() {
       const respond = await fetch(apiUrl);
@@ -38,9 +42,10 @@ const RoomCardList = () => {
       setMaxPage(room.max_page);
     }
 
-    fetchRoomHandler(); // Call the function here
-  }, [topic, page, apiUrl]); // Include all dependencies in the array
+    fetchRoomHandler();
+  }, [topic, page, apiUrl]);
 
+  //===================================== RETURN COMPONENT ================================
   return (
     <React.Fragment>
       {data.length === 0 && (
