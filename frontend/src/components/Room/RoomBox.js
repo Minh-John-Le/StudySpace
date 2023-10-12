@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const RoomBox = (props) => {
+  //================================ VARIABLEs ==============================
   const [messages, setMessages] = useState([]);
   const [roomMetaContent, setRoomMetaContent] = useState([]);
   const [memberStatus, setMemberStatus] = useState([]);
@@ -15,6 +16,8 @@ const RoomBox = (props) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  //================================ FUNCTIONS ==============================
+  // Get Room Message
   async function fetchRoomMessage(id, authToken) {
     const apiUrl = `http://localhost:8000/api/database/room-message/${id}/`;
 
@@ -44,6 +47,7 @@ const RoomBox = (props) => {
     }
   }
 
+  // Get the member status such as join or not join the room
   async function fetchMemberStatus(id, authToken) {
     const apiUrl = `http://localhost:8000/api/database/member-in-room/${id}/`;
 
@@ -70,6 +74,7 @@ const RoomBox = (props) => {
     }
   }
 
+  // Reformat Message Time
   function formatCreatedAt(created_at) {
     const date = new Date(created_at);
     // Convert to local time
@@ -88,35 +93,7 @@ const RoomBox = (props) => {
     return formattedDate;
   }
 
-  const joinRoom = async (roomId, authToken) => {};
-
-  const leaveRoom = async (roomId, authToken) => {
-    const apiUrl = `http://localhost:8000/api/database/member-in-room/${roomId}/`;
-
-    try {
-      const response = await fetch(apiUrl, {
-        method: "DELETE", // You might need to adjust this depending on your API
-        headers: {
-          Authorization: `Token ${authToken}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      // You can optionally handle the response data if the backend returns any
-      const responseData = await response.json();
-
-      // Return the response data or perform any other necessary actions
-      return responseData;
-    } catch (error) {
-      console.error("Error joining room:", error);
-      // Handle the error as needed, e.g., show an error message to the user
-      throw error; // You can re-throw the error to handle it at the component level
-    }
-  };
+  // Function handle join room
   const onJoinRoomHandler = async (event) => {
     event.preventDefault();
     const apiUrl = `http://localhost:8000/api/database/member-in-room/${id}/`;
@@ -142,6 +119,7 @@ const RoomBox = (props) => {
     }
   };
 
+  // Function handle delete room
   const onDeleteRoomHandler = async (event) => {
     event.preventDefault();
     try {
@@ -167,10 +145,13 @@ const RoomBox = (props) => {
     }
   };
 
+  // Function handle edit room
   const onEditRoomHandler = (event) => {
     event.preventDefault();
     navigate(`/update-room/${id}`);
   };
+
+  // Function handle leave room
   const onLeaveRoomHandler = async (event) => {
     event.preventDefault();
     const apiUrl = `http://localhost:8000/api/database/member-in-room/${id}/`;
@@ -195,12 +176,15 @@ const RoomBox = (props) => {
       throw error; // You can re-throw the error to handle it at the component level
     }
   };
+
+  // Get the room message and join status for the first time
   useEffect(() => {
     fetchRoomMessage(id, authToken);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     fetchMemberStatus(id, authToken);
   }, [authToken, id]);
 
+  // Get the room info (meta info) for the first time
   useEffect(() => {
     async function fetchData() {
       const apiUrl = `http://localhost:8000/api/database/room-manager/${id}/`;
@@ -229,6 +213,7 @@ const RoomBox = (props) => {
     }
   }, [authToken, id]);
 
+  //================================ RETURN COMPONENTS ==============================
   return (
     <React.Fragment>
       <Card className={classes.header}>

@@ -6,11 +6,14 @@ import Cookies from "js-cookie";
 import { useParams } from "react-router-dom";
 
 const Room = () => {
+  //========================= VARIABLE ==================================
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
   const [members, setMembers] = useState([]);
   const [memberStatus, setMemberStatus] = useState([]);
 
+  //========================= FUNCTIONS ==================================
+  // Get member list of the room
   async function fetchAllMemberInRoom(id, authToken) {
     const apiUrl = `http://localhost:8000/api/database/all-member-in-room/${id}/`;
 
@@ -36,10 +39,12 @@ const Room = () => {
     }
   }
 
+  // Get member list of the room when page load, leave or join room
   useEffect(() => {
     fetchAllMemberInRoom(id, authToken);
   }, [id, authToken, memberStatus]);
 
+  //========================= RETURN COMPONENTS ==================================
   return (
     <div className={classes["room-container"]}>
       <div className={classes["room-box"]}>

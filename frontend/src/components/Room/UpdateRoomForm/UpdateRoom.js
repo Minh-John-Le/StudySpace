@@ -1,16 +1,16 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useInput from "../../../hooks/use-input";
 import Button from "../../UI/Button/Button";
 import Input from "../../UI/Input/Input";
 import classes from "./UpdateRoom.module.css";
 import Card from "../../UI/Card/Card";
-import AuthContext from "../../../store/auth-context";
 import Cookies from "js-cookie";
 
 const UpdateRoom = () => {
+  //==================================== VARIABLE ===========================
+
   const [roomInfo, setRoomInfo] = useState([""]);
-  const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
@@ -73,12 +73,13 @@ const UpdateRoom = () => {
         return;
       }
 
-      navigate(`/room/${id}`)
+      navigate(`/room/${id}`);
     } catch (error) {
       console.error("An error occurred:", error);
     }
   };
-
+  //==================================== FUNCTION / GET DATA ===========================
+  // Update the room info
   useEffect(() => {
     const fetchRoomInfo = async () => {
       try {
@@ -116,7 +117,7 @@ const UpdateRoom = () => {
     fetchRoomInfo();
   }, [id, authToken]);
 
-
+  //==================================== RETURN COMPONENTS ===========================
   return (
     <React.Fragment>
       <Card className={classes.header}>

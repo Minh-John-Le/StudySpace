@@ -5,15 +5,17 @@ import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const MessageForm = (props) => {
+  //===================== VARIABLE ===============================
   const [enterMessage, setEnterMessage] = useState("");
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
 
-  // Event handler to update the search query
+  //===================== FUNCTIONS ===============================
   const handleInputChange = (event) => {
     setEnterMessage(event.target.value);
   };
 
+  // Input send message to chat room
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     const content = {
@@ -48,6 +50,7 @@ const MessageForm = (props) => {
     }
   };
 
+  //===================== Return Components ===============================
   return (
     <Card>
       <form onSubmit={handleFormSubmit}>
