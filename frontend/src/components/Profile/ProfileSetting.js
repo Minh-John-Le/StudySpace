@@ -10,10 +10,7 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const ProfileSetting = (props) => {
-  //const [enteredEmail, setEnteredEmail] = useState('');
-  // const [emailIsValid, setEmailIsValid] = useState();
-  // const [enteredPassword, setEnteredPassword] = useState('');
-  // const [passwordIsValid, setPasswordIsValid] = useState();
+  //==================================== VARIABLE =====================
   const [profile, setProfile] = useState([""]);
   const ctx = useContext(AuthContext);
   const navigate = useNavigate();
@@ -54,11 +51,14 @@ const ProfileSetting = (props) => {
     reset: resetBioInput,
   } = useInput((value) => true);
 
+  //====================================== FUNCTION =========================
+  // Going back to user profile main page
   const cancelHandler = (event) => {
     event.preventDefault();
     navigate(`/user/${profile.user}`);
   };
 
+  // Update user Profile
   const submitHandler = async (event) => {
     event.preventDefault();
     const profileData = {
@@ -94,12 +94,9 @@ const ProfileSetting = (props) => {
     }
   };
 
-  //const formIsValid = enteredUsernameIsValid;
-
-  //=================================================================================
-
+  //===================================== GET DATA =============================
+  // Get user data so it initially fill in all the field
   const authToken = Cookies.get("authToken");
-
   useEffect(() => {
     const apiUrl = `http://localhost:8000/api/auth/profile/`;
 
@@ -130,7 +127,7 @@ const ProfileSetting = (props) => {
     resetBioInput(profile.bio);
   }, [authToken, profile.display_name, profile.bio]);
 
-  //===============================================================================
+  //====================================== RETURN COMPONENTS =================================
   return (
     <React.Fragment>
       <Card className={classes.header}>

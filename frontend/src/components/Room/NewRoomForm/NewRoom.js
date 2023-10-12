@@ -1,16 +1,15 @@
-import React, { useEffect, useState, useContext } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import useInput from "../../hooks/use-input";
-import Button from "../UI/Button/Button";
-import Input from "../UI/Input/Input";
+import useInput from "../../../hooks/use-input";
+import Button from "../../UI/Button/Button";
+import Input from "../../UI/Input/Input";
 import classes from "./NewRoom.module.css";
-import Card from "../UI/Card/Card";
-import AuthContext from "../../store/auth-context";
+import Card from "../../UI/Card/Card";
 import Cookies from "js-cookie";
 
 const NewRoom = () => {
-  const [roomId, setRoomId] = useState();
-  const authCtx = useContext(AuthContext);
+  //================================== VARIABLE ========================
+
   const navigate = useNavigate();
   const authToken = Cookies.get("authToken");
 
@@ -41,11 +40,14 @@ const NewRoom = () => {
     reset: resetDescriptionInput,
   } = useInput((value) => value.trim().length <= 256);
 
+  //================================== GET DATA/ FUNCTION ===========================
+  // Go back to Home Page
   const cancelHandler = (event) => {
     event.preventDefault();
     navigate(`/`);
   };
 
+  // Go Create a new room then go to that room
   const submitHandler = async (event) => {
     event.preventDefault();
     const roomData = {
@@ -79,6 +81,7 @@ const NewRoom = () => {
     }
   };
 
+  //================================== RETURN COMPONENTS ===========================
   return (
     <React.Fragment>
       <Card className={classes.header}>

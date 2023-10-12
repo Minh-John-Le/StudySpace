@@ -4,7 +4,6 @@ import { useLocation } from "react-router-dom";
 import Card from "../UI/Card/Card";
 import classes from "./UserRoomCardList.module.css";
 
-
 const UserRoomCardList = () => {
   const [data, setData] = useState([]);
 

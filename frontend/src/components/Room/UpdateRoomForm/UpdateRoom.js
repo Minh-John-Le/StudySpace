@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import useInput from "../../hooks/use-input";
-import Button from "../UI/Button/Button";
-import Input from "../UI/Input/Input";
+import useInput from "../../../hooks/use-input";
+import Button from "../../UI/Button/Button";
+import Input from "../../UI/Input/Input";
 import classes from "./UpdateRoom.module.css";
-import Card from "../UI/Card/Card";
-import AuthContext from "../../store/auth-context";
+import Card from "../../UI/Card/Card";
+import AuthContext from "../../../store/auth-context";
 import Cookies from "js-cookie";
 
 const UpdateRoom = () => {

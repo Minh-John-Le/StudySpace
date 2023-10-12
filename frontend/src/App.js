@@ -10,8 +10,8 @@ import Signup from "./components/Signup/Signup";
 import Profile from "./components/Profile/Profile";
 import ProfileSetting from "./components/Profile/ProfileSetting";
 import Room from "./components/Room/Room";
-import UpdateRoom from "./components/Room/UpdateRoom";
-import NewRoom from "./components/Room/NewRoom";
+import UpdateRoom from "./components/Room/UpdateRoomForm/UpdateRoom";
+import NewRoom from "./components/Room/NewRoomForm/NewRoom";
 
 function App() {
   const ctx = useContext(AuthContext);

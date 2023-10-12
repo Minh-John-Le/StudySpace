@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-
-import classes from "./UserProfile.module.css";
-import Button from "../UI/Button/Button";
+import classes from "./ProfileInfo.module.css";
 import Cookies from "js-cookie";
 import { useParams, useNavigate } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 
-const UserProfile = (props) => {
+const ProfileInfo = (props) => {
+  //=============================== VARIABLE ================================
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
   const ctx = useContext(AuthContext);
@@ -15,11 +14,21 @@ const UserProfile = (props) => {
   const [followStatus, setFollowStatus] = useState([]);
   const navigate = useNavigate();
 
+  //=============================== FUNCTIONS ================================
   const editProfileHandler = (event) => {
     event.preventDefault();
     navigate("/profile-setting");
   };
 
+  const logoutHandler = (event) => {
+    event.preventDefault();
+    Cookies.remove("authToken");
+    ctx.changeDisplayName("");
+    navigate("/");
+  };
+
+  //=============================== GET DATA ================================
+  // Get the following status of other user (either auth user follow thier friend or not)
   async function fetchFollowStatus(id, authToken) {
     const apiUrl = `http://localhost:8000/api/database/follow-status/${id}/`;
 
@@ -43,6 +52,7 @@ const UserProfile = (props) => {
     }
   }
 
+  // Follow another user
   const followHandler = async (event) => {
     event.preventDefault();
 
@@ -71,6 +81,7 @@ const UserProfile = (props) => {
     }
   };
 
+  // Unfollow another user
   const unfollowHandler = async (event) => {
     event.preventDefault();
 
@@ -96,10 +107,12 @@ const UserProfile = (props) => {
     }
   };
 
+  // Fetch follow status first time when page load
   useEffect(() => {
     fetchFollowStatus(id, authToken);
   }, [authToken, id]);
 
+  // Get other User profile Info as well
   useEffect(() => {
     const apiUrl = `http://localhost:8000/api/auth/user/${id}/`;
 
@@ -124,17 +137,11 @@ const UserProfile = (props) => {
     }
 
     if (authToken) {
-      fetchProfile(); // Call the function here if authToken is available
+      fetchProfile();
     }
   }, [authToken, id, followStatus]);
 
-  const logoutHandler = (event) => {
-    event.preventDefault();
-    Cookies.remove("authToken");
-    ctx.changeDisplayName("");
-    navigate("/");
-  };
-
+  //=============================== RETURN COMPONENTS ================================
   return (
     <React.Fragment>
       <div className={classes["profile-info"]}>
@@ -194,4 +201,4 @@ const UserProfile = (props) => {
   );
 };
 
-export default UserProfile;
+export default ProfileInfo;

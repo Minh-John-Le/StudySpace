@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import UserProfile from "./UserProfile";
+import ProfileInfo from "./ProfileInfo";
 import classes from "./Profile.module.css";
 import Cookies from "js-cookie";
 import { useParams } from "react-router-dom";
@@ -7,6 +7,7 @@ import ScrollableSideCard from "../UI/SideCard/ScrollableSideCard";
 import RecentActivitySideCard from "../UI/SideCard/RecentActivitySideCard";
 
 const Profile = () => {
+  //================================== VARIABLE ===================================
   const [follower, setFollower] = useState([]);
   const [following, setFollowing] = useState([]);
   const [followStatus, setFollowStatus] = useState([]);
@@ -15,6 +16,8 @@ const Profile = () => {
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
 
+  //================================== GET DATA ===================================
+  // Get User's Follower List
   useEffect(() => {
     const apiUrl = `http://localhost:8000/api/database/follower/${id}/`;
 
@@ -43,6 +46,7 @@ const Profile = () => {
     }
   }, [authToken, id, followStatus]);
 
+  // Get User's Following List
   useEffect(() => {
     const apiUrl = `http://localhost:8000/api/database/following/${id}/`;
 
@@ -71,6 +75,7 @@ const Profile = () => {
     }
   }, [authToken, id]);
 
+  // Get recent Post from User
   useEffect(() => {
     const apiUrl = `http://localhost:8000/api/database/recent-message/${id}/`;
 
@@ -99,6 +104,7 @@ const Profile = () => {
     }
   }, [authToken, id]);
 
+  //================================== RETURN COMPONENTS ===================================
   return (
     <div className={classes["profile-container"]}>
       <div className={classes["side-card"]}>
@@ -107,13 +113,10 @@ const Profile = () => {
         <ScrollableSideCard title={"FOLLOWING"} data={following} />
       </div>
       <div className={classes["user-profile"]}>
-        <UserProfile changeFollowStatus={setFollowStatus} />
+        <ProfileInfo changeFollowStatus={setFollowStatus} />
       </div>
       <div className={classes["side-card"]}>
-        <RecentActivitySideCard
-          title={"RECENT POSTS"}
-          data={recentMessage}
-        ></RecentActivitySideCard>
+        <RecentActivitySideCard title={"RECENT POSTS"} data={recentMessage} />
       </div>
     </div>
   );
