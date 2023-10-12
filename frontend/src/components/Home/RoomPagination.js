@@ -28,34 +28,37 @@ const RoomPagination = (props) => {
   // Update the page number from the URL
   useEffect(() => {
     setPageNumberInput(pageNumberFromQueryParam);
-    setPageNumberFromURL(pageNumberFromQueryParam); // Update pageNumberFromURL as well
+    setPageNumberFromURL(pageNumberFromQueryParam);
   }, [pageNumberFromQueryParam]);
 
   // Event handler to handle form submission when Enter is pressed
   const handleFormSubmit = (event) => {
-    event.preventDefault(); // Prevent the default form submission
-    const newPageNumber = parseInt(pageNumberInput);
+    event.preventDefault();
+    const newPageNumber = Math.min(parseInt(pageNumberInput), props.max_page);
     if (!isNaN(newPageNumber)) {
       navigate(`/?topic=${topic}&page=${newPageNumber}`);
-      setPageNumberFromURL(newPageNumber); // Update pageNumberFromURL
+      setPageNumberFromURL(newPageNumber);
     }
   };
 
   // Event handler to increment the page number
   const handleIncrement = () => {
-    const newPageNumber = pageNumberFromURL + 1;
+    const newPageNumber = Math.min(pageNumberFromURL + 1, props.max_page);
+
     setPageNumberInput(newPageNumber);
+    console.log(props.max_page);
+    console.log(newPageNumber);
     navigate(`/?topic=${topic}&page=${newPageNumber}`);
-    setPageNumberFromURL(newPageNumber); // Update pageNumberFromURL
+    setPageNumberFromURL(newPageNumber);
   };
 
   // Event handler to decrement the page number
   const handleDecrement = () => {
     if (pageNumberFromURL > 1) {
-      const newPageNumber = pageNumberFromURL - 1;
+      const newPageNumber = Math.min(pageNumberFromURL - 1, props.max_page);
       setPageNumberInput(newPageNumber);
       navigate(`/?topic=${topic}&page=${newPageNumber}`);
-      setPageNumberFromURL(newPageNumber); // Update pageNumberFromURL
+      setPageNumberFromURL(newPageNumber);
     }
   };
 

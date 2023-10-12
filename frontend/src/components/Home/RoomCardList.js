@@ -8,6 +8,8 @@ import RoomPagination from "./RoomPagination";
 const RoomCardList = () => {
   const [data, setData] = useState([]);
 
+  const [maxPage, setMaxPage] = useState(1);
+
   // Get the current location object
   const location = useLocation();
 
@@ -31,9 +33,11 @@ const RoomCardList = () => {
   useEffect(() => {
     async function fetchRoomHandler() {
       const respond = await fetch(apiUrl);
-      console.log(apiUrl);
+      //console.log(apiUrl);
       const room = await respond.json();
       setData(room.result);
+      setMaxPage(room.max_page);
+      //console.log(room);
     }
 
     fetchRoomHandler(); // Call the function here
@@ -65,7 +69,9 @@ const RoomCardList = () => {
         ))}
       </div>
 
-      {data.length !== 0 && <RoomPagination></RoomPagination>}
+      {data.length !== 0 && (
+        <RoomPagination max_page={maxPage}></RoomPagination>
+      )}
     </React.Fragment>
   );
 };
