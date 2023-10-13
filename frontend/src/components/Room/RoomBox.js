@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Card from "../UI/Card/Card";
 import classes from "./RoomBox.module.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -290,7 +290,9 @@ const RoomBox = (props) => {
           NOTE: Room will only display 100 most recent messages while this
           website is still in beta.
         </div>
+
         <ConversationBox messages={messages}></ConversationBox>
+
         <MessageForm fetchRoomMessage={fetchRoomMessage}></MessageForm>
       </Card>
     </React.Fragment>

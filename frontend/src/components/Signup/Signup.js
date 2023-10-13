@@ -40,6 +40,15 @@ const Signup = (props) => {
   } = useInput((value) => value.trim().length > 8);
 
   const {
+    value: enteredDisplayName,
+    isValid: enteredDisplayNameIsValid,
+    hasError: displayNameInputHasError,
+    valueChangeHandler: displayNameChangedHandler,
+    inputBlurHandler: displayNameBlurHandler,
+    reset: resetDisplayNameInput,
+  } = useInput((value) => value.trim().length > 0);
+
+  const {
     value: enteredPassword,
     isValid: enteredPasswordIsValid,
     hasError: passowordInputHasError,
@@ -64,6 +73,7 @@ const Signup = (props) => {
       email: enteredEmail,
       password: enteredPassword,
       repeat_password: enteredRepeatedPassword,
+      display_name: enteredDisplayName,
     };
 
     try {
@@ -144,6 +154,7 @@ const Signup = (props) => {
             onBlur={emailBlurHandler}
             errorMessage={"Email must include @"}
           ></Input>
+
           <Input
             id="username"
             label="Username"
@@ -154,30 +165,40 @@ const Signup = (props) => {
             onBlur={usernameBlurHandler}
             errorMessage={"Username must be length 8 or more"}
           ></Input>
-          {
-            <Input
-              id="password"
-              label="Password"
-              type="password"
-              isValid={!passowordInputHasError}
-              value={enteredPassword}
-              onChange={passwordChangedHandler}
-              onBlur={passwordBlurHandler}
-              errorMessage={"Password must be length 6 or more"}
-            ></Input>
-          }
-          {
-            <Input
-              id="repeat_password"
-              label="Reapeat Password"
-              type="password"
-              isValid={!repatedPasswordInputHasError}
-              value={enteredRepeatedPassword}
-              onChange={repeatedPasswordChangedHandler}
-              onBlur={repeatedPasswordBlurHandler}
-              errorMessage={"Password must be length 6 or more"}
-            ></Input>
-          }
+
+          <Input
+            id="display_name"
+            label="Display Name"
+            type="text"
+            isValid={!displayNameInputHasError}
+            value={enteredDisplayName}
+            onChange={displayNameChangedHandler}
+            onBlur={displayNameBlurHandler}
+            errorMessage={"Username cannot be empty"}
+          ></Input>
+
+          <Input
+            id="password"
+            label="Password"
+            type="password"
+            isValid={!passowordInputHasError}
+            value={enteredPassword}
+            onChange={passwordChangedHandler}
+            onBlur={passwordBlurHandler}
+            errorMessage={"Password must be length 6 or more"}
+          ></Input>
+
+          <Input
+            id="repeat_password"
+            label="Reapeat Password"
+            type="password"
+            isValid={!repatedPasswordInputHasError}
+            value={enteredRepeatedPassword}
+            onChange={repeatedPasswordChangedHandler}
+            onBlur={repeatedPasswordBlurHandler}
+            errorMessage={"Password must be length 6 or more"}
+          ></Input>
+
           <div className={classes.actions}>
             <Button
               type="submit"

@@ -452,7 +452,7 @@ class RoomMessageAPI(APIView):
 
     def get(self, request, room_id):
         messages = Messages.objects.filter(
-            room=room_id).order_by('created_at')[:100]
+            room=room_id).order_by('-created_at')[:100]
 
         serializer = RoomMessageSerializer(messages, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

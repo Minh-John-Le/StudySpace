@@ -15,6 +15,7 @@ const ScrollableSideCard = (props) => {
         {props.data &&
           props.data.map((user, index) => (
             <Link
+              key={user.profile_id}
               to={`/user/${user.profile_id}`}
               className={classes.avatarLink}
             >

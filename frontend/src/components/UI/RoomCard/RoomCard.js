@@ -10,6 +10,7 @@ const RoomCard = (props) => {
       <div className={classes["roomcard-header"]}>
         <div className={classes["roomcard-header-left"]}>
           <Link
+            key={`user_${props.host_id}`}
             to={"/user/" + props.host_id}
             className={classes.roomcard__avatarLink}
           >
@@ -34,6 +35,7 @@ const RoomCard = (props) => {
       </div>
       <div>
         <Link
+          key={`room_${props.host_id}`}
           to={"/room/" + props.room_id}
           className={classes["roomcard__room-link"]}
         >
@@ -43,6 +45,7 @@ const RoomCard = (props) => {
       <div className={classes["roomcard_room-member"]}>
         {props.members.map((member, index) => (
           <Link
+            key={`member_${props.host_id}`}
             to={"/user/" + member.profile_id}
             className={classes["roomcard__member-avatarLink"]}
           >

@@ -11,10 +11,12 @@ from django.http import Http404
 
 class UserSerializer(serializers.ModelSerializer):
     repeat_password = serializers.CharField(write_only=True, required=True)
+    display_name = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password', 'repeat_password')
+        fields = ('id', 'username', 'email', 'password',
+                  'repeat_password', 'display_name')
         extra_kwargs = {'password': {'write_only': True}}
 
     def validate(self, data):
@@ -25,11 +27,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop('repeat_password')
+        display_name = validated_data.pop('display_name')
         user = User.objects.create_user(**validated_data)
+
+        display_nameStr = display_name.replace(" ", "%20")
 
         # Create a user profile for the newly created user
         UserProfile.objects.create(
-            user=user, display_name=user.username, profile_image_url=f"https://api.multiavatar.com/{user.username}.svg"
+            user=user, display_name=display_name, profile_image_url=f"https://api.multiavatar.com/{display_nameStr}.svg"
         )
 
         # Generate a token for the user
