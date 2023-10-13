@@ -2,7 +2,6 @@ import React from "react";
 
 import Navigation from "./Navigation";
 import classes from "./MainHeader.module.css";
-import SearchBar from "./SearchBar";
 import { SiStarship } from "react-icons/si";
 import { Link } from "react-router-dom";
 
@@ -16,7 +15,6 @@ const MainHeader = (props) => {
           </span>
           <h2>Study Space</h2>
         </Link>
-        <SearchBar></SearchBar>
       </div>
       <Navigation />
     </header>

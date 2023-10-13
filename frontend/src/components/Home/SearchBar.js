@@ -23,21 +23,19 @@ const SearchBar = (props) => {
 
   //============================ RETURN COMPONENTS ==============================
   return (
-    <form onSubmit={handleFormSubmit}>
-      <div className={classes.control}>
-        <div className={classes.searchContainer}>
-          <GoSearch className={classes.searchIcon} />
-          <input
-            type="text"
-            id="search"
-            placeholder="Search"
-            value={searchQuery}
-            onChange={handleInputChange}
-          />
-        </div>
+    <form onSubmit={handleFormSubmit} className={classes.searchForm}>
+      <div className={classes.searchContainer}>
+        <GoSearch className={classes.searchIcon} />
+        <input
+          type="text"
+          id="search"
+          placeholder="Search"
+          value={searchQuery}
+          onChange={handleInputChange}
+          className={classes.searchInput}
+        />
       </div>
     </form>
   );
 };
-
 export default SearchBar;

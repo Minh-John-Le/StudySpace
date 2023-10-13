@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import ScrollableSideCard from "../UI/SideCard/ScrollableSideCard";
 import Cookies from "js-cookie";
 import HotTopicSideCard from "../UI/SideCard/HotTopicSideCard";
+import SearchBar from "./SearchBar";
 const Home = (props) => {
   //======================================= VARIABLE ==============================
   //const authCtx = useContext(AuthContext);
@@ -82,6 +83,7 @@ const Home = (props) => {
         ></HotTopicSideCard>
       </div>
       <div className={classes["room"]}>
+        <SearchBar></SearchBar>
         <div className={classes.actions}>
           <Button
             type="button"

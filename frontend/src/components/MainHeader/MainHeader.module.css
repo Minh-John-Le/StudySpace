@@ -20,13 +20,12 @@
 .main-header__home-link span {
   color: #fff; /* Change the color as needed */
   font-size: 24px; /* Adjust the font size as needed */
-  margin-right: 1rem; /* Add margin to separate the icon from the text */
+  margin-right: .5rem; /* Add margin to separate the icon from the text */
 }
 
 .main-header__home-link h2 {
   color: #fff; /* Change the color as needed */
   font-size: 24px; /* Adjust the font size as needed */
-  margin-right: 1rem; /* Add margin to separate the icon from the text */
 }
 
 .main-header h2 {
@@ -39,7 +38,5 @@
 }
 
 .header-content h2 {
-  margin-right: 10rem;
+  margin-right: 1rem;
 }
-
-

@@ -28,7 +28,9 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
 
         # Create a user profile for the newly created user
-        UserProfile.objects.create(user=user, display_name=user.username)
+        UserProfile.objects.create(
+            user=user, display_name=user.username, profile_image_url=f"https://api.multiavatar.com/{user.username}.svg"
+        )
 
         # Generate a token for the user
         token, _ = Token.objects.get_or_create(user=user)

@@ -11,6 +11,7 @@ const Navigation = (props) => {
 
   //const navigation = useNavigate();
   const [profile, setProfile] = useState([]);
+  const [avatar, setAvatar] = useState("1");
   const authToken = Cookies.get("authToken");
 
   //=============================== GET DATA =======================================
@@ -43,6 +44,17 @@ const Navigation = (props) => {
     }
   }, [authToken, ctx.displayName]);
 
+  const generateRandomNumber = () => {
+    const min = 1;
+    const max = 12230590464;
+    const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+    setAvatar(randomNum);
+  };
+
+  useEffect(() => {
+    generateRandomNumber();
+  }, [authToken]);
+
   //=============================== RETURN COMPONENT ===============================
   return (
     <nav className={classes.nav}>
@@ -52,7 +64,7 @@ const Navigation = (props) => {
             <Link to="/login/" className={classes.avatarLink}>
               <div className={classes.avatarContainer}>
                 <img
-                  src="https://placebear.com/250/250"
+                  src={`https://api.multiavatar.com/${avatar}.svg`}
                   alt="Avatar"
                   className={classes.avatar}
                 />
