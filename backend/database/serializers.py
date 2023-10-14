@@ -8,7 +8,7 @@ from authentication.models import UserProfile
 # ================================= ROOM Serializer =================================
 class RoomMetaContentSerializer(serializers.ModelSerializer):
     host_display_name = serializers.SerializerMethodField(read_only=True)
-    host_image_url = serializers.SerializerMethodField(read_only=True)
+    host_avatar_name = serializers.SerializerMethodField(read_only=True)
     created_ago = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -22,10 +22,10 @@ class RoomMetaContentSerializer(serializers.ModelSerializer):
         except UserProfile.DoesNotExist:
             return "StudySpace User"
 
-    def get_host_image_url(self, obj):
+    def get_host_avatar_name(self, obj):
         try:
             profile = UserProfile.objects.get(user=obj.host)
-            return profile.profile_image_url
+            return profile.avatar_name
         except UserProfile.DoesNotExist:
             return ""
 
@@ -48,7 +48,7 @@ class SingleRoomSerializer(serializers.ModelSerializer):
 
 class RoomCardSerializer(serializers.ModelSerializer):
     host_display_name = serializers.SerializerMethodField(read_only=True)
-    host_image_url = serializers.SerializerMethodField(read_only=True)
+    host_avatar_name = serializers.SerializerMethodField(read_only=True)
     total_member = serializers.SerializerMethodField(read_only=True)
     created_ago = serializers.SerializerMethodField(read_only=True)
 
@@ -63,10 +63,10 @@ class RoomCardSerializer(serializers.ModelSerializer):
         except UserProfile.DoesNotExist:
             return "StudySpace User"
 
-    def get_host_image_url(self, obj):
+    def get_host_avatar_name(self, obj):
         try:
             profile = UserProfile.objects.get(user=obj.host)
-            return profile.profile_image_url
+            return profile.avatar_name
         except UserProfile.DoesNotExist:
             return ""
 
@@ -108,7 +108,7 @@ class RoomsMembersSerializer(serializers.ModelSerializer):
 
 class AllMembersInRoomSerializer(serializers.ModelSerializer):
     display_name = serializers.SerializerMethodField()
-    profile_image_url = serializers.SerializerMethodField()
+    avatar_name = serializers.SerializerMethodField()
     profile_id = serializers.ReadOnlyField(source='member.id')
 
     class Meta:
@@ -121,10 +121,10 @@ class AllMembersInRoomSerializer(serializers.ModelSerializer):
             return obj.member.userprofile.display_name
         return None
 
-    def get_profile_image_url(self, obj):
+    def get_avatar_name(self, obj):
         # Check if UserProfile exists for the follower
         if hasattr(obj.member, 'userprofile'):
-            return obj.member.userprofile.profile_image_url
+            return obj.member.userprofile.avatar_name
         return None
 
 # ================================= FOllOWERS Serializer =================================
@@ -138,7 +138,7 @@ class FollowStatusSerializer(serializers.ModelSerializer):
 
 class FollowerSerializer(serializers.ModelSerializer):
     display_name = serializers.SerializerMethodField()
-    profile_image_url = serializers.SerializerMethodField()
+    avatar_name = serializers.SerializerMethodField()
     profile_id = serializers.ReadOnlyField(source='follower.id')
 
     class Meta:
@@ -151,16 +151,16 @@ class FollowerSerializer(serializers.ModelSerializer):
             return obj.follower.userprofile.display_name
         return None
 
-    def get_profile_image_url(self, obj):
+    def get_avatar_name(self, obj):
         # Check if UserProfile exists for the follower
         if hasattr(obj.follower, 'userprofile'):
-            return obj.follower.userprofile.profile_image_url
+            return obj.follower.userprofile.avatar_name
         return None
 
 
 class FollowingSerializer(serializers.ModelSerializer):
     display_name = serializers.SerializerMethodField()
-    profile_image_url = serializers.SerializerMethodField()
+    avatar_name = serializers.SerializerMethodField()
     profile_id = serializers.ReadOnlyField(source="user.id")
 
     class Meta:
@@ -173,17 +173,17 @@ class FollowingSerializer(serializers.ModelSerializer):
             return obj.user.userprofile.display_name
         return None
 
-    def get_profile_image_url(self, obj):
+    def get_avatar_name(self, obj):
         # Check if UserProfile exists for the follower
         if hasattr(obj.user, 'userprofile'):
-            return obj.user.userprofile.profile_image_url
+            return obj.user.userprofile.avatar_name
         return None
 
 # ================================= MESSAGE Serializer =================================
 
 
 class RoomMessageSerializer(serializers.ModelSerializer):
-    writer_image_url = serializers.SerializerMethodField()
+    writer_avatar_name = serializers.SerializerMethodField()
     writer_name = serializers.SerializerMethodField()
 
     class Meta:
@@ -196,15 +196,15 @@ class RoomMessageSerializer(serializers.ModelSerializer):
             return obj.writer.userprofile.display_name
         return None
 
-    def get_writer_image_url(self, obj):
+    def get_writer_avatar_name(self, obj):
         # Check if UserProfile exists for the follower
         if hasattr(obj.writer, 'userprofile'):
-            return obj.writer.userprofile.profile_image_url
+            return obj.writer.userprofile.avatar_name
         return None
 
 
 class MemberRecentMessageSerializer(serializers.ModelSerializer):
-    writer_image_url = serializers.SerializerMethodField()
+    writer_avatar_name = serializers.SerializerMethodField()
     writer_name = serializers.SerializerMethodField()
     room_name = serializers.SerializerMethodField()
     created_ago = serializers.SerializerMethodField(read_only=True)
@@ -219,10 +219,10 @@ class MemberRecentMessageSerializer(serializers.ModelSerializer):
             return obj.writer.userprofile.display_name
         return None
 
-    def get_writer_image_url(self, obj):
+    def get_writer_avatar_name(self, obj):
         # Check if UserProfile exists for the follower
         if hasattr(obj.writer, 'userprofile'):
-            return obj.writer.userprofile.profile_image_url
+            return obj.writer.userprofile.avatar_name
         return None
 
     def get_room_name(self, obj):
@@ -244,8 +244,8 @@ class MemberRecentMessageSerializer(serializers.ModelSerializer):
 class TopMemberSerializer(serializers.ModelSerializer):
     display_name = serializers.CharField(
         source="user.userprofile.display_name")
-    profile_image_url = serializers.URLField(
-        source="user.userprofile.profile_image_url")
+    avatar_name = serializers.URLField(
+        source="user.userprofile.avatar_name")
     profile_id = serializers.ReadOnlyField(source="user.id")
     follower_count = serializers.IntegerField()
 

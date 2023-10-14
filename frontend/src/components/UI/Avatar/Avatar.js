@@ -8,8 +8,8 @@ const Avatar = (props) => {
 
   return (
     <Link
-      to={props.userLink}
-      className={`${classes["avatar-link"]} ${props.linkClassName}`}
+      to={props.avatarLink}
+      className={`${classes["avatar-link"]} ${props.avatarLinkClassName}`}
     >
       <div
         className={`${classes["avatar-link__avatar-border"]} ${props.imageClassName}`}
@@ -21,9 +21,9 @@ const Avatar = (props) => {
       </div>
       {props.includeDisplayName && (
         <span
-          className={`${classes["avatar-link__name"]} ${props.disaplyNameClassName}`}
+          className={`${classes["avatar-link__name"]} ${props.displayNameClassName}`}
         >
-          {"Minh Hung Le"}
+          {props.displayName}
         </span>
       )}
     </Link>

@@ -4,6 +4,7 @@ import ScrollableCard from "../Card/ScrollableCard";
 import classes from "./RecentActivitySideCard.module.css";
 
 import { Link } from "react-router-dom";
+import Avatar from "../Avatar/Avatar";
 const RecentActivitySideCard = (props) => {
   return (
     <React.Fragment>
@@ -16,23 +17,19 @@ const RecentActivitySideCard = (props) => {
           props.data.map((message, index) => (
             <Card className={classes["inner-body"]}>
               <div className={classes["writer-info"]}>
-                <Link
-                  to={`/user/${message.writer}`}
-                  className={classes.avatarLink}
-                >
-                  <div className={classes.avatarContainer}>
-                    <img
-                      src={message.writer_image_url}
-                      alt="Avatar"
-                      className={classes.avatar}
-                    />
-                  </div>
-                  <span className={classes["avatarLink__display-name"]}>
-                    {message.writer_name}
-                  </span>
-                </Link>
+                <Avatar
+                  avatarLink={`/user/${message.writer}`}
+                  avatarName={message.writer_avatar_name}
+                  displayName={message.writer_name}
+                  includeDisplayName={true}
+                  displayNameClassName={classes["avatar__display-name"]}
+                  imageClassName={classes["avatar__image"]}
+                  
+                />
               </div>
-              <div className={classes["sent-date"]}>{message.created_ago} {"ago"}</div>
+              <div className={classes["sent-date"]}>
+                {message.created_ago} {"ago"}
+              </div>
 
               <div className={classes["sent-date"]}>
                 {`Replied to post "`}

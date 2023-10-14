@@ -3,31 +3,21 @@ import Card from "../Card/Card";
 import { Link } from "react-router-dom";
 import classes from "./RoomCard.module.css";
 import { TbUsers } from "react-icons/tb";
+import Avatar from "../Avatar/Avatar";
 
 const RoomCard = (props) => {
   return (
     <Card className={classes["roomcard"]}>
       <div className={classes["roomcard-header"]}>
         <div className={classes["roomcard-header-left"]}>
-          <Link
-            key={`user_${props.host_id}`}
-            to={"/user/" + props.host_id}
-            className={classes.roomcard__avatarLink}
-          >
-            <div className={classes["roomcard__avatar-container"]}>
-              <img
-                src={props.host_image_url}
-                alt="Avatar"
-                className={classes["roomcard__avatar-container__img"]}
-              />
-              <span
-                to={"/user/" + props.host_id}
-                className={classes["roomcard__avatar-container__link"]}
-              >
-                Host @{props.host}
-              </span>
-            </div>
-          </Link>
+          <Avatar
+            displayName={`Host @${props.host}`}
+            avatarName={props.host_avatar_name}
+            avatarLink={"/user/" + props.host_id}
+            includeDisplayName={true}
+            displayNameClassName={classes["avatar__display-name"]}
+            avatarLinkClassName={classes["avatar__link"]}
+          />
         </div>
         <div className={classes["roomcard-header-right"]}>
           <span>{props.created_ago} ago</span>
@@ -44,19 +34,14 @@ const RoomCard = (props) => {
       </div>
       <div className={classes["roomcard_room-member"]}>
         {props.members.map((member, index) => (
-          <Link
-            key={`member_${props.host_id}`}
-            to={"/user/" + member.profile_id}
-            className={classes["roomcard__member-avatarLink"]}
-          >
-            <div className={classes["roomcard__avatar-container"]}>
-              <img
-                src={member.profile_image_url}
-                alt="Avatar"
-                className={classes["roomcard__avatar-container__img"]}
-              />
-            </div>
-          </Link>
+          <Avatar
+            key={`member_${member.profile_id}`}
+            avatarName={member.avatar_name}
+            avatarLink={"/user/" + member.profile_id}
+            includeDisplayName={false}
+            displayNameClassName={classes["avatar__display-name"]}
+            avatarLinkClassName={classes["avatar__link"]}
+          />
         ))}
       </div>
       <div className={classes["roomcard__meta"]}>

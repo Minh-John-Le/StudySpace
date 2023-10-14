@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 
 import classes from "./Navigation.module.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import AuthContext from "../../store/auth-context";
 import Avatar from "../UI/Avatar/Avatar";
@@ -80,8 +80,8 @@ const Navigation = (props) => {
         {authToken && (
           <li>
             <Avatar
-              userLink={`/user/${profile.user}/`}
-              avatarName={profile.display_name}
+              avatarLink={`/user/${profile.user}/`}
+              avatarName={profile.avatar_name}
               displayName={profile.display_name}
               includeDisplayName={true}
             />

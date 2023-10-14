@@ -9,7 +9,6 @@ import ScrollableSideCard from "../UI/SideCard/ScrollableSideCard";
 import Cookies from "js-cookie";
 import HotTopicSideCard from "../UI/SideCard/HotTopicSideCard";
 import SearchBar from "./SearchBar";
-import multiavatar from "@multiavatar/multiavatar";
 
 const Home = (props) => {
   //======================================= VARIABLE ==============================

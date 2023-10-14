@@ -24,7 +24,7 @@ const ConversationBox = (props) => {
             <ConversationThread
               writer={message.writer}
               writer_name={message.writer_name}
-              writer_image_url={message.writer_image_url}
+              writer_avatar_name={message.writer_avatar_name}
               content={message.content}
               created_at={message.created_at}
             ></ConversationThread>

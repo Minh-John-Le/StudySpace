@@ -30,11 +30,9 @@ class UserSerializer(serializers.ModelSerializer):
         display_name = validated_data.pop('display_name')
         user = User.objects.create_user(**validated_data)
 
-        display_nameStr = display_name.replace(" ", "%20")
-
         # Create a user profile for the newly created user
         UserProfile.objects.create(
-            user=user, display_name=display_name, profile_image_url=f"https://api.multiavatar.com/{display_nameStr}.svg"
+            user=user, display_name=display_name, avatar_name=display_name
         )
 
         # Generate a token for the user
@@ -50,7 +48,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['user', 'bio', 'display_name',
-                  'profile_image_url', 'email', 'username']
+                  'avatar_name', 'email', 'username']
 
 
 class SingleUserProfileSerializer(serializers.ModelSerializer):
@@ -59,7 +57,7 @@ class SingleUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['user', 'bio', 'display_name',
-                  'profile_image_url', 'followers_count']
+                  'avatar_name', 'followers_count']
 
     def get_followers_count(self, obj):
         # Count the number of followers for the UserProfile object (obj)

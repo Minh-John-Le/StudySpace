@@ -6,6 +6,7 @@ import ConversationBox from "./ConversationBox";
 import MessageForm from "./MessageForm";
 import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
+import Avatar from "../UI/Avatar/Avatar";
 
 const RoomBox = (props) => {
   //================================ VARIABLEs ==============================
@@ -268,22 +269,17 @@ const RoomBox = (props) => {
         <div className={classes.description}>
           {roomMetaContent.created_ago} {"ago"}
         </div>
+    
         <div className={classes.subtitle}>HOSTED BY</div>
-        <Link
-          to={`/user/${roomMetaContent.host}`}
-          className={classes.avatarLink}
-        >
-          <div className={classes.avatarContainer}>
-            <img
-              src={roomMetaContent.host_image_url}
-              alt="Avatar"
-              className={classes.avatar}
-            />
-          </div>
-          <span className={classes["avatarLink__display-name"]}>
-            {roomMetaContent.host_display_name}
-          </span>
-        </Link>
+        <Avatar
+          displayName={roomMetaContent.host_display_name}
+          avatarName={roomMetaContent.host_avatar_name}
+          avatarLink={`/user/${roomMetaContent.host}`}
+          includeDisplayName={true}
+          displayNameClassName={classes["avatar__display-name"]}
+          avatarLinkClassName={classes["avatar__link"]}
+        />
+       
         <div className={classes.subtitle}>ROOM INFO</div>
         <div className={classes.description}>{roomMetaContent.description}</div>
         <div className={classes["room-note"]}>

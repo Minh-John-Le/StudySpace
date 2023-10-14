@@ -148,8 +148,8 @@ const ProfileInfo = (props) => {
     <React.Fragment>
       <div className={classes["profile-info"]}>
         <Avatar
-          userLink={`/user/${profile.user}/`}
-          avatarName={profile.display_name}
+          avatarLink={`/user/${profile.user}/`}
+          avatarName={profile.avatar_name}
           imageClassName={classes["avatar-image"]}
           includeDisplayName={false}
         />

@@ -63,7 +63,7 @@ class RoomCardAPI(APIView):
 
         for room in page:
             members = Rooms_Members.objects.filter(
-                room=room.id).order_by("-created_at")[:10]
+                room=room.id).order_by("-created_at")[:7]
 
             # Serialize the followers' data
             members_serializer = AllMembersInRoomSerializer(members, many=True)
@@ -436,8 +436,8 @@ class FollowingAPI(APIView):
 class TopMembersAPI(APIView):
     def get(self, request):
         # Query for the top 10 people with the most followers
-        top_members = UserProfile.objects.annotate(follower_count=models.Count(
-            'user__followers')).order_by('-follower_count')[:10]
+        top_members = UserProfile.objects.annotate(follower_count=Count(
+            'user__following')).order_by('-follower_count')[:10]
 
         # Serialize the top members using the TopMemberSerializer
         serializer = TopMemberSerializer(top_members, many=True)
