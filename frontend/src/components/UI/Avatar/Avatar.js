@@ -12,9 +12,13 @@ const Avatar = (props) => {
       className={`${classes["avatar-link"]} ${props.linkClassName}`}
     >
       <div
-        className={`${classes["avatar-link__avatar-image"]} ${props.imageClassName}`}
-        dangerouslySetInnerHTML={{ __html: svgCode }}
-      />
+        className={`${classes["avatar-link__avatar-border"]} ${props.imageClassName}`}
+      >
+        <div
+          className={classes["avatar-link__avatar-image"]}
+          dangerouslySetInnerHTML={{ __html: svgCode }}
+        />
+      </div>
       {props.includeDisplayName && (
         <span
           className={`${classes["avatar-link__name"]} ${props.disaplyNameClassName}`}
