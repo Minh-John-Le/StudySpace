@@ -1,9 +1,9 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import CardScrollbar from "../UI/Card/ScrollableCard";
 import ConversationThread from "./ConversationThread";
 
 const ConversationBox = (props) => {
-  const scrollableContainerRef = useRef(null);
+  //const scrollableContainerRef = useRef(null);
 
   // Scroll to the bottom whenever new messages are added
   // useEffect(() => {

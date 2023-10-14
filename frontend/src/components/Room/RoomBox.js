@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../UI/Card/Card";
 import classes from "./RoomBox.module.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ConversationBox from "./ConversationBox";
 import MessageForm from "./MessageForm";
 import { useParams } from "react-router-dom";
@@ -269,7 +269,7 @@ const RoomBox = (props) => {
         <div className={classes.description}>
           {roomMetaContent.created_ago} {"ago"}
         </div>
-    
+
         <div className={classes.subtitle}>HOSTED BY</div>
         <Avatar
           displayName={roomMetaContent.host_display_name}
@@ -279,7 +279,7 @@ const RoomBox = (props) => {
           displayNameClassName={classes["avatar__display-name"]}
           avatarLinkClassName={classes["avatar__link"]}
         />
-       
+
         <div className={classes.subtitle}>ROOM INFO</div>
         <div className={classes.description}>{roomMetaContent.description}</div>
         <div className={classes["room-note"]}>

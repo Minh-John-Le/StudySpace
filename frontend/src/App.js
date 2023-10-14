@@ -8,7 +8,7 @@ import AuthContext from "./store/auth-context";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Signup from "./components/Signup/Signup";
 import Profile from "./components/Profile/Profile";
-import ProfileSetting from "./components/Profile/ProfileSetting";
+import ProfileSetting from "./components/Profile/ProfileSetting/ProfileSetting";
 import Room from "./components/Room/Room";
 import UpdateRoom from "./components/Room/UpdateRoomForm/UpdateRoom";
 import NewRoom from "./components/Room/NewRoomForm/NewRoom";

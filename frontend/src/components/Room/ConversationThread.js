@@ -1,7 +1,6 @@
 import React from "react";
 import Card from "../UI/Card/Card";
 import classes from "./ConversationThread.module.css";
-import { Link } from "react-router-dom";
 import Avatar from "../UI/Avatar/Avatar";
 const ConversationThread = (props) => {
   return (
