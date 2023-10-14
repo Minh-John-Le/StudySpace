@@ -4,6 +4,7 @@ import classes from "./Navigation.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import AuthContext from "../../store/auth-context";
+import multiavatar from "@multiavatar/multiavatar";
 
 const Navigation = (props) => {
   //=============================== VARIABLE =======================================
@@ -13,6 +14,8 @@ const Navigation = (props) => {
   const [profile, setProfile] = useState([]);
   const [avatar, setAvatar] = useState("1");
   const authToken = Cookies.get("authToken");
+  const identifier = "Binx Bond";
+  const svgCode = multiavatar(identifier);
 
   //=============================== GET DATA =======================================
   // get user profile info if user is already log in
@@ -79,13 +82,11 @@ const Navigation = (props) => {
         {authToken && (
           <li>
             <Link to={`/user/${profile.user}/`} className={classes.avatarLink}>
-              <div className={classes.avatarContainer}>
-                <img
-                  src={profile.profile_image_url}
-                  alt="Avatar"
-                  className={classes.avatar}
-                />
-              </div>
+              <div
+                className={classes.avatarContainer}
+                dangerouslySetInnerHTML={{ __html: svgCode }}
+              />
+
               <span className={classes["roomcard__avatar-container__link"]}>
                 {profile.display_name}
               </span>
