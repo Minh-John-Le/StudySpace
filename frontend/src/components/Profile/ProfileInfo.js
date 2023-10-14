@@ -14,20 +14,21 @@ const ProfileInfo = (props) => {
   const [followStatus, setFollowStatus] = useState([]);
   const navigate = useNavigate();
 
-  //=============================== FUNCTIONS ================================
+  //=============================== FUNCTIONS AND GETTING DATA ================================
+  // redirect to change profile page
   const editProfileHandler = (event) => {
     event.preventDefault();
     navigate("/profile-setting");
   };
 
+  // logout user
   const logoutHandler = (event) => {
     event.preventDefault();
     Cookies.remove("authToken");
-    ctx.changeDisplayName("");
+    ctx.changeDisplayName(ctx.displayName + "_");
     navigate("/");
   };
 
-  //=============================== GET DATA ================================
   // Get the following status of other user (either auth user follow thier friend or not)
   async function fetchFollowStatus(id, authToken) {
     const apiUrl = `http://localhost:8000/api/database/follow-status/${id}/`;
