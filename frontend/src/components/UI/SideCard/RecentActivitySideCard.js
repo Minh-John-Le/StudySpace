@@ -23,8 +23,6 @@ const RecentActivitySideCard = (props) => {
                   displayName={message.writer_name}
                   includeDisplayName={true}
                   displayNameClassName={classes["avatar__display-name"]}
-                  imageClassName={classes["avatar__image"]}
-                  
                 />
               </div>
               <div className={classes["sent-date"]}>

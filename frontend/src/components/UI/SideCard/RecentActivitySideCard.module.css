@@ -1,8 +1,8 @@
 .header {
   background-color: var(--color-dark-light);
   width: 90%;
-  max-width: 40rem;
-  min-width: 20rem;
+  max-width: 22rem;
+  min-width: 22rem;
   margin-left: auto;
   margin-right: auto;
   padding: 0.1rem 1rem;
@@ -17,8 +17,8 @@
 
 .body {
   width: 90%;
-  max-width: 40rem;
-  min-width: 20rem;
+  max-width: 22rem;
+  min-width: 22rem;
   margin: 0rem auto;
   padding: 2rem 2rem;
   border-top-right-radius: 0px;
@@ -82,13 +82,8 @@
 
 .avatar__display-name {
   color: var(--color-main);
-  font-size: 80%;
 }
 
-.avatar__image {
-  width: 30px;
-  height: 30px;
-}
 .room-link {
   color: var(--color-main);
   font-weight: bold;

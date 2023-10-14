@@ -136,7 +136,7 @@ class ProfileRoomCardAPI(APIView):
 
         for room in page:
             members = Rooms_Members.objects.filter(
-                room=room.id).order_by("-created_at")[:10]
+                room=room.id).order_by("-created_at")[:7]
 
             # Serialize the followers' data
             members_serializer = AllMembersInRoomSerializer(members, many=True)
