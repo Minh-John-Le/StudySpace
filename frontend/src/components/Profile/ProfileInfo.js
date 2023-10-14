@@ -3,6 +3,7 @@ import classes from "./ProfileInfo.module.css";
 import Cookies from "js-cookie";
 import { useParams, useNavigate } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
+import Avatar from "../UI/Avatar/Avatar";
 
 const ProfileInfo = (props) => {
   //=============================== VARIABLE ================================
@@ -146,13 +147,12 @@ const ProfileInfo = (props) => {
   return (
     <React.Fragment>
       <div className={classes["profile-info"]}>
-        <div className={classes["profile-info__avatar-container"]}>
-          <img
-            src={profile.profile_image_url}
-            alt="Avatar"
-            className={classes["profile-info__avatar"]}
-          />
-        </div>
+        <Avatar
+          userLink={`/user/${profile.user}/`}
+          avatarName={profile.display_name}
+          imageClassName={classes["avatar-image"]}
+          includeDisplayName={false}
+        />
       </div>
 
       <div className={classes["display-name"]}>{profile.display_name}</div>
