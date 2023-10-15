@@ -9,6 +9,7 @@ import useInput from "../../hooks/use-input";
 import { useNavigate } from "react-router-dom";
 
 import { Link } from "react-router-dom";
+import FormCard from "../UI/FormCard/FormCard";
 
 const Signup = (props) => {
   // const [enteredEmail, setEnteredEmail] = useState('');
@@ -139,10 +140,7 @@ const Signup = (props) => {
           </Card>
         </div>
       )}
-      <Card className={classes.header}>
-        <h2>Signup</h2>
-      </Card>
-      <Card className={classes.login}>
+      <FormCard title={"Signup"}>
         <form onSubmit={submitHandler}>
           <Input
             id="email"
@@ -218,7 +216,7 @@ const Signup = (props) => {
             </Link>
           </div>
         </form>
-      </Card>
+      </FormCard>
     </React.Fragment>
   );
 };

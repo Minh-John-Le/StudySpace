@@ -8,6 +8,7 @@ import Input from "../UI/Input/Input";
 import useInput from "../../hooks/use-input";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import FormCard from "../UI/FormCard/FormCard";
 
 const Login = (props) => {
   //==================================== VARIABLE ======================================
@@ -73,10 +74,7 @@ const Login = (props) => {
   //==================================== RETURN COMPONENTS ======================================
   return (
     <React.Fragment>
-      <Card className={classes.header}>
-        <h2>Login</h2>
-      </Card>
-      <Card className={classes.login}>
+      <FormCard title={"Login"}>
         <form onSubmit={submitHandler}>
           <Input
             id="username"
@@ -116,7 +114,7 @@ const Login = (props) => {
             </Link>
           </div>
         </form>
-      </Card>
+      </FormCard>
     </React.Fragment>
   );
 };
