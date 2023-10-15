@@ -8,6 +8,7 @@ import Input from "../../UI/Input/Input";
 import useInput from "../../../hooks/use-input";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import Avatar from "../../UI/Avatar/Avatar";
 
 const ProfileSetting = (props) => {
   //==================================== VARIABLE =====================
@@ -51,6 +52,14 @@ const ProfileSetting = (props) => {
     reset: resetBioInput,
   } = useInput((value) => true);
 
+  const {
+    value: enteredAvatarName,
+    isValid: enteredAvatarNameIsValid,
+    hasError: avatarNameInputHasError,
+    valueChangeHandler: avatarNameChangedHandler,
+    inputBlurHandler: avatarNameBlurHandler,
+    reset: resetAvatarNameInput,
+  } = useInput((value) => value.trim().length > 0 && value.trim().length <= 32);
   //====================================== FUNCTION =========================
   // Going back to user profile main page
   const cancelHandler = (event) => {
@@ -64,6 +73,7 @@ const ProfileSetting = (props) => {
     const profileData = {
       bio: enteredBio,
       display_name: enteredDisplayName,
+      avatar_name: enteredAvatarName,
     };
 
     try {
@@ -125,7 +135,8 @@ const ProfileSetting = (props) => {
     }
     resetDisplayNameInput(profile.display_name);
     resetBioInput(profile.bio);
-  }, [authToken, profile.display_name, profile.bio]);
+    resetAvatarNameInput(profile.avatar_name);
+  }, [authToken, profile.display_name, profile.bio, profile.avatar_name]);
 
   //====================================== RETURN COMPONENTS =================================
   return (
@@ -156,6 +167,18 @@ const ProfileSetting = (props) => {
             onBlur={usernameBlurHandler}
             errorMessage={"Username must be length 8 or more"}
             readOnly={true}
+          ></Input>
+          <Avatar avatarName={enteredAvatarName}></Avatar>
+          <Input
+            id="avatarname"
+            label="Avatar Name"
+            type="text"
+            isValid={!avatarNameInputHasError}
+            value={enteredAvatarName}
+            onChange={avatarNameChangedHandler}
+            onBlur={avatarNameBlurHandler}
+            errorMessage={"Username must be less than 32 characters"}
+            readOnly={false}
           ></Input>
 
           <Input

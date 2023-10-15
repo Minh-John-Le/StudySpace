@@ -34,6 +34,9 @@ class PersonalProfileView(APIView):
         if 'bio' in data:
             user_profile.bio = data['bio']
 
+        if 'avatar_name' in data:
+            user_profile.avatar_name = data['avatar_name']
+
         user_profile.save()
         serializer = UserProfileSerializer(user_profile)
         return Response(serializer.data, status=status.HTTP_200_OK)
