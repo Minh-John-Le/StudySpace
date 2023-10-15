@@ -1,4 +1,5 @@
 # api/serializers.py
+from django.db import IntegrityError
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
@@ -22,7 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if data['password'] != data['repeat_password']:
             raise serializers.ValidationError(
-                {"password_validation_errors": "Passwords do not match."})
+                {"password_validation_errors": "Password and reapeat password do not match."})
         return data
 
     def create(self, validated_data):
@@ -30,10 +31,14 @@ class UserSerializer(serializers.ModelSerializer):
         display_name = validated_data.pop('display_name')
         user = User.objects.create_user(**validated_data)
 
-        # Create a user profile for the newly created user
-        UserProfile.objects.create(
-            user=user, display_name=display_name, avatar_name=display_name
-        )
+        try:
+            # Attempt to create a user profile for the newly created user
+            UserProfile.objects.create(
+                user=user, display_name=display_name, avatar_name=display_name
+            )
+        except IntegrityError:
+            # Handle the constraint violation here
+            raise serializers.ValidationError("User profile creation failed due to a constraint violation.")
 
         # Generate a token for the user
         token, _ = Token.objects.get_or_create(user=user)

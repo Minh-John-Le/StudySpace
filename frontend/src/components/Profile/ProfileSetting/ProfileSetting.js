@@ -9,6 +9,7 @@ import useInput from "../../../hooks/use-input";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import Avatar from "../../UI/Avatar/Avatar";
+import FormCard from "../../UI/FormCard/FormCard";
 
 const ProfileSetting = (props) => {
   //==================================== VARIABLE =====================
@@ -141,10 +142,7 @@ const ProfileSetting = (props) => {
   //====================================== RETURN COMPONENTS =================================
   return (
     <React.Fragment>
-      <Card className={classes.header}>
-        <h2>Profile Settings</h2>
-      </Card>
-      <Card className={classes.login}>
+      <FormCard title={"Profile Settings"}>
         <form onSubmit={submitHandler}>
           <Input
             id="email"
@@ -221,7 +219,7 @@ const ProfileSetting = (props) => {
             </Button>
           </div>
         </form>
-      </Card>
+      </FormCard>
     </React.Fragment>
   );
 };

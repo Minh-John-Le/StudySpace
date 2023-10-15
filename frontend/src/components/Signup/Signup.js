@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Link } from "react-router-dom";
 import FormCard from "../UI/FormCard/FormCard";
+import ErrorCard from "../UI/ErrorCard/ErrorCard";
 
 const Signup = (props) => {
   // const [enteredEmail, setEnteredEmail] = useState('');
@@ -125,20 +126,15 @@ const Signup = (props) => {
   return (
     <React.Fragment>
       {hasSubmitError && (
-        <div>
-          <Card className={classes.header}>
-            <h2>Error</h2>
-          </Card>
-          <Card className={classes.login}>
-            {
-              <ul>
-                {errorMessage.map((err, index) => (
-                  <li key={index}>{err}</li>
-                ))}
-              </ul>
-            }
-          </Card>
-        </div>
+        <ErrorCard title={"Error"}>
+          {
+            <ul>
+              {errorMessage.map((err, index) => (
+                <li key={index}>{err}</li>
+              ))}
+            </ul>
+          }
+        </ErrorCard>
       )}
       <FormCard title={"Signup"}>
         <form onSubmit={submitHandler}>
