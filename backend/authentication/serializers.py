@@ -11,44 +11,14 @@ from django.http import Http404
 
 
 class UserSerializer(serializers.ModelSerializer):
-    repeat_password = serializers.CharField(write_only=True, required=True)
-    display_name = serializers.CharField(write_only=True, required=True)
-
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password',
-                  'repeat_password', 'display_name')
-        extra_kwargs = {'password': {'write_only': True}}
-
-    def validate(self, data):
-        if data['password'] != data['repeat_password']:
-            raise serializers.ValidationError(
-                {"password_validation_errors": "Password and reapeat password do not match."})
-        return data
-
-    def create(self, validated_data):
-        validated_data.pop('repeat_password')
-        display_name = validated_data.pop('display_name')
-        user = User.objects.create_user(**validated_data)
-
-        try:
-            # Attempt to create a user profile for the newly created user
-            UserProfile.objects.create(
-                user=user, display_name=display_name, avatar_name=display_name
-            )
-        except IntegrityError:
-            # Handle the constraint violation here
-            raise serializers.ValidationError("User profile creation failed due to a constraint violation.")
-
-        # Generate a token for the user
-        token, _ = Token.objects.get_or_create(user=user)
-        user.token = token.key
-        return user
+        fields = ['id', 'username', 'email', 'password']
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(source='user.email')
-    username = serializers.CharField(source='user.username')
+    email = serializers.EmailField(source='user.email', read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
 
     class Meta:
         model = UserProfile

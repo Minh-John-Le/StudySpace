@@ -7,11 +7,60 @@ from .models import UserProfile
 from .serializers import UserProfileSerializer, SingleUserProfileSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.db import models, transaction
+from rest_framework import serializers
 
 
 class SignupView(generics.CreateAPIView):
-    serializer_class = UserSerializer
-    permission_classes = [permissions.AllowAny]
+    def post(self, request):
+        try:
+            with transaction.atomic():
+                username = request.data.get('username', '')
+                email = request.data.get('email', '')
+                password = request.data.get('password', '')
+                repeat_password = request.data.get('repeat_password', '')
+                display_name = request.data.get('display_name', '')
+
+                if password != repeat_password:
+                    raise serializers.ValidationError(
+                        {"password_validation_errors": "Password and repeat password do not match."})
+
+                # Create the user and save it within the transaction
+                user_data = {
+                    'username': username,
+                    'email': email,
+                    'password': password,
+                }
+                user_serializer = UserSerializer(data=user_data)
+
+                if not user_serializer.is_valid():
+                    raise serializers.ValidationError(user_serializer.errors)
+
+                user = user_serializer.save()
+
+                # Create the user profile within the same transaction
+                user_profile_data = {
+                    'user': user.id,
+                    'display_name': display_name,
+                    'avatar_name': display_name,
+                }
+
+                user_profile_serializers = UserProfileSerializer(
+                    data=user_profile_data)
+
+                if not user_profile_serializers.is_valid():
+                    raise serializers.ValidationError(
+                        user_profile_serializers.errors)
+
+                user_profile_serializers.save()
+
+                return Response({'message': 'User and profile created successfully'}, status=status.HTTP_201_CREATED)
+
+        except serializers.ValidationError as e:
+            return Response({'error': e.detail}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            error_message = str(e)
+            return Response({'error': error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class PersonalProfileView(APIView):
@@ -22,7 +71,7 @@ class PersonalProfileView(APIView):
         user_profile = UserProfile.objects.get(user=request.user)
         serializer = UserProfileSerializer(user_profile)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def patch(self, request):
         user_profile = UserProfile.objects.get(user=request.user)
         data = request.data  # Assuming the request data is in JSON format
@@ -50,7 +99,6 @@ class UserProfileView(APIView):
         user_profile = UserProfile.objects.get(user=request.user)
         serializer = UserProfileSerializer(user_profile)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 
 class SingleUserProfileView(APIView):

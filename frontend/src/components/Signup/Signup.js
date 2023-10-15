@@ -70,7 +70,7 @@ const Signup = (props) => {
 
   const submitHandler = async (event) => {
     event.preventDefault();
-    const user = {
+    const data = {
       username: enteredUsername,
       email: enteredEmail,
       password: enteredPassword,
@@ -84,11 +84,13 @@ const Signup = (props) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {
-        const errorData = await response.json(); // Parse the error response
+        const errorObject = await response.json(); // Parse the error response
+        const errorData = errorObject.error
+        console.log(errorData);
 
         // Create an array to store error messages
         const errorMessages = [];
@@ -108,7 +110,9 @@ const Signup = (props) => {
         throw new Error(errorMessages);
       }
 
-      const data = await response.json();
+      const rs = await response.json();
+
+      console.log(rs);
       // Clear input fields and reset error state
       resetEmailInput();
       resetUsernameInput();
