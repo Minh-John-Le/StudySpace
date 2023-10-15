@@ -27,4 +27,6 @@ main {
   --color-bg: #2d2d39;
   --color-success: #5dd693;
   --color-error: #fc4b0b;
+  --color-bg-red: rgba(239, 68, 68, 0.1);
+  --color-border-red: rgba(239, 68, 68, 1);
 }

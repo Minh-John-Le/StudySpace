@@ -89,7 +89,7 @@ const Signup = (props) => {
 
       if (!response.ok) {
         const errorObject = await response.json(); // Parse the error response
-        const errorData = errorObject.error
+        const errorData = errorObject.error;
         console.log(errorData);
 
         // Create an array to store error messages
@@ -130,14 +130,7 @@ const Signup = (props) => {
   return (
     <React.Fragment>
       {hasSubmitError && (
-        <ErrorCard title={"Error"}>
-          {
-            <ul>
-              {errorMessage.map((err, index) => (
-                <li key={index}>{err}</li>
-              ))}
-            </ul>
-          }
+        <ErrorCard  errorMessages={errorMessage}>
         </ErrorCard>
       )}
       <FormCard title={"Signup"}>
