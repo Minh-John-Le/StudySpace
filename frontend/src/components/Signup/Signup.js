@@ -39,7 +39,9 @@ const Signup = (props) => {
     valueChangeHandler: usernameChangedHandler,
     inputBlurHandler: usernameBlurHandler,
     reset: resetUsernameInput,
-  } = useInput((value) => value.trim().length > 8);
+  } = useInput(
+    (value) => value.trim().length >= 8 && value.trim().length <= 32
+  );
 
   const {
     value: enteredDisplayName,
@@ -48,7 +50,7 @@ const Signup = (props) => {
     valueChangeHandler: displayNameChangedHandler,
     inputBlurHandler: displayNameBlurHandler,
     reset: resetDisplayNameInput,
-  } = useInput((value) => value.trim().length > 0);
+  } = useInput((value) => value.trim().length > 0 && value.trim().length <= 20);
 
   const {
     value: enteredPassword,
@@ -57,7 +59,7 @@ const Signup = (props) => {
     valueChangeHandler: passwordChangedHandler,
     inputBlurHandler: passwordBlurHandler,
     reset: resetPasswordInput,
-  } = useInput((value) => value.trim().length >= 6);
+  } = useInput((value) => value.trim().length >= 8);
 
   const {
     value: enteredRepeatedPassword,
@@ -66,7 +68,7 @@ const Signup = (props) => {
     valueChangeHandler: repeatedPasswordChangedHandler,
     inputBlurHandler: repeatedPasswordBlurHandler,
     reset: resetRepeatedPasswordInput,
-  } = useInput((value) => value.trim().length >= 6);
+  } = useInput((value) => value.trim().length >= 8);
 
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -129,10 +131,7 @@ const Signup = (props) => {
   const formIsValid = true;
   return (
     <React.Fragment>
-      {hasSubmitError && (
-        <ErrorCard  errorMessages={errorMessage}>
-        </ErrorCard>
-      )}
+      {hasSubmitError && <ErrorCard errorMessages={errorMessage}></ErrorCard>}
       <FormCard title={"Signup"}>
         <form onSubmit={submitHandler}>
           <Input
@@ -154,7 +153,7 @@ const Signup = (props) => {
             value={enteredUsername}
             onChange={usernameChangedHandler}
             onBlur={usernameBlurHandler}
-            errorMessage={"Username must be length 8 or more"}
+            errorMessage={"Username length must be between 8 and 32 characters"}
           ></Input>
 
           <Input
@@ -165,7 +164,9 @@ const Signup = (props) => {
             value={enteredDisplayName}
             onChange={displayNameChangedHandler}
             onBlur={displayNameBlurHandler}
-            errorMessage={"Username cannot be empty"}
+            errorMessage={
+              "Username cannot be empty and must be less than 20 characters"
+            }
           ></Input>
 
           <Input

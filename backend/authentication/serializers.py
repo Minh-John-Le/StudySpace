@@ -15,6 +15,41 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'email', 'password']
 
+    def validate_username(self, value):
+        if not (8 <= len(value) <= 32):
+            raise serializers.ValidationError(
+                "Username must be between 8 and 32 characters.")
+        return value
+
+    def validate_email(self, value):
+        if '@' not in value:
+            raise serializers.ValidationError(
+                "Email must contain the '@' symbol.")
+        return value
+
+    def validate_password(self, value):
+        errors = []
+
+        if len(value) < 8:
+            errors.append("Password must be at least 8 characters long.")
+
+        if not any(char.isupper() for char in value):
+            errors.append("Password must contain at least 1 UPPERCASE letter.")
+
+        if not any(char.islower() for char in value):
+            errors.append("Password must contain at least 1 lowercase letter.")
+
+        if not any(char.isdigit() for char in value):
+            errors.append("Password must contain at least 1 number.")
+
+        if ' ' in value:
+            errors.append("Password cannot contain spaces.")
+
+        if errors:
+            raise serializers.ValidationError(errors)
+
+        return value
+
 
 class UserProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='user.email', read_only=True)
@@ -24,7 +59,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = ['user', 'bio', 'display_name',
                   'avatar_name', 'email', 'username']
-
 
 class SingleUserProfileSerializer(serializers.ModelSerializer):
     followers_count = serializers.SerializerMethodField()
