@@ -4,8 +4,9 @@ import useInput from "../../../hooks/use-input";
 import Button from "../../UI/Button/Button";
 import Input from "../../UI/Input/Input";
 import classes from "./UpdateRoom.module.css";
-import Card from "../../UI/Card/Card";
 import Cookies from "js-cookie";
+import ErrorCard from "../../UI/ErrorCard/ErrorCard";
+import FormCard from "../../UI/FormCard/FormCard";
 
 const UpdateRoom = () => {
   //==================================== VARIABLE ===========================
@@ -15,6 +16,9 @@ const UpdateRoom = () => {
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
 
+  const [errorMessage, setErrorMessage] = useState("Please fill in the form!");
+  const [hasSubmitError, setHasSubmitError] = useState(false);
+
   const {
     value: enteredTopic,
     isValid: enteredTopicIsValid,
@@ -22,7 +26,7 @@ const UpdateRoom = () => {
     valueChangeHandler: topicChangedHandler,
     inputBlurHandler: topicBlurHandler,
     reset: resetTopicInput,
-  } = useInput((value) => value.trim().length > 0 && value.trim().length <= 16);
+  } = useInput((value) => value.trim().length > 0 && value.trim().length <= 20);
 
   const {
     value: enteredRoomName,
@@ -47,6 +51,7 @@ const UpdateRoom = () => {
     navigate(`/room/${id}`);
   };
 
+  // Update Room Info
   const submitHandler = async (event) => {
     event.preventDefault();
     const roomData = {
@@ -70,16 +75,36 @@ const UpdateRoom = () => {
       );
 
       if (!response.ok) {
-        return;
+        const errorObject = await response.json(); // Parse the error response
+        const errorData = errorObject.error;
+
+        // Create an array to store error messages
+        const errorMessages = [];
+
+        // Format all error messages dynamically
+        Object.keys(errorData).forEach((key) => {
+          if (Array.isArray(errorData[key])) {
+            errorData[key].forEach((error) => {
+              errorMessages.push(`${key}: ${error}`);
+            });
+          } else {
+            errorMessages.push(`${key}: ${errorData[key]}`);
+          }
+        });
+
+        setHasSubmitError(true);
+        setErrorMessage(errorMessages);
+        throw new Error(errorMessages);
       }
 
+      setHasSubmitError(false);
       navigate(`/room/${id}`);
     } catch (error) {
       console.error("An error occurred:", error);
     }
   };
-  //==================================== FUNCTION / GET DATA ===========================
-  // Update the room info
+
+  // Get Room Info
   useEffect(() => {
     const fetchRoomInfo = async () => {
       try {
@@ -94,15 +119,31 @@ const UpdateRoom = () => {
         });
 
         if (!response.ok) {
-          // Handle the error here if needed
-          return;
+          const errorObject = await response.json(); // Parse the error response
+          const errorData = errorObject.error;
+
+          // Create an array to store error messages
+          const errorMessages = [];
+
+          // Format all error messages dynamically
+          Object.keys(errorData).forEach((key) => {
+            if (Array.isArray(errorData[key])) {
+              errorData[key].forEach((error) => {
+                errorMessages.push(`${key}: ${error}`);
+              });
+            } else {
+              errorMessages.push(`${key}: ${errorData[key]}`);
+            }
+          });
+
+          setHasSubmitError(true);
+          setErrorMessage(errorMessages);
+          throw new Error(errorMessages);
         }
 
         const roomInfoRs = await response.json();
         setRoomInfo(roomInfoRs);
-
-        // Log the updated roomInfo after it's set
-        console.log(roomInfoRs);
+        setHasSubmitError(false);
 
         // Set input values based on the received data
         resetroomNameInput(roomInfoRs.room_name);
@@ -120,10 +161,8 @@ const UpdateRoom = () => {
   //==================================== RETURN COMPONENTS ===========================
   return (
     <React.Fragment>
-      <Card className={classes.header}>
-        <h2>Update Room Info</h2>
-      </Card>
-      <Card className={classes.login}>
+      {hasSubmitError && <ErrorCard errorMessages={errorMessage}></ErrorCard>}
+      <FormCard title={"Update Room Info"}>
         <form onSubmit={submitHandler}>
           <Input
             id="topic"
@@ -134,7 +173,7 @@ const UpdateRoom = () => {
             onChange={topicChangedHandler}
             onBlur={topicBlurHandler}
             errorMessage={
-              "Topic cannot be empty and max length is 16 characters"
+              "Topic cannot be empty and max length is 20 characters."
             }
           ></Input>
           <Input
@@ -146,7 +185,7 @@ const UpdateRoom = () => {
             onChange={roomNameChangedHandler}
             onBlur={roomNameBlurHandler}
             errorMessage={
-              "Room Name cannot be empty and max length is 32 characters"
+              "Room Name cannot be empty and max length is 32 characters."
             }
           ></Input>
           <Input
@@ -157,7 +196,7 @@ const UpdateRoom = () => {
             value={enteredDescription}
             onChange={descriptionChangedHandler}
             onBlur={descriptionBlurHandler}
-            errorMessage={"description's maxlength is 256 characters"}
+            errorMessage={"description's maxlength is 256 characters."}
           ></Input>
 
           <div className={classes.actions}>
@@ -173,7 +212,7 @@ const UpdateRoom = () => {
             </Button>
           </div>
         </form>
-      </Card>
+      </FormCard>
     </React.Fragment>
   );
 };

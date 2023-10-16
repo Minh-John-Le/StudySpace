@@ -19,6 +19,8 @@ from .serializers import RoomMetaContentSerializer, RoomCardSerializer, FollowSt
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 
+from rest_framework import serializers
+
 
 # Create your views here.
 # ======================= REST API for RoomCard Display ===================================
@@ -168,7 +170,7 @@ class RoomManagerAPI(APIView):
             item = Rooms.objects.get(id=room_id)
         except Rooms.DoesNotExist:
             return Response(
-                {"error": "Room Content not found."},
+                {"error": {"room_does_not_exist": "Room Content not found."}},
                 status=status.HTTP_404_NOT_FOUND
             )
 
@@ -177,32 +179,56 @@ class RoomManagerAPI(APIView):
 
     def patch(self, request, room_id):
         try:
+            # Retrieve the room
             room_profile = Rooms.objects.get(id=room_id)
         except Rooms.DoesNotExist:
             return Response(
-                {"error": "Room not found."},
+                {"error": {"room_does_not_exist": "Room Content not found."}},
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        # Check if the authenticated user is the host of the room
-        if request.user != room_profile.host:
-            raise PermissionDenied(
-                "You do not have permission to edit this room.")
+        try:
+            # Check if the authenticated user is the host of the room
+            if request.user != room_profile.host:
+                raise PermissionDenied(
+                    "You do not have permission to edit this room.")
 
-        data = request.data  # Assuming the request data is in JSON format
+            data = request.data  # Assuming the request data is in JSON format
 
-        if 'room_name' in data:
-            room_profile.room_name = data['room_name']
+            # Validate and update fields
+            if 'room_name' in data:
+                room_profile.room_name = data['room_name']
 
-        if 'description' in data:
-            room_profile.description = data['description']
+            if 'description' in data:
+                room_profile.description = data['description']
 
-        if 'topic' in data:
-            room_profile.topic = data['topic']
+            if 'topic' in data:
+                room_profile.topic = data['topic']
 
-        room_profile.save()
-        serializer = SingleRoomSerializer(room_profile)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+            # Validate the serializer
+            print(room_profile)
+            serializer = SingleRoomSerializer(
+                room_profile, data=data, partial=True)
+
+            print(serializer.is_valid())
+            if not serializer.is_valid():
+                raise serializers.ValidationError(serializer.errors)
+
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except serializers.ValidationError as e:
+            return Response({'error': e.detail}, status=status.HTTP_400_BAD_REQUEST)
+        except PermissionDenied as e:
+            return Response({'error': {"Permission_Denied":str(e)}}, status=status.HTTP_403_FORBIDDEN)
+        except Rooms.DoesNotExist:
+            return Response(
+                {"error": {"room_does_not_exist": "Room Content not found."}},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            error_message = str(e)
+            return Response({'error': error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def delete(self, request, room_id):
         try:
@@ -261,12 +287,14 @@ class NewRoomAPI(APIView):
                 # Combine existing data and additional data
                 updated_data = {**existing_data, **additional_data}
                 serialized_item = SingleRoomSerializer(data=updated_data)
-                serialized_item.is_valid(raise_exception=True)
+
+                if not serialized_item.is_valid():
+                    raise serializers.ValidationError(
+                        serialized_item.errors)
                 serialized_item.save()
 
                 # After creating the room, get the room_id
                 room_id = serialized_item.instance.id
-                print(room_id)
 
                 # Create a new entry in the Rooms_Members table
                 room_member_data = {
@@ -276,12 +304,17 @@ class NewRoomAPI(APIView):
                 }
                 room_member_serializer = RoomsMembersSerializer(
                     data=room_member_data)
-                room_member_serializer.is_valid(raise_exception=True)
+                if not room_member_serializer.is_valid():
+                    raise serializers.ValidationError(
+                        room_member_serializer.errors)
                 room_member_serializer.save()
 
                 return Response(serialized_item.data, status=status.HTTP_200_OK)
+        except serializers.ValidationError as e:
+            return Response({'error': e.detail}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            return Response({'error': 'An error occurred'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            error_message = str(e)
+            return Response({'error': error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # ======================= REST API for Single Member In Single Room ===================================

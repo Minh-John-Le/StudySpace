@@ -84,7 +84,7 @@ const Login = (props) => {
         });
 
         setHasSubmitError(true);
-        setErrorMessage(errorMessages); // Set as an array of error messages
+        setErrorMessage(errorMessages); 
         throw new Error(errorMessages);
       }
 

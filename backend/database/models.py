@@ -9,7 +9,7 @@ from django.utils import timezone  # Import the timezone module
 class Rooms(models.Model):
     host = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.TextField(max_length=256, blank=True, default="")
-    topic = models.CharField(max_length=16, default="")
+    topic = models.CharField(max_length=20, default="")
     room_name = models.CharField(max_length=32, default="")
     created_at = models.DateTimeField(auto_now_add=True)
 

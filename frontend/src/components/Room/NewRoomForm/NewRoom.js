@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useInput from "../../../hooks/use-input";
 import Button from "../../UI/Button/Button";
 import Input from "../../UI/Input/Input";
 import classes from "./NewRoom.module.css";
-import Card from "../../UI/Card/Card";
 import Cookies from "js-cookie";
+import FormCard from "../../UI/FormCard/FormCard";
+import ErrorCard from "../../UI/ErrorCard/ErrorCard";
 
 const NewRoom = () => {
   //================================== VARIABLE ========================
 
   const navigate = useNavigate();
   const authToken = Cookies.get("authToken");
+
+  const [errorMessage, setErrorMessage] = useState("Please fill in the form!");
+  const [hasSubmitError, setHasSubmitError] = useState(false);
 
   const {
     value: enteredTopic,
@@ -20,7 +24,7 @@ const NewRoom = () => {
     valueChangeHandler: topicChangedHandler,
     inputBlurHandler: topicBlurHandler,
     reset: resetTopicInput,
-  } = useInput((value) => value.trim().length > 0 && value.trim().length <= 16);
+  } = useInput((value) => value.trim().length > 0 && value.trim().length <= 20);
 
   const {
     value: enteredRoomName,
@@ -71,10 +75,31 @@ const NewRoom = () => {
       );
 
       if (!response.ok) {
-        return;
-      }
-      const data = await response.json();
+        const errorObject = await response.json(); // Parse the error response
+        const errorData = errorObject.error;
+        console.log(errorData);
 
+        // Create an array to store error messages
+        const errorMessages = [];
+
+        // Format all error messages dynamically
+        Object.keys(errorData).forEach((key) => {
+          if (Array.isArray(errorData[key])) {
+            errorData[key].forEach((error) => {
+              errorMessages.push(`${key}: ${error}`);
+            });
+          } else {
+            errorMessages.push(`${key}: ${errorData[key]}`);
+          }
+        });
+
+        setHasSubmitError(true);
+        setErrorMessage(errorMessages);
+        throw new Error(errorMessages);
+      }
+
+      const data = await response.json();
+      setHasSubmitError(true);
       navigate(`/room/${data.id}`);
     } catch (error) {
       console.error("Create Room Error:", error);
@@ -84,10 +109,8 @@ const NewRoom = () => {
   //================================== RETURN COMPONENTS ===========================
   return (
     <React.Fragment>
-      <Card className={classes.header}>
-        <h2>Room Info</h2>
-      </Card>
-      <Card className={classes.login}>
+      {hasSubmitError && <ErrorCard errorMessages={errorMessage}></ErrorCard>}
+      <FormCard title={"Room Info"}>
         <form onSubmit={submitHandler}>
           <Input
             id="topic"
@@ -98,7 +121,7 @@ const NewRoom = () => {
             onChange={topicChangedHandler}
             onBlur={topicBlurHandler}
             errorMessage={
-              "Topic cannot be empty and max length is 16 characters"
+              "Topic cannot be empty and max length is 20 characters."
             }
           ></Input>
           <Input
@@ -137,7 +160,7 @@ const NewRoom = () => {
             </Button>
           </div>
         </form>
-      </Card>
+      </FormCard>
     </React.Fragment>
   );
 };
