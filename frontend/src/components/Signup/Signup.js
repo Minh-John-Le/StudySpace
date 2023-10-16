@@ -52,6 +52,12 @@ const Signup = (props) => {
     reset: resetDisplayNameInput,
   } = useInput((value) => value.trim().length > 0 && value.trim().length <= 20);
 
+  const isPasswordValid = (password) => {
+    // Regular expression for password requirements
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*\s).{8,}$/;
+    return passwordPattern.test(password);
+  };
+
   const {
     value: enteredPassword,
     isValid: enteredPasswordIsValid,
@@ -59,7 +65,7 @@ const Signup = (props) => {
     valueChangeHandler: passwordChangedHandler,
     inputBlurHandler: passwordBlurHandler,
     reset: resetPasswordInput,
-  } = useInput((value) => value.trim().length >= 8);
+  } = useInput(isPasswordValid);
 
   const {
     value: enteredRepeatedPassword,
@@ -142,7 +148,7 @@ const Signup = (props) => {
             value={enteredEmail}
             onChange={emailChangedHandler}
             onBlur={emailBlurHandler}
-            errorMessage={"Email must include @"}
+            errorMessage={"Email must include @."}
           ></Input>
 
           <Input
@@ -153,7 +159,9 @@ const Signup = (props) => {
             value={enteredUsername}
             onChange={usernameChangedHandler}
             onBlur={usernameBlurHandler}
-            errorMessage={"Username length must be between 8 and 32 characters"}
+            errorMessage={
+              "Username length must be between 8 and 32 characters."
+            }
           ></Input>
 
           <Input
@@ -165,7 +173,7 @@ const Signup = (props) => {
             onChange={displayNameChangedHandler}
             onBlur={displayNameBlurHandler}
             errorMessage={
-              "Username cannot be empty and must be less than 20 characters"
+              "Display name cannot be empty and must be less than 20 characters."
             }
           ></Input>
 
@@ -177,7 +185,9 @@ const Signup = (props) => {
             value={enteredPassword}
             onChange={passwordChangedHandler}
             onBlur={passwordBlurHandler}
-            errorMessage={"Password must be length 6 or more"}
+            errorMessage={
+              "Password must meet the following requirements: at least 8 characters in length, contain at least 1 uppercase letter, 1 lowercase letter, and 1 digit."
+            }
           ></Input>
 
           <Input
@@ -188,7 +198,9 @@ const Signup = (props) => {
             value={enteredRepeatedPassword}
             onChange={repeatedPasswordChangedHandler}
             onBlur={repeatedPasswordBlurHandler}
-            errorMessage={"Password must be length 6 or more"}
+            errorMessage={
+              "Password must meet the following requirements: at least 8 characters in length, contain at least 1 uppercase letter, 1 lowercase letter, and 1 digit."
+            }
           ></Input>
 
           <div className={classes.actions}>
