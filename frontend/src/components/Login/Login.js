@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
@@ -9,11 +9,21 @@ import useInput from "../../hooks/use-input";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import FormCard from "../UI/FormCard/FormCard";
+import ErrorCard from "../UI/ErrorCard/ErrorCard";
 
 const Login = (props) => {
   //==================================== VARIABLE ======================================
+  const [errorMessage, setErrorMessage] = useState("Please fill in the form!");
+  const [hasSubmitError, setHasSubmitError] = useState(false);
+
   const ctx = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const isPasswordValid = (password) => {
+    // Regular expression for password requirements
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*\s).{8,}$/;
+    return passwordPattern.test(password);
+  };
 
   const {
     value: enteredUsername,
@@ -22,7 +32,9 @@ const Login = (props) => {
     valueChangeHandler: usernameChangedHandler,
     inputBlurHandler: usernameBlurHandler,
     reset: resetUsernameInput,
-  } = useInput((value) => value.trim().length > 8);
+  } = useInput(
+    (value) => value.trim().length >= 8 && value.trim().length <= 32
+  );
 
   const {
     value: enteredPassword,
@@ -31,7 +43,7 @@ const Login = (props) => {
     valueChangeHandler: passwordChangedHandler,
     inputBlurHandler: passwordBlurHandler,
     reset: resetPasswordInput,
-  } = useInput((value) => value.trim().length > 8);
+  } = useInput(isPasswordValid);
 
   //==================================== GET DATA ======================================
   // Log in with user username and password
@@ -53,8 +65,27 @@ const Login = (props) => {
       });
 
       if (!response.ok) {
-        console.error("Login failed");
-        return;
+        const errorObject = await response.json(); // Parse the error response
+        const errorData = errorObject;
+        console.log(errorData);
+
+        // Create an array to store error messages
+        const errorMessages = [];
+
+        // Format all error messages dynamically
+        Object.keys(errorData).forEach((key) => {
+          if (Array.isArray(errorData[key])) {
+            errorData[key].forEach((error) => {
+              errorMessages.push(`${key}: ${error}`);
+            });
+          } else {
+            errorMessages.push(`${key}: ${errorData[key]}`);
+          }
+        });
+
+        setHasSubmitError(true);
+        setErrorMessage(errorMessages); // Set as an array of error messages
+        throw new Error(errorMessages);
       }
 
       // Assuming your backend responds with a JSON object containing a "token" field
@@ -65,6 +96,7 @@ const Login = (props) => {
 
       // Go to Home page
       ctx.changeDisplayName("StudySpaceUser");
+      setHasSubmitError(false);
       navigate("/");
     } catch (error) {
       console.error("An error occurred:", error);
@@ -74,6 +106,7 @@ const Login = (props) => {
   //==================================== RETURN COMPONENTS ======================================
   return (
     <React.Fragment>
+      {hasSubmitError && <ErrorCard errorMessages={errorMessage}></ErrorCard>}
       <FormCard title={"Login"}>
         <form onSubmit={submitHandler}>
           <Input
@@ -84,7 +117,9 @@ const Login = (props) => {
             value={enteredUsername}
             onChange={usernameChangedHandler}
             onBlur={usernameBlurHandler}
-            errorMessage={"Username must be length 8 or more"}
+            errorMessage={
+              "Username length must be between 8 and 32 characters."
+            }
           ></Input>
           {
             <Input
@@ -95,7 +130,9 @@ const Login = (props) => {
               value={enteredPassword}
               onChange={passwordChangedHandler}
               onBlur={passwordBlurHandler}
-              errorMessage={"Password must be length 6 or more"}
+              errorMessage={
+                "Password must meet the following requirements: at least 8 characters in length, contain at least 1 uppercase letter, 1 lowercase letter, and 1 digit."
+              }
             ></Input>
           }
 

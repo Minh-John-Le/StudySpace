@@ -74,7 +74,7 @@ const Signup = (props) => {
     valueChangeHandler: repeatedPasswordChangedHandler,
     inputBlurHandler: repeatedPasswordBlurHandler,
     reset: resetRepeatedPasswordInput,
-  } = useInput((value) => value.trim().length >= 8);
+  } = useInput(isPasswordValid);
 
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -98,7 +98,6 @@ const Signup = (props) => {
       if (!response.ok) {
         const errorObject = await response.json(); // Parse the error response
         const errorData = errorObject.error;
-        console.log(errorData);
 
         // Create an array to store error messages
         const errorMessages = [];
@@ -120,7 +119,6 @@ const Signup = (props) => {
 
       const rs = await response.json();
 
-      console.log(rs);
       // Clear input fields and reset error state
       resetEmailInput();
       resetUsernameInput();
