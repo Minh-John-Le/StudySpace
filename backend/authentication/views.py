@@ -9,6 +9,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.db import models, transaction
 from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 
 
 class SignupView(generics.CreateAPIView):
@@ -37,6 +38,8 @@ class SignupView(generics.CreateAPIView):
                     raise serializers.ValidationError(user_serializer.errors)
 
                 user = user_serializer.save()
+
+                token, created = Token.objects.get_or_create(user=user)
 
                 # Create the user profile within the same transaction
                 user_profile_data = {

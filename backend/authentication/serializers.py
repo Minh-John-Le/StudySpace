@@ -22,9 +22,17 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
     def validate_email(self, value):
+        errors = []
         if '@' not in value:
-            raise serializers.ValidationError(
+            errors.append(
                 "Email must contain the '@' symbol.")
+
+        if User.objects.filter(email=value).exists():
+            errors.append("This email is already in use.")
+
+        if errors:
+            raise serializers.ValidationError(errors)
+
         return value
 
     def validate_password(self, value):
@@ -59,6 +67,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = ['user', 'bio', 'display_name',
                   'avatar_name', 'email', 'username']
+
 
 class SingleUserProfileSerializer(serializers.ModelSerializer):
     followers_count = serializers.SerializerMethodField()
