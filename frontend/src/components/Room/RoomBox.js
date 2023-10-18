@@ -7,7 +7,7 @@ import MessageForm from "./MessageForm";
 import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import Avatar from "../UI/Avatar/Avatar";
-
+import { w3cwebsocket as W3WebSocket } from "websocket";
 const RoomBox = (props) => {
   //================================ VARIABLEs ==============================
   const [messages, setMessages] = useState([]);
@@ -19,6 +19,13 @@ const RoomBox = (props) => {
 
   //================================ FUNCTIONS ==============================
   // Get Room Message
+
+  const socket = new WebSocket(`ws://localhost:8000/ws/room/${id}/`, [], {
+    headers: {
+      Authorization: `Token ${authToken}`,
+    },
+  });
+
   async function fetchRoomMessage(id, authToken) {
     const apiUrl = `http://localhost:8000/api/database/room-message/${id}/`;
 

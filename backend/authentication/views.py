@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.db import models, transaction
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
 
 
 class SignupView(generics.CreateAPIView):
@@ -37,7 +38,9 @@ class SignupView(generics.CreateAPIView):
                 if not user_serializer.is_valid():
                     raise serializers.ValidationError(user_serializer.errors)
 
-                user = user_serializer.save()
+                user = User.objects.create_user(
+                    username=username, email=email, password=password)
+                print(user.password)
 
                 token, created = Token.objects.get_or_create(user=user)
 
