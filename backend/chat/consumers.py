@@ -29,8 +29,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        # Perform disconnection logic here
-        pass
+        # Remove the consumer from the group
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
 
     async def receive(self, text_data):
         data = json.loads(text_data)
@@ -42,20 +45,43 @@ class ChatConsumer(AsyncWebsocketConsumer):
             user = await self.get_user_from_token(user_token)
 
             if user is not None:
-                message = await self.save_message(user, message_text)  # Save the message to the database
+                # Save the message to the database
+                message = await self.save_message(user, message_text)
+                user_profile = await self.get_user_profile(user)
 
-                if message:
-                    # Serialize the message using the RoomMessageSerializer
-                    message_data = RoomMessageSerializer(message).data
+                if message and user_profile:
+                    message_data = {
+                        "id": message.id,
+                        "writer_avatar_name": user_profile.avatar_name,
+                        "writer_name": user_profile.display_name,
+                        "content": message.content,
+                        "created_at": str(message.created_at),
+                        "writer": user.id,
+                        "room": self.room_name,
+                    }
 
                     # Send the serialized message data to the room group
-                    await self.send_group_message(message_data)
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            'type': 'chat_message',
+                            'message_data': message_data
+                        }
+                    )
                 else:
                     await self.close()
             else:
                 await self.close()
         else:
             await self.close()
+
+    async def chat_message(self, event):
+        # Send the message to the WebSocket
+        message_data = event['message_data']
+        await self.send(text_data=json.dumps({
+            'type': 'chat.message',
+            'message_data': message_data
+        }))
 
     @database_sync_to_async
     def save_message(self, user, message_text):
@@ -78,4 +104,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
             user = User.objects.get(auth_token=token)
             return user
         except User.DoesNotExist:
+            return None
+
+    @database_sync_to_async
+    def get_user_profile(self, user):
+        # Import the User model here to avoid issues
+        from authentication.models import UserProfile
+
+        try:
+            user_profile = UserProfile.objects.get(user=user)
+            return user_profile
+        except UserProfile.DoesNotExist:
             return None

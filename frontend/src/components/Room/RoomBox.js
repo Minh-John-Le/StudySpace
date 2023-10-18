@@ -7,7 +7,6 @@ import MessageForm from "./MessageForm";
 import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import Avatar from "../UI/Avatar/Avatar";
-import { w3cwebsocket as W3WebSocket } from "websocket";
 const RoomBox = (props) => {
   //================================ VARIABLEs ==============================
   const [messages, setMessages] = useState([]);
@@ -20,11 +19,32 @@ const RoomBox = (props) => {
   //================================ FUNCTIONS ==============================
   // Get Room Message
 
-  const socket = new WebSocket(`ws://localhost:8000/ws/room/${id}/`, [], {
-    headers: {
-      Authorization: `Token ${authToken}`,
-    },
-  });
+  const handleWebSocketMessage = (event) => {
+    const newMessage = JSON.parse(event.data);
+    const message_data = newMessage.message_data;
+
+    // Format the created_at field before adding it to the state
+    const formattedMessage = {
+      ...message_data,
+      created_at: formatCreatedAt(message_data.created_at),
+    };
+
+    // Assuming the WebSocket server sends messages as JSON objects
+    setMessages((prevMessages) => [formattedMessage, ...prevMessages]);
+  };
+
+  useEffect(() => {
+    const socket = new WebSocket(`ws://localhost:8000/ws/room/${id}/`);
+
+    socket.onmessage = (event) => {
+      handleWebSocketMessage(event);
+    };
+
+    return () => {
+      // Close the WebSocket connection when the component unmounts
+      socket.close();
+    };
+  }, [id]);
 
   async function fetchRoomMessage(id, authToken) {
     const apiUrl = `http://localhost:8000/api/database/room-message/${id}/`;
