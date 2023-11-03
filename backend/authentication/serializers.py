@@ -55,7 +55,7 @@ class UserSerializer(serializers.ModelSerializer):
 
         if errors:
             raise serializers.ValidationError(errors)
-    
+
         return value
 
 

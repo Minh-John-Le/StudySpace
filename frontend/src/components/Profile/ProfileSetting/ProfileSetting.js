@@ -10,10 +10,15 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import Avatar from "../../UI/Avatar/Avatar";
 import FormCard from "../../UI/FormCard/FormCard";
+import ErrorCard from "../../UI/ErrorCard/ErrorCard";
 
 const ProfileSetting = (props) => {
   //==================================== VARIABLE =====================
   const [profile, setProfile] = useState([""]);
+
+  const [errorMessage, setErrorMessage] = useState("Please fill in the form!");
+  const [hasSubmitError, setHasSubmitError] = useState(false);
+
   const ctx = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -89,13 +94,32 @@ const ProfileSetting = (props) => {
       });
 
       if (!response.ok) {
-        // Handle login error here (e.g., show an error message)
-        console.error("Update profile fail");
-        return;
-      }
+        const errorObject = await response.json(); // Parse the error response
+        const errorData = errorObject;
+        console.log(errorData);
 
+        // Create an array to store error messages
+        const errorMessages = [];
+
+        // Format all error messages dynamically
+        Object.keys(errorData).forEach((key) => {
+          if (Array.isArray(errorData[key])) {
+            errorData[key].forEach((error) => {
+              errorMessages.push(`${key}: ${error}`);
+            });
+          } else {
+            errorMessages.push(`${key}: ${errorData[key]}`);
+          }
+        });
+
+        setHasSubmitError(true);
+        setErrorMessage(errorMessages);
+        throw new Error(errorMessages);
+      }
       // Assuming your backend responds with a JSON object containing a "token" field
       //const data = await response.json();
+
+      setHasSubmitError(false);
       setProfile(profile);
       ctx.changeDisplayName(profile.display_name);
       navigate(`/user/${profile.user}`);
@@ -142,6 +166,7 @@ const ProfileSetting = (props) => {
   //====================================== RETURN COMPONENTS =================================
   return (
     <React.Fragment>
+      {hasSubmitError && <ErrorCard errorMessages={errorMessage}></ErrorCard>}
       <FormCard title={"Profile Settings"}>
         <form onSubmit={submitHandler}>
           <Input

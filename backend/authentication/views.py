@@ -80,21 +80,14 @@ class PersonalProfileView(APIView):
 
     def patch(self, request):
         user_profile = UserProfile.objects.get(user=request.user)
-        data = request.data  # Assuming the request data is in JSON format
+        serializer = UserProfileSerializer(
+            user_profile, data=request.data, partial=True)
 
-        # Check if 'display_name' or 'bio' is present in the request data
-        if 'display_name' in data:
-            user_profile.display_name = data['display_name']
-
-        if 'bio' in data:
-            user_profile.bio = data['bio']
-
-        if 'avatar_name' in data:
-            user_profile.avatar_name = data['avatar_name']
-
-        user_profile.save()
-        serializer = UserProfileSerializer(user_profile)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserProfileView(APIView):
