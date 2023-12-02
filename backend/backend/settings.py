@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'database',
     'corsheaders',
     'chat',
+    'chatbot',
 
 ]
 
