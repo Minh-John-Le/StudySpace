@@ -39,17 +39,16 @@ class ChatBotMessageAPI(APIView):
 
     def get(self, request):
         messages = ChatBotMessages.objects.filter(
-            writer=request.user).order_by('-created_at')[:100]
+            writer=request.user).order_by('-created_at')[:10]
 
         serializer = ChatBotMessageSerializer(messages, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        writer = request.user  # Assuming the user is authenticated
+        writer = request.user
 
         content = request.data.get('content', '').strip()
 
-        # Validate the content
         if not content:
             raise ValidationError("Message content is required")
 
@@ -61,6 +60,10 @@ class ChatBotMessageAPI(APIView):
             message=content,
             response=response_from_openai
         )
+
+        # Serialize the code before saving
+        serialized_data = message.serialize_code()
+        message.save()
 
         serializer = ChatBotMessageSerializer(message)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
