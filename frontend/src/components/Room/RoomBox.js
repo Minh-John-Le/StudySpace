@@ -30,7 +30,7 @@ const RoomBox = (props) => {
     };
 
     // Assuming the WebSocket server sends messages as JSON objects
-    setMessages((prevMessages) => [formattedMessage, ...prevMessages]);
+    setMessages((prevMessages) => [...prevMessages, formattedMessage]);
   };
 
   useEffect(() => {

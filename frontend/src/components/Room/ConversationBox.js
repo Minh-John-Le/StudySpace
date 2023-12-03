@@ -1,24 +1,21 @@
-import React from "react";
-import CardScrollbar from "../UI/Card/ScrollableCard";
+import React, { useRef, useEffect } from "react";
 import ConversationThread from "./ConversationThread";
+import classes from "./ConversationBox.module.css";
 
 const ConversationBox = (props) => {
-  //const scrollableContainerRef = useRef(null);
+  const scrollableContainerRef = useRef(null);
 
   // Scroll to the bottom whenever new messages are added
-  // useEffect(() => {
-  //   if (scrollableContainerRef.current) {
-  //     scrollableContainerRef.current.scrollIntoView({
-  //       behavior: "smooth",
-  //       block: "end",
-  //     });
-  //   }
-  //   // To prevent the parent or browser window from scrolling, set its scroll position back to the current value
-  // }, [props.messages]);
+  useEffect(() => {
+    if (scrollableContainerRef.current) {
+      const scrollableDiv = scrollableContainerRef.current;
+      scrollableDiv.scrollTop = scrollableDiv.scrollHeight;
+    }
+  }, [props.messages]);
 
   return (
     <React.Fragment>
-      <CardScrollbar>
+      <div ref={scrollableContainerRef} className={classes.scrollableCard}>
         {props.messages.map((message, index) => (
           <div key={message.id}>
             <ConversationThread
@@ -27,11 +24,11 @@ const ConversationBox = (props) => {
               writer_avatar_name={message.writer_avatar_name}
               content={message.content}
               created_at={message.created_at}
-            ></ConversationThread>
-            <br></br>
+            />
+            <br />
           </div>
         ))}
-      </CardScrollbar>
+      </div>
     </React.Fragment>
   );
 };

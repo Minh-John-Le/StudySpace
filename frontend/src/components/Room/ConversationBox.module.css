@@ -1,0 +1,43 @@
+.scrollableCard {
+    background: var(--color-bg);
+    box-shadow: 0 2px 8px var(--color-bg);
+    border-radius: 10px;
+    height: 400px; /* Adjust the fixed height as needed */
+    overflow-y: auto; /* Enable vertical scrolling when content overflows */
+    padding: 16px;
+    color: var(--color-light-gray);
+  }
+  
+  /* Style the scrollbar */
+  .scrollableCard::-webkit-scrollbar {
+    width: 10px;
+    background: var(
+      --color-dark-light
+    ); /* Background color of the scrollbar track */
+    border-radius: 10px;
+  }
+  
+  .scrollableCard::-webkit-scrollbar-thumb {
+    background: var(
+      --color-dark-medium
+    ); /* Color of the scrollbar thumb (drag handle) */
+    border-radius: 10px; /* Rounded corners for the thumb */
+  }
+  
+  .scrollableCard::-webkit-scrollbar-thumb:hover {
+    background: var(--color-dark); /* Color of the thumb on hover */
+    border-radius: 10px;
+  }
+  
+  /* Style the scrollbar track when it's not actively being scrolled */
+  .scrollableCard::-webkit-scrollbar-track {
+    background: var(--color-bg); /* Background color of the scrollbar track */
+    border-radius: 10px;
+  }
+  
+  /* Style the scrollbar when it's in a "corner" (e.g., bottom-right) */
+  .scrollableCard::-webkit-scrollbar-corner {
+    background: var(--color-dark);
+    border-radius: 10px;
+  }
+  
