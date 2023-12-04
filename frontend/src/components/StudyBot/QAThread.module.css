@@ -40,3 +40,14 @@
 .message-content {
   line-height: 1.5;
 }
+
+.study-bot {
+  display: flex;
+  align-items: center;
+  color: var(--color-main);
+}
+
+.bot-text {
+  margin-left: 10px;
+  margin-bottom: 15px;
+}
