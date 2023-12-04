@@ -11,6 +11,26 @@
   padding: 0 2rem;
 }
 
+.sub-link {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+}
+
+.sub-link a {
+  text-decoration: none;
+  margin-right: 30px;
+}
+
+.sub-link span {
+  color: var(--color-light);
+  font-size: 18px;
+}
+
+.sub-link span:hover {
+  color: var(--color-main);
+}
+
 .main-header__home-link {
   text-decoration: none;
   display: flex;
@@ -20,7 +40,7 @@
 .main-header__home-link span {
   color: #fff; /* Change the color as needed */
   font-size: 24px; /* Adjust the font size as needed */
-  margin-right: .5rem; /* Add margin to separate the icon from the text */
+  margin-right: 0.5rem; /* Add margin to separate the icon from the text */
 }
 
 .main-header__home-link h2 {

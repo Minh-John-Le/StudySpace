@@ -15,6 +15,15 @@ const MainHeader = (props) => {
           </span>
           <h2>Study Space</h2>
         </Link>
+
+        <div className={classes["sub-link"]}>
+          <Link to={"/"}>
+            <span>Chat Room</span>
+          </Link>
+          <Link to={"/studybot"}>
+            <span>Study Bot</span>
+          </Link>
+        </div>
       </div>
       <Navigation />
     </header>
