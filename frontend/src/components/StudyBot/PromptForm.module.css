@@ -7,16 +7,51 @@
 }
 
 /* Adjust the input width to 100% to make it flex the whole width */
-.message-box input {
+.message-box textarea {
   width: 100%;
-  padding: 8px; /* Adjust padding as needed */
-  border: none; /* Remove border if not needed */
-  border-radius: 5px; /* Add border radius as needed */
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
   text-align: left;
   color: var(--color-light);
-  font-size: 90%;
+  font-size: 100%;
+  background-color: var(--color-dark-light);
+  resize: vertical;
+  min-height: 100px;
 }
 
-.message-box input::placeholder {
+.message-box textarea::placeholder {
   color: var(--color-light-gray); /* Set the placeholder text color to red */
+}
+
+/* Style the scrollbar */
+.message-box__textarea::-webkit-scrollbar {
+  width: 10px;
+  background: var(
+    --color-dark-ligh-
+  ); /* Background color of the scrollbar track */
+  border-radius: 10px;
+}
+
+.message-box__textarea::-webkit-scrollbar-thumb {
+  background: var(
+    --color-dark-medium
+  ); /* Color of the scrollbar thumb (drag handle) */
+  border-radius: 10px; /* Rounded corners for the thumb */
+}
+.message-box__textarea::-webkit-scrollbar-thumb:hover {
+  background: var(--color-dark);
+  border-radius: 10px;
+}
+
+/* Style the scrollbar track when it's not actively being scrolled */
+.message-box__textarea::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+/* Style the scrollbar when it's in a "corner" (e.g., bottom-right) */
+.message-box__textarea::-webkit-scrollbar-corner {
+  background: var(--color-dark);
+  border-radius: 10px;
 }

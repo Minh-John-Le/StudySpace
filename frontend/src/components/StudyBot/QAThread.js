@@ -18,7 +18,11 @@ const QAThread = (props) => {
           />
           <div className={classes["sent-date"]}>Sent {props.created_at}</div>
         </div>
-        <div className={classes["message-content"]}>{props.message}</div>
+        <div className={classes["message-content"]}>
+          <pre style={{ whiteSpace: "pre-wrap", fontSize: "120%" }}>
+            {props.message}
+          </pre>
+        </div>
       </Card>
 
       <br></br>
@@ -29,7 +33,9 @@ const QAThread = (props) => {
         </div>
 
         <div className={classes["message-content"]}>
-          <pre style={{ whiteSpace: "pre-wrap" }}>{props.response}</pre>
+          <pre style={{ whiteSpace: "pre-wrap", fontSize: "120%" }}>
+            {props.response}
+          </pre>
         </div>
       </Card>
     </React.Fragment>

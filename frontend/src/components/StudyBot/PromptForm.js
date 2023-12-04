@@ -59,18 +59,23 @@ const PromptForm = (props) => {
   //===================== Return Components ===============================
   return (
     <Card>
-      <form onSubmit={handleFormSubmit}>
-        <div className={classes["message-box"]}>
-          <input
-            type="text"
-            id="search"
-            value={enterMessage}
-            placeholder="Write Your Message Here"
-            maxLength={256}
-            onChange={handleInputChange}
-          />
-        </div>
-      </form>
+      <div className={classes["message-box"]}>
+        <textarea
+          className={classes["message-box__textarea"]}
+          id="search"
+          type="text"
+          value={enterMessage}
+          placeholder="Write Your Message Here"
+          maxLength={4068}
+          onChange={handleInputChange}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleFormSubmit(e);
+            }
+          }}
+        />
+      </div>
     </Card>
   );
 };
