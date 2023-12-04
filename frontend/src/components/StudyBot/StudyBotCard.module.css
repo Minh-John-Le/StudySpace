@@ -22,3 +22,9 @@
   border-top-right-radius: 0px;
   border-top-left-radius: 0px;
 }
+
+.bot-note {
+  margin-top: 1rem;
+  color: #e3a442;
+  margin-bottom: 3rem;
+}

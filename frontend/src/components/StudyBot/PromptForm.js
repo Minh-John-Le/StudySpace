@@ -8,7 +8,6 @@ const PromptForm = (props) => {
   //===================== VARIABLE ===============================
   const [enterMessage, setEnterMessage] = useState("");
   const authToken = Cookies.get("authToken");
-  const { id } = useParams();
 
   //===================== FUNCTIONS ===============================
   const handleInputChange = (event) => {

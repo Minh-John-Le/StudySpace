@@ -3,21 +3,40 @@ import Card from "../UI/Card/Card";
 import classes from "./QAThread.module.css";
 import Avatar from "../UI/Avatar/Avatar";
 
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vs } from "react-syntax-highlighter/dist/esm/styles/prism";
+
 const QAThread = (props) => {
   return (
-    <Card className={classes["body"]}>
-      <div className={classes["writer-info"]}>
-        <Avatar
-          avatarLink={`/user/1/`}
-          displayName={"You"}
-          avatarName={"ABC"}
-          includeDisplayName={true}
-          displayNameClassName={classes["avatar__display-name"]}
-        />
-        <div className={classes["sent-date"]}>Sent {"asdasdasdad"}</div>
-      </div>
-      <div className={classes["message-content"]}>{props.content}</div>
-    </Card>
+    <React.Fragment>
+      <Card className={classes["body"]}>
+        <div className={classes["writer-info"]}>
+          <Avatar
+            avatarLink={`/user/${props.writer}`}
+            displayName={props.writer_name}
+            avatarName={props.writer_avatar_name}
+            includeDisplayName={true}
+            displayNameClassName={classes["avatar__display-name"]}
+          />
+          <div className={classes["sent-date"]}>Sent {props.created_at}</div>
+        </div>
+        <div className={classes["message-content"]}>{props.message}</div>
+        <div></div>
+      </Card>
+      <br></br>
+
+      <Card className={classes["body"]}>
+        <div className={classes["writer-info"]}>
+          <Avatar
+            displayName={"Study Bot"}
+            includeDisplayName={true}
+            displayNameClassName={classes["avatar__display-name"]}
+          />
+        </div>
+        <div className={classes["message-content"]}>{props.response}</div>
+        <div></div>
+      </Card>
+    </React.Fragment>
   );
 };
 
