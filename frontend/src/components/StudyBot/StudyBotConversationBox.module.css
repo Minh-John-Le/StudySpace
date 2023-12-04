@@ -2,7 +2,7 @@
   background: var(--color-bg);
   box-shadow: 0 2px 8px var(--color-bg);
   border-radius: 10px;
-  height: 400px; /* Adjust the fixed height as needed */
+  height: 600px; /* Adjust the fixed height as needed */
   overflow-y: auto; /* Enable vertical scrolling when content overflows */
   padding: 16px;
   color: var(--color-light-gray);

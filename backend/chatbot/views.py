@@ -40,6 +40,7 @@ class ChatBotMessageAPI(APIView):
     def get(self, request):
         messages = ChatBotMessages.objects.filter(
             writer=request.user).order_by('-created_at')[:10]
+        
 
         serializer = ChatBotMessageSerializer(messages, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

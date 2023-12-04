@@ -220,7 +220,7 @@ class RoomManagerAPI(APIView):
         except serializers.ValidationError as e:
             return Response({'error': e.detail}, status=status.HTTP_400_BAD_REQUEST)
         except PermissionDenied as e:
-            return Response({'error': {"Permission_Denied":str(e)}}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': {"Permission_Denied": str(e)}}, status=status.HTTP_403_FORBIDDEN)
         except Rooms.DoesNotExist:
             return Response(
                 {"error": {"room_does_not_exist": "Room Content not found."}},
@@ -485,7 +485,7 @@ class RoomMessageAPI(APIView):
 
     def get(self, request, room_id):
         messages = Messages.objects.filter(
-            room=room_id).order_by('created_at')[:100]
+            room=room_id).order_by('-created_at')[:100]
 
         serializer = RoomMessageSerializer(messages, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

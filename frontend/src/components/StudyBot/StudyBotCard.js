@@ -26,6 +26,15 @@ const StudyBotCard = () => {
     return formattedDate;
   }
 
+  const addNewQA = (qa) => {
+    const formattedQA = {
+      ...qa,
+      created_at: formatCreatedAt(qa.created_at),
+    };
+
+    setAllQA((prevAllQA) => [formattedQA, ...prevAllQA]);
+  };
+
   useEffect(() => {
     fetchAllQA(authToken);
   }, [authToken]);
@@ -71,7 +80,7 @@ const StudyBotCard = () => {
           is still in beta.
         </div>
         <StudyBotConversationBox allQA={allQA}></StudyBotConversationBox>
-        <PromptForm></PromptForm>
+        <PromptForm addNewQA={addNewQA}></PromptForm>
       </Card>
     </React.Fragment>
   );

@@ -17,6 +17,7 @@ const PromptForm = (props) => {
   // Input send message to chat room
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+    setEnterMessage("");
 
     const content = {
       content: enterMessage,
@@ -40,6 +41,11 @@ const PromptForm = (props) => {
         console.error("Add new message fail");
         return;
       }
+
+      const data = await response.json(); // Parse JSON from the response
+
+      // Assuming the response is an object with the new QA data
+      props.addNewQA(data);
 
       //const data = await response.json();
       setEnterMessage("");

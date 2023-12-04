@@ -3,9 +3,6 @@ import Card from "../UI/Card/Card";
 import classes from "./QAThread.module.css";
 import Avatar from "../UI/Avatar/Avatar";
 
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vs } from "react-syntax-highlighter/dist/esm/styles/prism";
-
 const QAThread = (props) => {
   return (
     <React.Fragment>
@@ -21,10 +18,9 @@ const QAThread = (props) => {
           <div className={classes["sent-date"]}>Sent {props.created_at}</div>
         </div>
         <div className={classes["message-content"]}>{props.message}</div>
-        <div></div>
       </Card>
-      <br></br>
 
+      <br></br>
       <Card className={classes["body"]}>
         <div className={classes["writer-info"]}>
           <Avatar
@@ -33,8 +29,9 @@ const QAThread = (props) => {
             displayNameClassName={classes["avatar__display-name"]}
           />
         </div>
-        <div className={classes["message-content"]}>{props.response}</div>
-        <div></div>
+        <div className={classes["message-content"]}>
+          <pre style={{ whiteSpace: "pre-wrap" }}>{props.response}</pre>
+        </div>
       </Card>
     </React.Fragment>
   );

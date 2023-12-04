@@ -12,24 +12,27 @@ const StudyBotConversationBox = (props) => {
       const scrollableDiv = scrollableContainerRef.current;
       scrollableDiv.scrollTop = scrollableDiv.scrollHeight;
     }
-  }, [props.messages]);
+  }, [props.allQA]);
 
   return (
     <React.Fragment>
       <div ref={scrollableContainerRef} className={classes.scrollableCard}>
-        {props.allQA.map((qa, index) => (
-          <div key={qa.id}>
-            <QAThread
-              writer={qa.writer}
-              writer_name={qa.writer_name}
-              writer_avatar_name={qa.writer_avatar_name}
-              message={qa.message}
-              created_at={qa.created_at}
-              response={qa.response}
-            />
-            <br />
-          </div>
-        ))}
+        {props.allQA
+          .slice()
+          .reverse()
+          .map((qa, index) => (
+            <div key={qa.id}>
+              <QAThread
+                writer={qa.writer}
+                writer_name={qa.writer_name}
+                writer_avatar_name={qa.writer_avatar_name}
+                message={qa.message}
+                created_at={qa.created_at}
+                response={qa.response}
+              />
+              <br />
+            </div>
+          ))}
       </div>
     </React.Fragment>
   );
