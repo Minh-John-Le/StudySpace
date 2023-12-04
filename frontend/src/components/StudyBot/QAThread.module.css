@@ -1,0 +1,42 @@
+.body {
+  width: 100%;
+  margin: 0rem auto;
+  padding: 1rem 1rem;
+  border-radius: 0px;
+  border-left: 3px solid var(--color-gray);
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.avatarContainer {
+  width: 40px; /* Adjust the size as needed */
+  height: 40px; /* Adjust the size as needed */
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 0.5rem; /* Adjust the spacing as needed */
+
+  border-color: var(--color-main);
+  border-style: solid;
+  border-width: 1%;
+}
+
+.avatar__display-name {
+  color: var(--color-main);
+}
+
+.writer-info {
+  display: flex; /* Use Flexbox to create a horizontal layout */
+  align-items: center; /* Vertically align items */
+  margin-bottom: 1rem;
+}
+
+.sent-date {
+  font-size: 90%;
+  margin-left: 1rem;
+  align-items: center;
+  color: var(--color-light-gray);
+}
+
+.message-content {
+  line-height: 1.5;
+}

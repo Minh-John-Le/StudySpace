@@ -1,0 +1,22 @@
+/* Your CSS for the .message-box class */
+.message-box {
+  margin: -0.5rem 0;
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+}
+
+/* Adjust the input width to 100% to make it flex the whole width */
+.message-box input {
+  width: 100%;
+  padding: 8px; /* Adjust padding as needed */
+  border: none; /* Remove border if not needed */
+  border-radius: 5px; /* Add border radius as needed */
+  text-align: left;
+  color: var(--color-light);
+  font-size: 90%;
+}
+
+.message-box input::placeholder {
+  color: var(--color-light-gray); /* Set the placeholder text color to red */
+}

@@ -12,6 +12,7 @@ import ProfileSetting from "./components/Profile/ProfileSetting/ProfileSetting";
 import Room from "./components/Room/Room";
 import UpdateRoom from "./components/Room/UpdateRoomForm/UpdateRoom";
 import NewRoom from "./components/Room/NewRoomForm/NewRoom";
+import StudyBotCard from "./components/StudyBot/StudyBotCard";
 
 function App() {
   const ctx = useContext(AuthContext);
@@ -32,6 +33,7 @@ function App() {
           <Route path="/new-room" element={<NewRoom></NewRoom>} />
           <Route path="/room/:id" element={<Room></Room>} />
           <Route path="/update-room/:id" element={<UpdateRoom></UpdateRoom>} />
+          <Route path="/studybot" element={<StudyBotCard></StudyBotCard>} />
         </Routes>
       </main>
     </Router>
