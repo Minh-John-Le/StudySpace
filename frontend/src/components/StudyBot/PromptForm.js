@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import { BiSend } from "react-icons/bi";
 import { MdInsertPhoto } from "react-icons/md";
+import OCRConverter from "./OCRConverter";
 
 const PromptForm = (props) => {
   const [enterMessage, setEnterMessage] = useState("");
@@ -17,7 +18,7 @@ const PromptForm = (props) => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    if (isLoading) {
+    if (isLoading || !enterMessage.trim()) {
       return; // If already loading, prevent new submissions
     }
 
@@ -77,14 +78,21 @@ const PromptForm = (props) => {
           />
         </div>
       </Card>
+
       <div className={classes["action-button-group"]}>
         <button className={classes["action-button"]}>
-          <BiSend size={32} className={classes["button-icon"]} />
+          <BiSend
+            size={32}
+            className={classes["button-icon"]}
+            onClick={handleFormSubmit}
+          />
         </button>
         <button className={classes["action-button"]}>
           <MdInsertPhoto size={32} className={classes["button-icon"]} />
         </button>
       </div>
+
+      <OCRConverter></OCRConverter>
     </React.Fragment>
   );
 };
