@@ -16,7 +16,7 @@
   color: var(--color-light);
   font-size: 120%;
   background-color: var(--color-dark-light);
-  resize: vertical;
+  resize: none;
   min-height: 100px;
 }
 

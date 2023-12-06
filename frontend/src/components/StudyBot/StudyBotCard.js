@@ -4,6 +4,7 @@ import Card from "../UI/Card/Card";
 import StudyBotConversationBox from "./StudyBotConversationBox";
 import PromptForm from "./PromptForm";
 import Cookies from "js-cookie";
+import OCRConverter from "./OCRConverter";
 
 const StudyBotCard = () => {
   const [allQA, setAllQA] = useState([]);
@@ -81,6 +82,7 @@ const StudyBotCard = () => {
         </div>
         <StudyBotConversationBox allQA={allQA}></StudyBotConversationBox>
         <PromptForm addNewQA={addNewQA}></PromptForm>
+        <OCRConverter></OCRConverter>
       </Card>
     </React.Fragment>
   );
