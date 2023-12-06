@@ -47,6 +47,11 @@
   white-space: nowrap;
 }
 
+.btn__actions:hover {
+  border: 2px solid var(--color-main-hover);
+  color: var(--color-main-hover);
+}
+
 .subtitle {
   color: var(--color-gray);
   font-weight: bold;
