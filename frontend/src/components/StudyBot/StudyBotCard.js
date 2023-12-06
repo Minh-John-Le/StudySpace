@@ -5,7 +5,6 @@ import StudyBotConversationBox from "./StudyBotConversationBox";
 import PromptForm from "./PromptForm";
 import Cookies from "js-cookie";
 import OCRConverter from "./OCRConverter";
-import ActionButton from "./ActionButton";
 
 const StudyBotCard = () => {
   const [allQA, setAllQA] = useState([]);
@@ -83,7 +82,6 @@ const StudyBotCard = () => {
         </div>
         <StudyBotConversationBox allQA={allQA}></StudyBotConversationBox>
         <PromptForm addNewQA={addNewQA}></PromptForm>
-        <ActionButton></ActionButton>
       </Card>
     </React.Fragment>
   );

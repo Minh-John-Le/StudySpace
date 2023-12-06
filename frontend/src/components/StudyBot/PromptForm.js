@@ -3,6 +3,8 @@ import classes from "./PromptForm.module.css";
 import Card from "../UI/Card/Card";
 import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
+import { BiSend } from "react-icons/bi";
+import { MdInsertPhoto } from "react-icons/md";
 
 const PromptForm = (props) => {
   const [enterMessage, setEnterMessage] = useState("");
@@ -54,26 +56,36 @@ const PromptForm = (props) => {
   };
 
   return (
-    <Card>
-      <div className={classes["message-box"]}>
-        <textarea
-          className={classes["message-box__textarea"]}
-          id="search"
-          type="text"
-          value={enterMessage}
-          placeholder="Write Your Message Here"
-          maxLength={4068}
-          onChange={handleInputChange}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              handleFormSubmit(e);
-            }
-          }}
-          disabled={isLoading} // Disable input during loading
-        />
+    <React.Fragment>
+      <Card>
+        <div className={classes["message-box"]}>
+          <textarea
+            className={classes["message-box__textarea"]}
+            id="search"
+            type="text"
+            value={enterMessage}
+            placeholder="Write Your Message Here"
+            maxLength={4068}
+            onChange={handleInputChange}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleFormSubmit(e);
+              }
+            }}
+            disabled={isLoading} // Disable input during loading
+          />
+        </div>
+      </Card>
+      <div className={classes["action-button-group"]}>
+        <button className={classes["action-button"]}>
+          <BiSend size={32} className={classes["button-icon"]} />
+        </button>
+        <button className={classes["action-button"]}>
+          <MdInsertPhoto size={32} className={classes["button-icon"]} />
+        </button>
       </div>
-    </Card>
+    </React.Fragment>
   );
 };
 

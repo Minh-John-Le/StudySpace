@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { createWorker } from "tesseract.js";
 
+
 const OCRConverter = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [textResult, setTextResult] = useState("");
