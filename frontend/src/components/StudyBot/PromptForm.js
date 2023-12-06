@@ -5,26 +5,28 @@ import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const PromptForm = (props) => {
-  //===================== VARIABLE ===============================
   const [enterMessage, setEnterMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Added loading state
   const authToken = Cookies.get("authToken");
 
-  //===================== FUNCTIONS ===============================
   const handleInputChange = (event) => {
     setEnterMessage(event.target.value);
   };
 
-  // Input send message to chat room
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    setEnterMessage("");
+    if (isLoading) {
+      return; // If already loading, prevent new submissions
+    }
+
+    setIsLoading(true);
+    setEnterMessage("Study Bot is thinking. Please wait ....");
 
     const content = {
       content: enterMessage,
     };
 
     try {
-      // Send a POST request to your backend login endpoint
       const apiUrl = `http://localhost:8000/api/chatbot/`;
 
       const response = await fetch(apiUrl, {
@@ -37,26 +39,20 @@ const PromptForm = (props) => {
       });
 
       if (!response.ok) {
-        // Handle login error here (e.g., show an error message)
-        console.error("Add new message fail");
+        console.error("Cannot get answer from Study Bot!");
         return;
       }
 
-      const data = await response.json(); // Parse JSON from the response
-
-      // Assuming the response is an object with the new QA data
+      const data = await response.json();
       props.addNewQA(data);
-
-      //const data = await response.json();
       setEnterMessage("");
-      //props.fetchRoomMessage(id, authToken);
     } catch (error) {
-      // Handle any other errors (e.g., network issues)
       console.error("An error occurred:", error);
+    } finally {
+      setIsLoading(false); // Set loading state to false regardless of success or failure
     }
   };
 
-  //===================== Return Components ===============================
   return (
     <Card>
       <div className={classes["message-box"]}>
@@ -74,6 +70,7 @@ const PromptForm = (props) => {
               handleFormSubmit(e);
             }
           }}
+          disabled={isLoading} // Disable input during loading
         />
       </div>
     </Card>
