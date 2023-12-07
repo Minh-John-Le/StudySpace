@@ -4,7 +4,6 @@ import Card from "../UI/Card/Card";
 import StudyBotConversationBox from "./StudyBotConversationBox";
 import PromptForm from "./PromptForm";
 import Cookies from "js-cookie";
-import OCRConverter from "./OCRConverter";
 
 const StudyBotCard = () => {
   const [allQA, setAllQA] = useState([]);

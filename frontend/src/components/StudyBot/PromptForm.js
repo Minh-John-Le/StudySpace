@@ -1,21 +1,26 @@
 import React, { useState } from "react";
 import classes from "./PromptForm.module.css";
 import Card from "../UI/Card/Card";
-import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import { BiSend } from "react-icons/bi";
 import { MdInsertPhoto } from "react-icons/md";
-import OCRConverter from "./OCRConverter";
+import { useEffect } from "react";
+import { createWorker } from "tesseract.js";
 
 const PromptForm = (props) => {
   const [enterMessage, setEnterMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // Added loading state
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+
   const authToken = Cookies.get("authToken");
 
   const handleInputChange = (event) => {
     setEnterMessage(event.target.value);
   };
 
+  //======================================= FUNCTION ======================================
+  //----------------------- Send message to study bot ----------------------
+  // Handle submit the question message to chat bot
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     if (isLoading || !enterMessage.trim()) {
@@ -56,6 +61,39 @@ const PromptForm = (props) => {
     }
   };
 
+  //----------------------- Convert image to text ----------------------
+  
+  const convertImageToText = async () => {
+    if (!selectedImage) return;
+
+    const workerInstance = await createWorker("eng");
+    try {
+      const ret = await workerInstance.recognize(selectedImage);
+      setEnterMessage(ret.data.text);
+    } finally {
+      setTimeout(() => {
+        if (workerInstance.terminate) {
+          workerInstance.terminate();
+        }
+      }, 1000);
+    }
+  };
+
+  useEffect(() => {
+    convertImageToText();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedImage]);
+
+  const handleChangeImage = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedImage(e.target.files[0]);
+    } else {
+      setSelectedImage(null);
+      setEnterMessage("");
+    }
+  };
+
+  //======================================= RETURN COMPONENTS ======================================
   return (
     <React.Fragment>
       <Card>
@@ -87,12 +125,26 @@ const PromptForm = (props) => {
             onClick={handleFormSubmit}
           />
         </button>
-        <button className={classes["action-button"]}>
-          <MdInsertPhoto size={32} className={classes["button-icon"]} />
-        </button>
+        <div>
+          <label htmlFor="imageInput" className={classes["image-input"]}>
+            <MdInsertPhoto size={34} className={classes["image-input-icon"]} />
+          </label>
+          <input
+            type="file"
+            id="imageInput"
+            accept="image/*"
+            onChange={handleChangeImage}
+            style={{ display: "none" }}
+          />
+        </div>
       </div>
-
-      <OCRConverter></OCRConverter>
+      <div className="result">
+        {selectedImage && (
+          <div className="box-image">
+            <img src={URL.createObjectURL(selectedImage)} alt="thumb" />
+          </div>
+        )}
+      </div>
     </React.Fragment>
   );
 };
