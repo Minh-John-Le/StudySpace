@@ -9,6 +9,8 @@ from rest_framework import status
 import environ
 import openai
 from django.forms import ValidationError
+from llama_cpp import Llama
+import os
 
 
 env = environ.Env()
@@ -37,10 +39,38 @@ class ChatBotMessageAPI(APIView):
         answer = completion.choices[0].message.content.strip()
         return answer
 
+    def ask_llama(self, prompt_message):
+
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+        # Construct the relative path to the model file
+        llm_model_path = os.path.join(
+            BASE_DIR, 'aimodels', 'mistral-7b-openorca.Q3_K_M.gguf')
+
+        llm = Llama(model_path=llm_model_path,
+                    n_gpu_layers=1, n_ctx=100)
+
+        prompt = f"""<|im_start|>system
+        You are a helpful chatbot.
+        <|im_end|>
+        <|im_start|>user
+        {prompt_message}<|im_end|>
+        <|im_start|>assistant"""
+
+        output = llm.create_completion(prompt, max_tokens=200,  stop=[
+                                       "<|im_end|>"], stream=False)
+        # print(output["choices"][0]["text"])
+        generated_message = output["choices"][0]["text"]
+
+        # for token in output:
+        #     generated_message += token["choices"][0]["text"]
+        #     print(token["choices"][0]["text"], end='', flush=True)
+
+        return generated_message
+
     def get(self, request):
         messages = ChatBotMessages.objects.filter(
             writer=request.user).order_by('-created_at')[:10]
-        
 
         serializer = ChatBotMessageSerializer(messages, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

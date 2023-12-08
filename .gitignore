@@ -1,1 +1,2 @@
 backend/chatbot/.env
+*.gguf
