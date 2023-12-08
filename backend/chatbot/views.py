@@ -46,6 +46,7 @@ class ChatBotMessageAPI(APIView):
         # Construct the relative path to the model file
         llm_model_path = os.path.join(
             BASE_DIR, 'aimodels', 'mistral-7b-openorca.Q3_K_M.gguf')
+        # get file at https://huggingface.co/Open-Orca/Mistral-7B-OpenOrca
 
         llm = Llama(model_path=llm_model_path,
                     n_gpu_layers=1, n_ctx=500)
@@ -66,7 +67,8 @@ class ChatBotMessageAPI(APIView):
         #     generated_message += token["choices"][0]["text"]
         #     print(token["choices"][0]["text"], end='', flush=True)
 
-        return generated_message
+        answer = generated_message.strip()
+        return answer
 
     def get(self, request):
         messages = ChatBotMessages.objects.filter(
@@ -83,13 +85,20 @@ class ChatBotMessageAPI(APIView):
         if not content:
             raise ValidationError("Message content is required")
 
-        response_from_openai = self.ask_llama(content)
+        ai_model = request.data.get("ai_model", "")
+
+        if ai_model == "openAI":
+            response_from_ai_model = self.ask_openai(content)
+        elif ai_model == "llama":
+            response_from_ai_model = self.ask_llama(content)
+        else:
+            response_from_ai_model = self.ask_llama(content)
 
         # Create a new message
         message = ChatBotMessages.objects.create(
             writer=writer,
             message=content,
-            response=response_from_openai
+            response=response_from_ai_model
         )
 
         # Serialize the code before saving

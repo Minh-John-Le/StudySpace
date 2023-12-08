@@ -11,6 +11,49 @@ import { FaRobot } from "react-icons/fa";
 import Select from "react-select";
 import { SiProbot } from "react-icons/si";
 
+const selectBotStyle = {
+  control: (provided) => ({
+    ...provided,
+    maxWidth: "40px",
+    maxHeight: "40px",
+    minWidth: "40px",
+    minHeight: "40px",
+    backgroundColor: "transparent",
+    border: "3px solid var(--color-main)",
+    borderRadius: "10px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    ":hover": {
+      border: "3px solid var(--color-main-hover)",
+    },
+  }),
+  menu: (provided) => ({
+    ...provided,
+    minWidth: "60px",
+    backgroundColor: "transparent",
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: "var(--color-dark)",
+    border: "3px solid var(--color-main)",
+    color: state.isSelected ? "white" : "black",
+    ":hover": {
+      border: "3px solid var(--color-main-hover)",
+      color: "white",
+    },
+  }),
+  indicatorsContainer: () => ({ display: "none" }),
+  dropdownIndicator: (provided) => ({
+    ...provided,
+    padding: "0px", // Increase padding to move the inner display away from the border
+  }),
+  valueContainer: (provided) => ({
+    ...provided,
+    padding: "0px", // Increase padding to move the inner display away from the border
+  }),
+};
+
 const PromptForm = (props) => {
   //======================================= VARIABLES ===================================
   //--------------------------- General Input Variable ------------------------------------
@@ -35,27 +78,27 @@ const PromptForm = (props) => {
   }, []);
 
   //--------------------------- Bot Option -----------------------
-  const [botOption, setBotOption] = useState("option1");
 
   const options = [
     {
-      value: "option1",
+      value: "OpenAI",
       label: (
-        <div>
-          <FaRobot size={42} /> <h2> Study Bot</h2>
+        <div className={classes["study-bot-OpenAI"]}>
+          <FaRobot size={24} />
         </div>
       ),
     },
     {
-      value: "option2",
+      value: "Llama",
       label: (
-        <div>
-          <SiProbot size={42} /> <h2> Experiment Bot</h2>
+        <div className={classes["study-bot-Llama"]}>
+          <SiProbot size={24} />
         </div>
       ),
     },
   ];
 
+  const [botOption, setBotOption] = useState(options[0]);
   //======================================= FUNCTION ======================================
   //----------------------- Send message to study bot ----------------------
   const handleInputChange = (event) => {
@@ -256,6 +299,7 @@ const PromptForm = (props) => {
             accept="image/*"
             onChange={handleChangeImage}
             style={{ display: "none" }}
+            className="bot-select"
           />
         </div>
 
@@ -285,6 +329,9 @@ const PromptForm = (props) => {
             value={botOption}
             onChange={handleBotOptionChange}
             options={options}
+            styles={selectBotStyle}
+            isSearchable={false}
+            menuPlacement="top"
           />
         </div>
       </div>
