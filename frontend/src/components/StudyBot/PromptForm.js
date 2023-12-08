@@ -53,9 +53,17 @@ const PromptForm = (props) => {
     };
 
     try {
-      const apiUrl = `http://localhost:8000/api/chatbot/`;
+      const apiUrl = "http://localhost:8000/api/chatbot/";
+      const timeoutDuration = 180000; // 3 minutes in milliseconds
 
-      const response = await fetch(apiUrl, {
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(
+          () => reject(new Error("Request timed out")),
+          timeoutDuration
+        )
+      );
+
+      const fetchPromise = fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,6 +72,8 @@ const PromptForm = (props) => {
         body: JSON.stringify(content),
       });
 
+      const response = await Promise.race([fetchPromise, timeoutPromise]);
+
       if (!response.ok) {
         console.error("Cannot get answer from Study Bot!");
         return;
@@ -71,11 +81,11 @@ const PromptForm = (props) => {
 
       const data = await response.json();
       props.addNewQA(data);
-      setEnterMessage("");
     } catch (error) {
       console.error("An error occurred:", error);
     } finally {
       setIsLoading(false);
+      setEnterMessage("");
     }
   };
 

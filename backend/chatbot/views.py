@@ -48,7 +48,7 @@ class ChatBotMessageAPI(APIView):
             BASE_DIR, 'aimodels', 'mistral-7b-openorca.Q3_K_M.gguf')
 
         llm = Llama(model_path=llm_model_path,
-                    n_gpu_layers=1, n_ctx=100)
+                    n_gpu_layers=1, n_ctx=500)
 
         prompt = f"""<|im_start|>system
         You are a helpful chatbot.
@@ -57,7 +57,7 @@ class ChatBotMessageAPI(APIView):
         {prompt_message}<|im_end|>
         <|im_start|>assistant"""
 
-        output = llm.create_completion(prompt, max_tokens=200,  stop=[
+        output = llm.create_completion(prompt, max_tokens=4069,  stop=[
                                        "<|im_end|>"], stream=False)
         # print(output["choices"][0]["text"])
         generated_message = output["choices"][0]["text"]
@@ -83,7 +83,7 @@ class ChatBotMessageAPI(APIView):
         if not content:
             raise ValidationError("Message content is required")
 
-        response_from_openai = self.ask_openai(content)
+        response_from_openai = self.ask_llama(content)
 
         # Create a new message
         message = ChatBotMessages.objects.create(
