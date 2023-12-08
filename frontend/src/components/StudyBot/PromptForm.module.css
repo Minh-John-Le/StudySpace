@@ -62,6 +62,7 @@
   display: flex; /* Align buttons in a row */
 }
 
+/*---------------------------------- Action Button -------------------*/
 .action-button {
   background-color: transparent;
   border-color: var(--color-main);
@@ -82,6 +83,57 @@
 }
 
 .action-button:hover .button-icon {
+  color: var(--color-main-hover);
+}
+
+/*---------------------------------- Voice Button -------------------*/
+.voice-button {
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+  border-color: var(--color-main);
+  border-width: 3px;
+  border-style: solid;
+  margin-right: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.voice-button:hover {
+  border-color: transparent;
+  border-width: 0px;
+}
+
+.voice-button:hover::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: 3px solid transparent;
+  border-radius: 10px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    border-color: var(--color-main);
+  }
+  50% {
+    border-color: var(--color-border-red);
+  }
+  100% {
+    border-color: var(--color-main);
+  }
+}
+
+.voice-icon {
+  color: var(--color-main);
+}
+
+.voice-button:hover .voice-icon {
   color: var(--color-main-hover);
 }
 

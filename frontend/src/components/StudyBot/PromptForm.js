@@ -6,6 +6,7 @@ import { BiSend } from "react-icons/bi";
 import { MdInsertPhoto } from "react-icons/md";
 import { useEffect } from "react";
 import { createWorker } from "tesseract.js";
+import { FaMicrophone } from "react-icons/fa";
 
 const PromptForm = (props) => {
   const [enterMessage, setEnterMessage] = useState("");
@@ -129,6 +130,7 @@ const PromptForm = (props) => {
             onClick={handleFormSubmit}
           />
         </button>
+
         <div>
           <label htmlFor="imageInput" className={classes["image-input"]}>
             <MdInsertPhoto size={34} className={classes["image-input-icon"]} />
@@ -141,6 +143,10 @@ const PromptForm = (props) => {
             style={{ display: "none" }}
           />
         </div>
+
+        <button className={classes["voice-button"]}>
+          <FaMicrophone size={32} className={classes["voice-icon"]} />
+        </button>
       </div>
 
       <div>
