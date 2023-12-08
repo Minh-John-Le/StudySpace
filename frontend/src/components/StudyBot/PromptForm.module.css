@@ -109,3 +109,13 @@
 .image-input:hover .image-input-icon {
   color: var(--color-main-hover);
 }
+
+.upload-image {
+  margin-top: 1rem;
+}
+.upload-image img {
+  border-width: 4px;
+  border-style: solid;
+  border-radius: 3%;
+  border-color: var(--color-main);
+}

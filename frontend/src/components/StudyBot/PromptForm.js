@@ -57,14 +57,16 @@ const PromptForm = (props) => {
     } catch (error) {
       console.error("An error occurred:", error);
     } finally {
-      setIsLoading(false); // Set loading state to false regardless of success or failure
+      setIsLoading(false);
     }
   };
 
   //----------------------- Convert image to text ----------------------
-  
   const convertImageToText = async () => {
     if (!selectedImage) return;
+
+    setIsLoading(true);
+    setEnterMessage("Study Bot is reading your file. Please wait ....");
 
     const workerInstance = await createWorker("eng");
     try {
@@ -76,6 +78,8 @@ const PromptForm = (props) => {
           workerInstance.terminate();
         }
       }, 1000);
+
+      setIsLoading(false);
     }
   };
 
@@ -138,9 +142,10 @@ const PromptForm = (props) => {
           />
         </div>
       </div>
-      <div className="result">
+
+      <div>
         {selectedImage && (
-          <div className="box-image">
+          <div className={classes["upload-image"]}>
             <img src={URL.createObjectURL(selectedImage)} alt="thumb" />
           </div>
         )}
