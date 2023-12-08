@@ -9,6 +9,7 @@ import { createWorker } from "tesseract.js";
 import { FaMicrophone } from "react-icons/fa";
 import { FaRobot } from "react-icons/fa";
 import Select from "react-select";
+import { SiProbot } from "react-icons/si";
 
 const PromptForm = (props) => {
   //======================================= VARIABLES ===================================
@@ -41,11 +42,18 @@ const PromptForm = (props) => {
       value: "option1",
       label: (
         <div>
-          <FaRobot size={42} /> <h2> Study bot</h2>
+          <FaRobot size={42} /> <h2> Study Bot</h2>
         </div>
       ),
     },
-    { value: "option2", label: <FaRobot size={42} /> },
+    {
+      value: "option2",
+      label: (
+        <div>
+          <SiProbot size={42} /> <h2> Experiment Bot</h2>
+        </div>
+      ),
+    },
   ];
 
   //======================================= FUNCTION ======================================
