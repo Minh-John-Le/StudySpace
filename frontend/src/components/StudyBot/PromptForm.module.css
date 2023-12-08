@@ -87,24 +87,18 @@
 }
 
 /*---------------------------------- Voice Button -------------------*/
-.voice-button {
+.action-button-selected {
   position: relative;
   overflow: hidden;
   background-color: transparent;
-  border-color: var(--color-main);
-  border-width: 3px;
-  border-style: solid;
+  border-color: transparent;
+  border-width: 0;
   margin-right: 5px;
   display: flex;
   align-items: center;
 }
 
-.voice-button:hover {
-  border-color: transparent;
-  border-width: 0px;
-}
-
-.voice-button:hover::before {
+.action-button-selected::before {
   content: "";
   position: absolute;
   top: 0px;
@@ -114,27 +108,53 @@
   box-sizing: border-box;
   border: 3px solid transparent;
   border-radius: 10px;
-  animation: pulse 2s infinite;
+  animation: action-border-pulse 4s infinite;
+  pointer-events: none;
 }
 
-@keyframes pulse {
+@keyframes action-border-pulse {
   0% {
     border-color: var(--color-main);
   }
+  25% {
+    border-color: var(--color-neon-yellow);
+  }
   50% {
-    border-color: var(--color-border-red);
+    border-color: var(--color-neon-pink);
+  }
+  75% {
+    border-color: var(--color-neon-yellow);
   }
   100% {
     border-color: var(--color-main);
   }
 }
 
-.voice-icon {
-  color: var(--color-main);
+.button-icon-selected {
+  color: var(--color-main-hover);
 }
 
-.voice-button:hover .voice-icon {
+.action-button-selected .button-icon-selected {
   color: var(--color-main-hover);
+  animation: button-icon-pulse 4s infinite;
+}
+
+@keyframes button-icon-pulse {
+  0% {
+    color: var(--color-main);
+  }
+  25% {
+    color: var(--color-neon-yellow);
+  }
+  50% {
+    color: var(--color-neon-pink);
+  }
+  75% {
+    color: var(--color-neon-yellow);
+  }
+  100% {
+    color: var(--color-main);
+  }
 }
 
 /*=====================================Prompt input =======================*/

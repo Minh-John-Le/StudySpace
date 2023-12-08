@@ -12,6 +12,7 @@ const PromptForm = (props) => {
   const [enterMessage, setEnterMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isVoiceOn, setIsVoiceOn] = useState(false);
 
   const authToken = Cookies.get("authToken");
 
@@ -98,6 +99,14 @@ const PromptForm = (props) => {
     }
   };
 
+  //---------------------- Voice Button -------------------------------
+  const handleOnClickVoiceButton = (event) => {
+    event.preventDefault();
+    setIsVoiceOn((prevIsVoiceOn) => {
+      console.log(!prevIsVoiceOn);
+      return !prevIsVoiceOn;
+    });
+  };
   //======================================= RETURN COMPONENTS ======================================
   return (
     <React.Fragment>
@@ -144,8 +153,22 @@ const PromptForm = (props) => {
           />
         </div>
 
-        <button className={classes["voice-button"]}>
-          <FaMicrophone size={32} className={classes["voice-icon"]} />
+        <button
+          className={`${
+            isVoiceOn
+              ? classes["action-button-selected"]
+              : classes["action-button"]
+          }`}
+        >
+          <FaMicrophone
+            size={32}
+            className={`${
+              isVoiceOn
+                ? classes["button-icon-selected"]
+                : classes["button-icon"]
+            }`}
+            onClick={handleOnClickVoiceButton}
+          />
         </button>
       </div>
 
