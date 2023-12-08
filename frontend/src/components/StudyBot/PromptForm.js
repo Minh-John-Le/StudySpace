@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import classes from "./PromptForm.module.css";
 import Card from "../UI/Card/Card";
 import Cookies from "js-cookie";
@@ -20,13 +20,16 @@ const PromptForm = (props) => {
 
   //--------------------------- Voice Input Variable ------------------------------------
   const [isVoiceOn, setIsVoiceOn] = useState(false);
-  const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
-  const mic = new SpeechRecognition();
 
-  mic.continuous = true;
-  mic.interimResults = true;
-  mic.lang = "en-US";
+  const mic = useMemo(() => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+    const micInstance = new SpeechRecognition();
+    micInstance.continuous = true;
+    micInstance.interimResults = true;
+    micInstance.lang = "en-US";
+    return micInstance;
+  }, []);
 
   //======================================= FUNCTION ======================================
   //----------------------- Send message to study bot ----------------------
@@ -81,6 +84,8 @@ const PromptForm = (props) => {
     if (!selectedImage) return;
 
     setIsLoading(true);
+    setIsVoiceOn(false);
+
     setEnterMessage("Study Bot is reading your file. Please wait ....");
 
     const workerInstance = await createWorker("eng");
@@ -121,18 +126,18 @@ const PromptForm = (props) => {
     });
   };
 
-  const handleListen = () => {
+  const handleListen = useCallback(() => {
     if (isVoiceOn && !mic.isActive) {
+      setEnterMessage("");
       mic.start();
       mic.isActive = true;
 
       mic.onend = () => {
-        console.log("Stopped Mic");
         mic.isActive = false;
       };
 
       mic.onstart = () => {
-        console.log("Mics on");
+        //console.log("Mics on");
       };
 
       mic.onresult = (event) => {
@@ -140,7 +145,6 @@ const PromptForm = (props) => {
           .map((result) => result[0])
           .map((result) => result.transcript)
           .join("");
-        console.log(transcript);
         setEnterMessage(transcript);
       };
 
@@ -151,14 +155,15 @@ const PromptForm = (props) => {
       mic.stop();
       mic.isActive = false;
     }
-  };
+  }, [isVoiceOn, setEnterMessage, mic]);
 
   useEffect(() => {
     handleListen();
     return () => {
       mic.stop();
     };
-  }, [isVoiceOn]);
+  }, [isVoiceOn, mic, handleListen]);
+
   //======================================= RETURN COMPONENTS ======================================
   return (
     <React.Fragment>
@@ -178,7 +183,7 @@ const PromptForm = (props) => {
                 handleFormSubmit(e);
               }
             }}
-            disabled={isLoading} // Disable input during loading
+            disabled={isLoading || isVoiceOn} // Disable input during loading
           />
         </div>
       </Card>
