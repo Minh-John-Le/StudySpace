@@ -9,19 +9,31 @@ import { createWorker } from "tesseract.js";
 import { FaMicrophone } from "react-icons/fa";
 
 const PromptForm = (props) => {
+  //======================================= VARIABLES ===================================
+  //--------------------------- General Input Variable ------------------------------------
   const [enterMessage, setEnterMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [isVoiceOn, setIsVoiceOn] = useState(false);
-
   const authToken = Cookies.get("authToken");
 
+  //--------------------------- Image Input Variable ------------------------------------
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  //--------------------------- Voice Input Variable ------------------------------------
+  const [isVoiceOn, setIsVoiceOn] = useState(false);
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+  const mic = new SpeechRecognition();
+
+  mic.continuous = true;
+  mic.interimResults = true;
+  mic.lang = "en-US";
+
+  //======================================= FUNCTION ======================================
+  //----------------------- Send message to study bot ----------------------
   const handleInputChange = (event) => {
     setEnterMessage(event.target.value);
   };
 
-  //======================================= FUNCTION ======================================
-  //----------------------- Send message to study bot ----------------------
   // Handle submit the question message to chat bot
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -30,6 +42,7 @@ const PromptForm = (props) => {
     }
 
     setIsLoading(true);
+    setIsVoiceOn(false);
     setEnterMessage("Study Bot is thinking. Please wait ....");
 
     const content = {
@@ -99,7 +112,7 @@ const PromptForm = (props) => {
     }
   };
 
-  //---------------------- Voice Button -------------------------------
+  //---------------------- Voice Function -------------------------------
   const handleOnClickVoiceButton = (event) => {
     event.preventDefault();
     setIsVoiceOn((prevIsVoiceOn) => {
@@ -107,6 +120,45 @@ const PromptForm = (props) => {
       return !prevIsVoiceOn;
     });
   };
+
+  const handleListen = () => {
+    if (isVoiceOn && !mic.isActive) {
+      mic.start();
+      mic.isActive = true;
+
+      mic.onend = () => {
+        console.log("Stopped Mic");
+        mic.isActive = false;
+      };
+
+      mic.onstart = () => {
+        console.log("Mics on");
+      };
+
+      mic.onresult = (event) => {
+        const transcript = Array.from(event.results)
+          .map((result) => result[0])
+          .map((result) => result.transcript)
+          .join("");
+        console.log(transcript);
+        setEnterMessage(transcript);
+      };
+
+      mic.onerror = (event) => {
+        console.log(event.error);
+      };
+    } else if (!isVoiceOn && mic.isActive) {
+      mic.stop();
+      mic.isActive = false;
+    }
+  };
+
+  useEffect(() => {
+    handleListen();
+    return () => {
+      mic.stop();
+    };
+  }, [isVoiceOn]);
   //======================================= RETURN COMPONENTS ======================================
   return (
     <React.Fragment>
