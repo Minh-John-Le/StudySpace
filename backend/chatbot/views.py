@@ -70,6 +70,37 @@ class ChatBotMessageAPI(APIView):
         answer = generated_message.strip()
         return answer
 
+    def ask_mini_llama(self, prompt_message):
+
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+        # Construct the relative path to the model file
+        llm_model_path = os.path.join(
+            BASE_DIR, 'aimodels', 'mistral-7b-openorca.Q3_K_M.gguf')
+        # get file at https://huggingface.co/Open-Orca/Mistral-7B-OpenOrca
+
+        llm = Llama(model_path=llm_model_path,
+                    n_gpu_layers=1, n_ctx=150)
+
+        prompt = f"""<|im_start|>system
+        You are a helpful chatbot.
+        <|im_end|>
+        <|im_start|>user
+        {prompt_message}<|im_end|>
+        <|im_start|>assistant"""
+
+        output = llm.create_completion(prompt, max_tokens=100,  stop=[
+                                       "<|im_end|>"], stream=False)
+        # print(output["choices"][0]["text"])
+        generated_message = output["choices"][0]["text"]
+
+        # for token in output:
+        #     generated_message += token["choices"][0]["text"]
+        #     print(token["choices"][0]["text"], end='', flush=True)
+
+        answer = generated_message.strip()
+        return answer
+
     def get(self, request):
         messages = ChatBotMessages.objects.filter(
             writer=request.user).order_by('-created_at')[:10]
@@ -91,6 +122,8 @@ class ChatBotMessageAPI(APIView):
             response_from_ai_model = self.ask_openai(content)
         elif ai_model == "llama":
             response_from_ai_model = self.ask_llama(content)
+        elif ai_model == "mini_llama":
+            response_from_ai_model = self.ask_mini_llama(content)
         else:
             response_from_ai_model = self.ask_llama(content)
 

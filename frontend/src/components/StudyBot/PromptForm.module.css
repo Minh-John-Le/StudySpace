@@ -158,18 +158,23 @@
 }
 
 /*---------------------------------- Bot option Button -------------------*/
-.study-bot-OpenAI {
+.study-bot-openAI {
   color: var(--color-main);
-  margin-bottom: 8px;
-  margin-left: 4px;
-}
-
-.study-bot-Llama {
-  color: var(--color-neon-hot-pink);
-  margin-bottom: 8px;
+  margin-bottom: 3px;
   margin-left: 3.5px;
 }
 
+.study-bot-llama {
+  color: var(--color-neon-hot-pink);
+  margin-bottom: 3px;
+  margin-left: 3.5px;
+}
+
+.study-bot-mini-llama {
+  color: var(--color-neon-yellow);
+  margin-bottom: 3px;
+  margin-left: 3.5px;
+}
 /*=====================================Prompt input =======================*/
 .image-input {
   background-color: transparent;

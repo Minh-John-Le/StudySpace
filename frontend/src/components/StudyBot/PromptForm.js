@@ -10,6 +10,7 @@ import { FaMicrophone } from "react-icons/fa";
 import { FaRobot } from "react-icons/fa";
 import Select from "react-select";
 import { SiProbot } from "react-icons/si";
+import { RiRobotFill } from "react-icons/ri";
 
 const selectBotStyle = {
   control: (provided) => ({
@@ -81,18 +82,26 @@ const PromptForm = (props) => {
 
   const options = [
     {
-      value: "OpenAI",
+      value: "openAI",
       label: (
-        <div className={classes["study-bot-OpenAI"]}>
+        <div className={classes["study-bot-openAI"]}>
           <FaRobot size={24} />
         </div>
       ),
     },
     {
-      value: "Llama",
+      value: "llama",
       label: (
-        <div className={classes["study-bot-Llama"]}>
+        <div className={classes["study-bot-llama"]}>
           <SiProbot size={24} />
+        </div>
+      ),
+    },
+    {
+      value: "mini_llama",
+      label: (
+        <div className={classes["study-bot-mini-llama"]}>
+          <RiRobotFill size={24} />
         </div>
       ),
     },
@@ -114,12 +123,14 @@ const PromptForm = (props) => {
 
     setIsLoading(true);
     setIsVoiceOn(false);
-    setEnterMessage("Study Bot is thinking. Please wait ....");
+    setEnterMessage("AI Bot is thinking. Please wait ....");
 
     const content = {
       content: enterMessage,
+      ai_model: botOption.value,
     };
 
+    console.log(botOption.value);
     try {
       const apiUrl = "http://localhost:8000/api/chatbot/";
       const timeoutDuration = 180000; // 3 minutes in milliseconds
@@ -143,7 +154,7 @@ const PromptForm = (props) => {
       const response = await Promise.race([fetchPromise, timeoutPromise]);
 
       if (!response.ok) {
-        console.error("Cannot get answer from Study Bot!");
+        console.error("Cannot get answer from AI Bot!");
         return;
       }
 
@@ -164,7 +175,7 @@ const PromptForm = (props) => {
     setIsLoading(true);
     setIsVoiceOn(false);
 
-    setEnterMessage("Study Bot is reading your file. Please wait ....");
+    setEnterMessage("AI Bot is reading your file. Please wait ....");
 
     const workerInstance = await createWorker("eng");
     try {

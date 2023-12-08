@@ -41,6 +41,7 @@
   line-height: 1.5;
 }
 
+/* ============================ Bot ========================================== */
 .study-bot {
   display: flex;
   align-items: center;
@@ -48,6 +49,28 @@
 }
 
 .bot-text {
+  margin-left: 10px;
+  margin-bottom: 15px;
+}
+
+.llama-bot {
+  display: flex;
+  align-items: center;
+  color: var(--color-neon-hot-pink);
+}
+
+.llama-bot-text {
+  margin-left: 10px;
+  margin-bottom: 15px;
+}
+
+.mini-bot {
+  display: flex;
+  align-items: center;
+  color: var(--color-neon-yellow);
+}
+
+.mini-bot-text {
   margin-left: 10px;
   margin-bottom: 15px;
 }
