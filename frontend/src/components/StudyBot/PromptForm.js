@@ -7,6 +7,8 @@ import { MdInsertPhoto } from "react-icons/md";
 import { useEffect } from "react";
 import { createWorker } from "tesseract.js";
 import { FaMicrophone } from "react-icons/fa";
+import { FaRobot } from "react-icons/fa";
+import Select from "react-select";
 
 const PromptForm = (props) => {
   //======================================= VARIABLES ===================================
@@ -30,6 +32,21 @@ const PromptForm = (props) => {
     micInstance.lang = "en-US";
     return micInstance;
   }, []);
+
+  //--------------------------- Bot Option -----------------------
+  const [botOption, setBotOption] = useState("option1");
+
+  const options = [
+    {
+      value: "option1",
+      label: (
+        <div>
+          <FaRobot size={42} /> <h2> Study bot</h2>
+        </div>
+      ),
+    },
+    { value: "option2", label: <FaRobot size={42} /> },
+  ];
 
   //======================================= FUNCTION ======================================
   //----------------------- Send message to study bot ----------------------
@@ -174,10 +191,21 @@ const PromptForm = (props) => {
     };
   }, [isVoiceOn, mic, handleListen]);
 
+  //---------------------- Bot Change Function -------------------------------
+  // const handleBotOptionChange = (event) => {
+  //   const selectedOption = event.target.value;
+  //   setBotOption(selectedOption);
+  // };
+
+  const handleBotOptionChange = (selectedOption) => {
+    setBotOption(selectedOption);
+    // Additional logic if needed
+  };
   //======================================= RETURN COMPONENTS ======================================
   return (
     <React.Fragment>
       <Card>
+        {/* ---------------------------- Message Box Component -----------------------------*/}
         <div className={classes["message-box"]}>
           <textarea
             className={classes["message-box__textarea"]}
@@ -198,7 +226,9 @@ const PromptForm = (props) => {
         </div>
       </Card>
 
+      {/* Action Button Group Component */}
       <div className={classes["action-button-group"]}>
+        {/* Send Button */}
         <button className={classes["action-button"]}>
           <BiSend
             size={32}
@@ -207,6 +237,7 @@ const PromptForm = (props) => {
           />
         </button>
 
+        {/*----------------------------- Image Input Button ------------------------- */}
         <div>
           <label htmlFor="imageInput" className={classes["image-input"]}>
             <MdInsertPhoto size={34} className={classes["image-input-icon"]} />
@@ -220,6 +251,7 @@ const PromptForm = (props) => {
           />
         </div>
 
+        {/*------------------------------ Voice Button -------------------------------*/}
         <button
           className={`${
             isVoiceOn
@@ -237,8 +269,19 @@ const PromptForm = (props) => {
             onClick={handleOnClickVoiceButton}
           />
         </button>
+
+        {/*------------------------------- Dropdown Button ---------------------------*/}
+        <div>
+          <Select
+            id="botOption"
+            value={botOption}
+            onChange={handleBotOptionChange}
+            options={options}
+          />
+        </div>
       </div>
 
+      {/*---------------------------- Uploaded Image Component -----------------------*/}
       <div>
         {selectedImage && (
           <div className={classes["upload-image"]}>
