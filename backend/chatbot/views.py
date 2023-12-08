@@ -29,7 +29,7 @@ class ChatBotMessageAPI(APIView):
 
     def ask_openai(self, prompt_message):
         completion = openai.chat.completions.create(
-            model="gpt-4",
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are an helpful assistant."},
                 {"role": "user", "content": prompt_message}
@@ -116,7 +116,7 @@ class ChatBotMessageAPI(APIView):
         if not content:
             raise ValidationError("Message content is required")
 
-        ai_model = request.data.get("ai_model", "")
+        ai_model = request.data.get("ai_model", "llama")
 
         if ai_model == "openAI":
             response_from_ai_model = self.ask_openai(content)
@@ -131,7 +131,8 @@ class ChatBotMessageAPI(APIView):
         message = ChatBotMessages.objects.create(
             writer=writer,
             message=content,
-            response=response_from_ai_model
+            response=response_from_ai_model,
+            ai_model=ai_model,
         )
 
         # Serialize the code before saving

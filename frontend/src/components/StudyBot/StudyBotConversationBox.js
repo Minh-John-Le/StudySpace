@@ -29,6 +29,7 @@ const StudyBotConversationBox = (props) => {
                 message={qa.message}
                 created_at={qa.created_at}
                 response={qa.response}
+                ai_model={qa.ai_model}
               />
               <br />
             </div>

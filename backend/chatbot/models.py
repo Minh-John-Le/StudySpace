@@ -7,6 +7,7 @@ class ChatBotMessages(models.Model):
     writer = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField()
     response = models.TextField()
+    ai_model = models.CharField(max_length=256, default="llama")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
