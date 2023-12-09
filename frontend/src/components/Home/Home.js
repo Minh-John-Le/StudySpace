@@ -17,6 +17,8 @@ const Home = (props) => {
   const [topTopic, setTopTopic] = useState([]); // top topic list
   const navigate = useNavigate();
   const authToken = Cookies.get("authToken");
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
   //======================================= Helper function ==============================
   const addRoomHandler = (event) => {
@@ -26,7 +28,7 @@ const Home = (props) => {
   //======================================= GET DATA =====================================
   // Get top topic list
   useEffect(() => {
-    const apiUrl = `http://localhost:8000/api/database/top-topic/`;
+    const apiUrl = `${backendUrl}/api/database/top-topic/`;
 
     async function fetchTopTopic() {
       try {
@@ -51,7 +53,7 @@ const Home = (props) => {
 
   // Get top member list
   useEffect(() => {
-    const apiUrl = `http://localhost:8000/api/database/top-member/`;
+    const apiUrl = `${backendUrl}/api/database/top-member/`;
 
     async function fetchTopMember() {
       try {

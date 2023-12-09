@@ -11,6 +11,9 @@ const RoomCardList = () => {
   const [data, setData] = useState([]); // all rooms
   const [maxPage, setMaxPage] = useState(1); // max page
 
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
+
   //===================================== PREPARE TOPIC AND PAGE================================
   // Get the current location object
   const location = useLocation();
@@ -31,7 +34,7 @@ const RoomCardList = () => {
 
   //===================================== GET DATA ================================
   // Url for room match topic and page
-  const apiUrl = `http://localhost:8000/api/database/room-card/?topic=${topic}&page=${page}`;
+  const apiUrl = `${backendUrl}/api/database/room-card/?topic=${topic}&page=${page}`;
 
   // Get new room data whenever topic or page change
   useEffect(() => {
