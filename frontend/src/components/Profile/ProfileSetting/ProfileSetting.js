@@ -16,12 +16,17 @@ const ProfileSetting = (props) => {
   //==================================== VARIABLE =====================
   const [profile, setProfile] = useState([""]);
 
+  //----------------------------------- Profile --------------------------------------
   const [errorMessage, setErrorMessage] = useState("Please fill in the form!");
   const [hasSubmitError, setHasSubmitError] = useState(false);
 
+  //----------------------------------- API --------------------------------------
   const ctx = useContext(AuthContext);
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
   const navigate = useNavigate();
 
+  //------------------------------------- Input ------------------------------------
   const {
     value: enteredUsername,
     isValid: enteredUsernameIsValid,
@@ -84,7 +89,7 @@ const ProfileSetting = (props) => {
 
     try {
       // Send a POST request to your backend login endpoint
-      const response = await fetch("http://localhost:8000/api/auth/profile/", {
+      const response = await fetch(`${backendUrl}/api/auth/profile/`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -133,7 +138,7 @@ const ProfileSetting = (props) => {
   // Get user data so it initially fill in all the field
   const authToken = Cookies.get("authToken");
   useEffect(() => {
-    const apiUrl = `http://localhost:8000/api/auth/profile/`;
+    const apiUrl = `${backendUrl}/api/auth/profile/`;
 
     async function fetchProfile() {
       try {

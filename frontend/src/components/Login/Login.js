@@ -16,6 +16,9 @@ const Login = (props) => {
   const [errorMessage, setErrorMessage] = useState("Please fill in the form!");
   const [hasSubmitError, setHasSubmitError] = useState(false);
 
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
+
   const ctx = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -56,7 +59,7 @@ const Login = (props) => {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/api/auth/login/", {
+      const response = await fetch(`${backendUrl}/api/auth/login/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,7 +87,7 @@ const Login = (props) => {
         });
 
         setHasSubmitError(true);
-        setErrorMessage(errorMessages); 
+        setErrorMessage(errorMessages);
         throw new Error(errorMessages);
       }
 

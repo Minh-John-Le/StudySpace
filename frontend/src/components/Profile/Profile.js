@@ -15,13 +15,16 @@ const Profile = () => {
   const [followStatus, setFollowStatus] = useState([]);
   const [recentMessage, setRecentMessage] = useState([]);
 
+  //----------------------------------- API ----------------------------------
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
   //================================== GET DATA ===================================
   // Get User's Follower List
   useEffect(() => {
-    const apiUrl = `http://localhost:8000/api/database/follower/${id}/`;
+    const apiUrl = `${backendUrl}/api/database/follower/${id}/`;
 
     async function fetchFollower() {
       try {
@@ -50,7 +53,7 @@ const Profile = () => {
 
   // Get User's Following List
   useEffect(() => {
-    const apiUrl = `http://localhost:8000/api/database/following/${id}/`;
+    const apiUrl = `${backendUrl}/api/database/following/${id}/`;
 
     async function fetchFollower() {
       try {
@@ -79,7 +82,7 @@ const Profile = () => {
 
   // Get recent Post from User
   useEffect(() => {
-    const apiUrl = `http://localhost:8000/api/database/recent-message/${id}/`;
+    const apiUrl = `${backendUrl}/api/database/recent-message/${id}/`;
 
     async function fetchRecentMessage() {
       try {

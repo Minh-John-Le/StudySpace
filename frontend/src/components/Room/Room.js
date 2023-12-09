@@ -7,15 +7,20 @@ import { useParams } from "react-router-dom";
 
 const Room = () => {
   //========================= VARIABLE ==================================
-  const authToken = Cookies.get("authToken");
-  const { id } = useParams();
+  //---------------------------- Membership data -----------------------------------
   const [members, setMembers] = useState([]);
   const [memberStatus, setMemberStatus] = useState([]);
+
+  //---------------------------- API -----------------------------------
+  const authToken = Cookies.get("authToken");
+  const { id } = useParams();
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
   //========================= FUNCTIONS ==================================
   // Get member list of the room
   async function fetchAllMemberInRoom(id, authToken) {
-    const apiUrl = `http://localhost:8000/api/database/all-member-in-room/${id}/`;
+    const apiUrl = `${backendUrl}/api/database/all-member-in-room/${id}/`;
 
     try {
       const response = await fetch(apiUrl, {

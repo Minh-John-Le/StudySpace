@@ -15,10 +15,13 @@ const Navigation = (props) => {
   const [avatar, setAvatar] = useState("1");
   const authToken = Cookies.get("authToken");
 
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
+
   //=============================== GET DATA =======================================
   // get user profile info if user is already log in
   useEffect(() => {
-    const apiUrl = `http://localhost:8000/api/auth/profile/`;
+    const apiUrl = `${backendUrl}/api/auth/profile/`;
 
     async function fetchProfile() {
       try {

@@ -13,12 +13,18 @@ const UpdateRoom = () => {
 
   const [roomInfo, setRoomInfo] = useState([""]);
   const navigate = useNavigate();
+
+  // -------------------------------------- API --------------------------
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
+  // -------------------------------------- Error --------------------------
   const [errorMessage, setErrorMessage] = useState("Please fill in the form!");
   const [hasSubmitError, setHasSubmitError] = useState(false);
 
+  // -------------------------------------- Room Info --------------------------
   const {
     value: enteredTopic,
     isValid: enteredTopicIsValid,
@@ -46,6 +52,7 @@ const UpdateRoom = () => {
     reset: resetDescriptionInput,
   } = useInput((value) => value.trim().length <= 256);
 
+  //==================================== FUNCTIONS ===========================
   const cancelHandler = (event) => {
     event.preventDefault();
     navigate(`/room/${id}`);
@@ -108,7 +115,7 @@ const UpdateRoom = () => {
   useEffect(() => {
     const fetchRoomInfo = async () => {
       try {
-        const url = `http://localhost:8000/api/database/room-manager/${id}/`;
+        const url = `${backendUrl}/api/database/room-manager/${id}/`;
 
         const response = await fetch(url, {
           method: "GET",

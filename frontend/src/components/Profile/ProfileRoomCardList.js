@@ -9,11 +9,15 @@ import { useParams } from "react-router-dom";
 
 const ProfileRoomCardList = () => {
   //===================================== PREPARE VARIABLE================================
-
+  //--------------------------------- Pagination ---------------------------------
   const [data, setData] = useState([]); // all rooms
   const [maxPage, setMaxPage] = useState(1); // max page
+
+  //--------------------------------- API--------------------------------------
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
   //===================================== PREPARE TOPIC AND PAGE================================
   // Get the current location object
@@ -35,7 +39,7 @@ const ProfileRoomCardList = () => {
 
   //===================================== GET DATA ================================
   // Url for room match topic and page
-  const apiUrl = `http://localhost:8000/api/database/user-room/${id}/?topic=${topic}&page=${page}`;
+  const apiUrl = `${backendUrl}/api/database/user-room/${id}/?topic=${topic}&page=${page}`;
 
   useEffect(() => {
     async function fetchRoomHandler() {
