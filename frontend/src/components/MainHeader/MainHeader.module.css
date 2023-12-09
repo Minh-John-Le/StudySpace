@@ -1,5 +1,4 @@
 .main-header {
-  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -7,8 +6,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #3f4156;
+  background: var(--color-dark);
   padding: 0 2rem;
+  margin-bottom: -2rem;
 }
 
 .sub-link {
