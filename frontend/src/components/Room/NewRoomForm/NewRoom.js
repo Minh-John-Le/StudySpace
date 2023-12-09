@@ -10,13 +10,17 @@ import ErrorCard from "../../UI/ErrorCard/ErrorCard";
 
 const NewRoom = () => {
   //================================== VARIABLE ========================
-
+  //-------------------------------- API ---------------------------------
   const navigate = useNavigate();
   const authToken = Cookies.get("authToken");
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
+  //-------------------------------- Error ---------------------------------
   const [errorMessage, setErrorMessage] = useState("Please fill in the form!");
   const [hasSubmitError, setHasSubmitError] = useState(false);
 
+  //-------------------------------- Room Info ---------------------------------
   const {
     value: enteredTopic,
     isValid: enteredTopicIsValid,
@@ -62,17 +66,14 @@ const NewRoom = () => {
 
     try {
       // Send a POST request to your backend login endpoint
-      const response = await fetch(
-        "http://localhost:8000/api/database/new-room/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Token ${authToken}`,
-          },
-          body: JSON.stringify(roomData),
-        }
-      );
+      const response = await fetch(`${backendUrl}/api/database/new-room/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${authToken}`,
+        },
+        body: JSON.stringify(roomData),
+      });
 
       if (!response.ok) {
         const errorObject = await response.json(); // Parse the error response

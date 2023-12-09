@@ -59,8 +59,12 @@ const PromptForm = (props) => {
   //======================================= VARIABLES ===================================
   //--------------------------- General Input Variable ------------------------------------
   const [enterMessage, setEnterMessage] = useState("");
+
+  //------------------------------- API --------------------------------
   const [isLoading, setIsLoading] = useState(false);
   const authToken = Cookies.get("authToken");
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
   //--------------------------- Image Input Variable ------------------------------------
   const [selectedImage, setSelectedImage] = useState(null);
@@ -130,9 +134,9 @@ const PromptForm = (props) => {
       ai_model: botOption.value,
     };
 
-    console.log(botOption.value);
+    //console.log(botOption.value);
     try {
-      const apiUrl = "http://localhost:8000/api/chatbot/";
+      const apiUrl = `${backendUrl}/api/chatbot/`;
       const timeoutDuration = 180000; // 3 minutes in milliseconds
 
       const timeoutPromise = new Promise((_, reject) =>

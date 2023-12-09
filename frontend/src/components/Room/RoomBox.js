@@ -9,16 +9,21 @@ import Cookies from "js-cookie";
 import Avatar from "../UI/Avatar/Avatar";
 const RoomBox = (props) => {
   //================================ VARIABLEs ==============================
+  //--------------------------------------- Room Info -----------------------------
   const [messages, setMessages] = useState([]);
   const [roomMetaContent, setRoomMetaContent] = useState([]);
   const [memberStatus, setMemberStatus] = useState([]);
+
+  //--------------------------------------- API ------------------------------------
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
   const navigate = useNavigate();
+  const wsURL = process.env.REACT_APP_WEBSOCKET_URL;
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
   //================================ FUNCTIONS ==============================
   // Get Room Message
-
   const handleWebSocketMessage = (event) => {
     const newMessage = JSON.parse(event.data);
     const message_data = newMessage.message_data;
@@ -34,7 +39,7 @@ const RoomBox = (props) => {
   };
 
   useEffect(() => {
-    const socket = new WebSocket(`ws://localhost:8000/ws/room/${id}/`);
+    const socket = new WebSocket(`${wsURL}/ws/room/${id}/`);
 
     socket.onmessage = (event) => {
       handleWebSocketMessage(event);
@@ -47,7 +52,7 @@ const RoomBox = (props) => {
   }, [id]);
 
   async function fetchRoomMessage(id, authToken) {
-    const apiUrl = `http://localhost:8000/api/database/room-message/${id}/`;
+    const apiUrl = `${backendUrl}/api/database/room-message/${id}/`;
 
     try {
       const response = await fetch(apiUrl, {
@@ -77,7 +82,7 @@ const RoomBox = (props) => {
 
   // Get the member status such as join or not join the room
   async function fetchMemberStatus(id, authToken) {
-    const apiUrl = `http://localhost:8000/api/database/member-in-room/${id}/`;
+    const apiUrl = `${backendUrl}/api/database/member-in-room/${id}/`;
 
     try {
       const response = await fetch(apiUrl, {
@@ -124,7 +129,7 @@ const RoomBox = (props) => {
   // Function handle join room
   const onJoinRoomHandler = async (event) => {
     event.preventDefault();
-    const apiUrl = `http://localhost:8000/api/database/member-in-room/${id}/`;
+    const apiUrl = `${backendUrl}/api/database/member-in-room/${id}/`;
 
     try {
       const response = await fetch(apiUrl, {
@@ -153,7 +158,7 @@ const RoomBox = (props) => {
     try {
       // Send a PATCH request to your backend login endpoint
       const response = await fetch(
-        `http://localhost:8000/api/database/room-manager/${id}/`,
+        `${backendUrl}/api/database/room-manager/${id}/`,
         {
           method: "DELETE",
           headers: {
@@ -182,7 +187,7 @@ const RoomBox = (props) => {
   // Function handle leave room
   const onLeaveRoomHandler = async (event) => {
     event.preventDefault();
-    const apiUrl = `http://localhost:8000/api/database/member-in-room/${id}/`;
+    const apiUrl = `${backendUrl}/api/database/member-in-room/${id}/`;
 
     try {
       const response = await fetch(apiUrl, {
@@ -215,7 +220,7 @@ const RoomBox = (props) => {
   // Get the room info (meta info) for the first time
   useEffect(() => {
     async function fetchData() {
-      const apiUrl = `http://localhost:8000/api/database/room-manager/${id}/`;
+      const apiUrl = `${backendUrl}/api/database/room-manager/${id}/`;
 
       try {
         const response = await fetch(apiUrl, {

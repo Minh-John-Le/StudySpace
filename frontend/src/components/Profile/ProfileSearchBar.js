@@ -5,10 +5,14 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 const ProfileSearchBar = (props) => {
+  //============================== VARIABLE =============================
   const [searchQuery, setSearchQuery] = useState("");
+
+  //---------------------------- API -----------------------------------
   const navigate = useNavigate();
   const { id } = useParams();
 
+  //============================== FUNCTION =============================
   const handleInputChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -18,6 +22,7 @@ const ProfileSearchBar = (props) => {
     navigate(`/user/${id}/?topic=${searchQuery}&page=${1}`);
   };
 
+  //============================== RETURN COMPONENTS =============================
   return (
     <form onSubmit={handleFormSubmit} className={classes.searchForm}>
       <div className={classes.searchContainer}>

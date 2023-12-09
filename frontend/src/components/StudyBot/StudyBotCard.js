@@ -6,9 +6,17 @@ import PromptForm from "./PromptForm";
 import Cookies from "js-cookie";
 
 const StudyBotCard = () => {
+  //=============================== VARIABLES ===================================
+  //--------------------------------- Q&A --------------------------------
   const [allQA, setAllQA] = useState([]);
-  const authToken = Cookies.get("authToken");
 
+  //--------------------------------- API --------------------------------
+  const authToken = Cookies.get("authToken");
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
+
+  //=============================== FUNCTIONS ===================================
+  //------------------------------ HELPER FUNCTION---------------------------------
   function formatCreatedAt(created_at) {
     const date = new Date(created_at);
     // Convert to local time
@@ -35,12 +43,13 @@ const StudyBotCard = () => {
     setAllQA((prevAllQA) => [formattedQA, ...prevAllQA]);
   };
 
+  //------------------------------ Getting Data --------------------------------
   useEffect(() => {
     fetchAllQA(authToken);
   }, [authToken]);
 
   async function fetchAllQA(authToken) {
-    const apiUrl = `http://localhost:8000/api/chatbot/`;
+    const apiUrl = `${backendUrl}/api/chatbot/`;
 
     try {
       const response = await fetch(apiUrl, {
@@ -68,6 +77,7 @@ const StudyBotCard = () => {
     }
   }
 
+  //=============================== RETURN COMPONENTS ===================================
   return (
     <React.Fragment>
       <Card className={classes.header}>

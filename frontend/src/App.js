@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
-
+import React from "react";
+//import { useContext } from "react";
 import Login from "./components/Login/Login";
 import Home from "./components/Home/Home";
 import MainHeader from "./components/MainHeader/MainHeader";
-import AuthContext from "./store/auth-context";
+//import AuthContext from "./store/auth-context";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Signup from "./components/Signup/Signup";
@@ -13,9 +13,10 @@ import Room from "./components/Room/Room";
 import UpdateRoom from "./components/Room/UpdateRoomForm/UpdateRoom";
 import NewRoom from "./components/Room/NewRoomForm/NewRoom";
 import StudyBotCard from "./components/StudyBot/StudyBotCard";
+import VideoChatRoom from "./components/VideoChatRoom/VideoChatRoom";
 
 function App() {
-  const ctx = useContext(AuthContext);
+  //const ctx = useContext(AuthContext);
 
   return (
     <Router>
@@ -34,6 +35,7 @@ function App() {
           <Route path="/room/:id" element={<Room></Room>} />
           <Route path="/update-room/:id" element={<UpdateRoom></UpdateRoom>} />
           <Route path="/studybot" element={<StudyBotCard></StudyBotCard>} />
+          <Route path="/video-chat" element={<VideoChatRoom></VideoChatRoom>} />
         </Routes>
       </main>
     </Router>

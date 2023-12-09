@@ -7,10 +7,14 @@ import Avatar from "../UI/Avatar/Avatar";
 
 const ProfileInfo = (props) => {
   //=============================== VARIABLE ================================
+  //-------------------------------- API ------------------------------------
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
   const ctx = useContext(AuthContext);
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
+  //-------------------------------- Profile ------------------------------------
   const [profile, setProfile] = useState([]);
   const [followStatus, setFollowStatus] = useState([]);
   const navigate = useNavigate();
@@ -32,7 +36,7 @@ const ProfileInfo = (props) => {
 
   // Get the following status of other user (either auth user follow thier friend or not)
   async function fetchFollowStatus(id, authToken) {
-    const apiUrl = `http://localhost:8000/api/database/follow-status/${id}/`;
+    const apiUrl = `${backendUrl}/api/database/follow-status/${id}/`;
 
     try {
       const response = await fetch(apiUrl, {
@@ -58,7 +62,7 @@ const ProfileInfo = (props) => {
   const followHandler = async (event) => {
     event.preventDefault();
 
-    const apiUrl = `http://localhost:8000/api/database/follow-status/${id}/`;
+    const apiUrl = `${backendUrl}/api/database/follow-status/${id}/`;
 
     try {
       const response = await fetch(apiUrl, {
@@ -90,7 +94,7 @@ const ProfileInfo = (props) => {
     // Send a DELETE request to the API to unfollow the user
     try {
       const response = await fetch(
-        `http://localhost:8000/api/database/follow-status/${id}/`,
+        `${backendUrl}/api/database/follow-status/${id}/`,
         {
           method: "DELETE",
           headers: {
@@ -116,7 +120,7 @@ const ProfileInfo = (props) => {
 
   // Get other User profile Info as well
   useEffect(() => {
-    const apiUrl = `http://localhost:8000/api/auth/user/${id}/`;
+    const apiUrl = `${backendUrl}/api/auth/user/${id}/`;
 
     async function fetchProfile() {
       try {

@@ -17,12 +17,20 @@ const Signup = (props) => {
   // const [emailIsValid, setEmailIsValid] = useState();
   // const [enteredPassword, setEnteredPassword] = useState('');
   // const [passwordIsValid, setPasswordIsValid] = useState();
+
+  //============================== VARIABLE ===============================
+  //--------------------------------- API ------------------------------
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
+  //--------------------------------- Error ------------------------------
   const [errorMessage, setErrorMessage] = useState("Please fill in the form!");
   const [hasSubmitError, setHasSubmitError] = useState(false);
+  const formIsValid = true;
 
+  //--------------------------------- User Input ------------------------------
   const {
     value: enteredEmail,
     isValid: enteredEmailIsValid,
@@ -76,6 +84,7 @@ const Signup = (props) => {
     reset: resetRepeatedPasswordInput,
   } = useInput(isPasswordValid);
 
+  //=========================================== FUNCTION =========================
   const submitHandler = async (event) => {
     event.preventDefault();
     const data = {
@@ -87,7 +96,7 @@ const Signup = (props) => {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/api/auth/signup/", {
+      const response = await fetch(`${backendUrl}/api/auth/signup/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -132,7 +141,9 @@ const Signup = (props) => {
       setHasSubmitError(true);
     }
   };
-  const formIsValid = true;
+
+  //=========================================== RETURN COMPONENTS =========================
+
   return (
     <React.Fragment>
       {hasSubmitError && <ErrorCard errorMessages={errorMessage}></ErrorCard>}
