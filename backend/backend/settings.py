@@ -48,7 +48,7 @@ INSTALLED_APPS = [
 
 ]
 
-ASGI_APPLICATION = 'backend.asgi.application'
+#ASGI_APPLICATION = 'backend.asgi.application'
 
 CHANNEL_LAYERS = {
     "default": {
