@@ -7,7 +7,21 @@ from rest_framework import status
 from .models import Messages
 from .serializers import RoomMessageSerializer, MemberRecentMessageSerializer
 from django.forms import ValidationError
+import pusher
+import environ
 
+env = environ.Env()
+environ.Env.read_env()
+
+# Access the OpenAI key
+
+pusher_client = pusher.Pusher(
+    app_id= env('app_id'),
+    key=env('key'),
+    secret=env('secret'),
+    cluster=env('cluster'),
+    ssl=True
+)
 
 
 # Create your views here.
@@ -42,6 +56,14 @@ class RoomMessageAPI(APIView):
         )
 
         serializer = RoomMessageSerializer(message)
+
+        try:
+            pusher_client.trigger(str(room_id), 'send-message', {'data': serializer.data})
+        except pusher.PusherError as e:
+            # Handle Pusher error, log it, or return an appropriate response
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 

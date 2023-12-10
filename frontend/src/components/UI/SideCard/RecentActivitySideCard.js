@@ -15,7 +15,7 @@ const RecentActivitySideCard = (props) => {
       <ScrollableCard className={classes.body}>
         {props.data &&
           props.data.map((message, index) => (
-            <Card className={classes["inner-body"]}>
+            <Card key={message.id} className={classes["inner-body"]}>
               <div className={classes["writer-info"]}>
                 <Avatar
                   avatarLink={`/user/${message.writer}`}

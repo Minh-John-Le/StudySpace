@@ -2,3 +2,4 @@ backend/chatbot/.env
 *.gguf
 myenv/
 frontend/.env
+backend/chat/.env

@@ -14,6 +14,7 @@ const HotTopicSideCard = (props) => {
         {props.data &&
           props.data.map((hotTopic, index) => (
             <Link
+              key={index}
               to={`/?topic=${hotTopic.topic}&page=1`}
               className={classes.avatarLink}
             >

@@ -9,7 +9,7 @@ from rest_framework import status
 import environ
 import openai
 from django.forms import ValidationError
-# from llama_cpp import Llama
+
 import os
 
 

@@ -7,6 +7,8 @@ import MessageForm from "./MessageForm";
 import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import Avatar from "../UI/Avatar/Avatar";
+import Pusher from "pusher-js";
+
 const RoomBox = (props) => {
   //================================ VARIABLEs ==============================
   //--------------------------------------- Room Info -----------------------------
@@ -18,41 +20,66 @@ const RoomBox = (props) => {
   const authToken = Cookies.get("authToken");
   const { id } = useParams();
   const navigate = useNavigate();
-  const wsURL = process.env.REACT_APP_WEBSOCKET_URL;
+  // const wsURL = process.env.REACT_APP_WEBSOCKET_URL;
   const backendUrl =
     process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
+  const pusherKey = process.env.REACT_APP_PUSHER_KEY;
 
   //================================ FUNCTIONS ==============================
   // Get Room Message
-  const handleWebSocketMessage = (event) => {
-    const newMessage = JSON.parse(event.data);
-    const message_data = newMessage.message_data;
+  // const handleWebSocketMessage = (event) => {
+  //   const newMessage = JSON.parse(event.data);
+  //   const message_data = newMessage.message_data;
 
-    // Format the created_at field before adding it to the state
-    const formattedMessage = {
-      ...message_data,
-      created_at: formatCreatedAt(message_data.created_at),
-    };
+  //   // Format the created_at field before adding it to the state
+  //   const formattedMessage = {
+  //     ...message_data,
+  //     created_at: formatCreatedAt(message_data.created_at),
+  //   };
 
-    // Assuming the WebSocket server sends messages as JSON objects
-    setMessages((prevMessages) => [formattedMessage, ...prevMessages]);
-  };
+  //   // Assuming the WebSocket server sends messages as JSON objects
+  //   setMessages((prevMessages) => [formattedMessage, ...prevMessages]);
+  // };
+
+  // useEffect(() => {
+  //   const socket = new WebSocket(`${wsURL}/ws/room/${id}/`);
+
+  //   socket.onmessage = (event) => {
+  //     handleWebSocketMessage(event);
+  //   };
+
+  //   return () => {
+  //     // Close the WebSocket connection when the component unmounts
+  //     socket.close();
+  //   };
+  // }, [id]);
 
   useEffect(() => {
-    const socket = new WebSocket(`${wsURL}/ws/room/${id}/`);
+    const pusher = new Pusher(`${pusherKey}`, {
+      cluster: "us3",
+    });
 
-    socket.onmessage = (event) => {
-      handleWebSocketMessage(event);
-    };
+    const channel = pusher.subscribe(`${id}`);
+    channel.bind("send-message", function (message) {
+      const message_data = message.data;
+      console.log(message_data);
+      const formattedMessage = {
+        ...message_data,
+        created_at: formatCreatedAt(message_data.created_at),
+      };
+      // Assuming the WebSocket server sends messages as JSON objects
+      setMessages((prevMessages) => [formattedMessage, ...prevMessages]);
+    });
 
+    // Clean up the subscription when the component unmounts
     return () => {
-      // Close the WebSocket connection when the component unmounts
-      socket.close();
+      channel.unbind("send-message");
+      pusher.unsubscribe(`${id}`);
     };
   }, [id]);
 
   async function fetchRoomMessage(id, authToken) {
-    const apiUrl = `${backendUrl}/api/database/room-message/${id}/`;
+    const apiUrl = `${backendUrl}/api/chat/room-message/${id}/`;
 
     try {
       const response = await fetch(apiUrl, {

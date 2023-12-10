@@ -82,7 +82,7 @@ const Profile = () => {
 
   // Get recent Post from User
   useEffect(() => {
-    const apiUrl = `${backendUrl}/api/database/recent-message/${id}/`;
+    const apiUrl = `${backendUrl}/api/chat/recent-message/${id}/`;
 
     async function fetchRecentMessage() {
       try {
