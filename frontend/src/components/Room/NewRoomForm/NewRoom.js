@@ -7,6 +7,7 @@ import classes from "./NewRoom.module.css";
 import Cookies from "js-cookie";
 import FormCard from "../../UI/FormCard/FormCard";
 import ErrorCard from "../../UI/ErrorCard/ErrorCard";
+import AuthenticateChecker from "../../Home/AuthenticateChecker";
 
 const NewRoom = () => {
   //================================== VARIABLE ========================
@@ -110,6 +111,7 @@ const NewRoom = () => {
   //================================== RETURN COMPONENTS ===========================
   return (
     <React.Fragment>
+      <AuthenticateChecker></AuthenticateChecker>
       {hasSubmitError && <ErrorCard errorMessages={errorMessage}></ErrorCard>}
       <FormCard title={"Room Info"}>
         <form onSubmit={submitHandler}>

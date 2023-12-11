@@ -4,6 +4,7 @@ import Card from "../UI/Card/Card";
 import StudyBotConversationBox from "./StudyBotConversationBox";
 import PromptForm from "./PromptForm";
 import Cookies from "js-cookie";
+import AuthenticateChecker from "../Home/AuthenticateChecker";
 
 const StudyBotCard = () => {
   //=============================== VARIABLES ===================================
@@ -80,6 +81,7 @@ const StudyBotCard = () => {
   //=============================== RETURN COMPONENTS ===================================
   return (
     <React.Fragment>
+      <AuthenticateChecker></AuthenticateChecker>
       <Card className={classes.header}>
         <h3>StudyBot</h3>
       </Card>

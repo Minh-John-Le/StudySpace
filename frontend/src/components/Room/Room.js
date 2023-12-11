@@ -4,6 +4,7 @@ import ScrollableSideCard from "../UI/SideCard/ScrollableSideCard";
 import classes from "./Room.module.css";
 import Cookies from "js-cookie";
 import { useParams } from "react-router-dom";
+import AuthenticateChecker from "../Home/AuthenticateChecker";
 
 const Room = () => {
   //========================= VARIABLE ==================================
@@ -52,6 +53,7 @@ const Room = () => {
   //========================= RETURN COMPONENTS ==================================
   return (
     <div className={classes["room-container"]}>
+      <AuthenticateChecker></AuthenticateChecker>
       <div className={classes["room-box"]}>
         <RoomBox changeMemberStatus={setMemberStatus}></RoomBox>
       </div>

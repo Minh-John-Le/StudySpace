@@ -7,6 +7,7 @@ import ScrollableSideCard from "../UI/SideCard/ScrollableSideCard";
 import RecentActivitySideCard from "../UI/SideCard/RecentActivitySideCard";
 import ProfileRoomCardList from "./ProfileRoomCardList";
 import ProfileSearchBar from "./ProfileSearchBar";
+import AuthenticateChecker from "../Home/AuthenticateChecker";
 
 const Profile = () => {
   //================================== VARIABLE ===================================
@@ -112,6 +113,7 @@ const Profile = () => {
   //================================== RETURN COMPONENTS ===================================
   return (
     <div className={classes["profile-container"]}>
+      <AuthenticateChecker></AuthenticateChecker>
       <div className={classes["side-card"]}>
         <ScrollableSideCard title={"FOLLOWERS"} data={follower} />
         <br></br>

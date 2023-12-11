@@ -11,6 +11,7 @@ import Cookies from "js-cookie";
 import Avatar from "../../UI/Avatar/Avatar";
 import FormCard from "../../UI/FormCard/FormCard";
 import ErrorCard from "../../UI/ErrorCard/ErrorCard";
+import AuthenticateChecker from "../../Home/AuthenticateChecker";
 
 const ProfileSetting = (props) => {
   //==================================== VARIABLE =====================
@@ -171,6 +172,7 @@ const ProfileSetting = (props) => {
   //====================================== RETURN COMPONENTS =================================
   return (
     <React.Fragment>
+      <AuthenticateChecker></AuthenticateChecker>
       {hasSubmitError && <ErrorCard errorMessages={errorMessage}></ErrorCard>}
       <FormCard title={"Profile Settings"}>
         <form onSubmit={submitHandler}>

@@ -119,3 +119,11 @@ class SingleUserProfileView(APIView):
         data = serializer.data
         data['is_auth_user'] = is_authenticated_user
         return Response(data, status=status.HTTP_200_OK)
+    
+class TokenValidationView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # If the request reached here, it means the token is valid
+        return Response({'valid': True}, status=status.HTTP_200_OK)
