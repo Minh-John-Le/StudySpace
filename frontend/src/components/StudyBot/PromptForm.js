@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState } from "react";
 import classes from "./PromptForm.module.css";
 import Card from "../UI/Card/Card";
 import Cookies from "js-cookie";
@@ -11,6 +11,9 @@ import { FaRobot } from "react-icons/fa";
 import Select from "react-select";
 import { SiProbot } from "react-icons/si";
 import { RiRobotFill } from "react-icons/ri";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 
 const selectBotStyle = {
   control: (provided) => ({
@@ -71,16 +74,12 @@ const PromptForm = (props) => {
 
   //--------------------------- Voice Input Variable ------------------------------------
   const [isVoiceOn, setIsVoiceOn] = useState(false);
-
-  const mic = useMemo(() => {
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-    const micInstance = new SpeechRecognition();
-    micInstance.continuous = true;
-    micInstance.interimResults = true;
-    micInstance.lang = "en-US";
-    return micInstance;
-  }, []);
+  const {
+    transcript,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+    isMicrophoneAvailable,
+  } = useSpeechRecognition();
 
   //--------------------------- Bot Option -----------------------
 
@@ -211,51 +210,27 @@ const PromptForm = (props) => {
   };
 
   //---------------------- Voice Function -------------------------------
-  const handleOnClickVoiceButton = (event) => {
-    event.preventDefault();
-    setIsVoiceOn((prevIsVoiceOn) => {
-      console.log(!prevIsVoiceOn);
-      return !prevIsVoiceOn;
-    });
-  };
-
-  const handleListen = useCallback(() => {
-    if (isVoiceOn && !mic.isActive) {
-      setEnterMessage("");
-      mic.start();
-      mic.isActive = true;
-
-      mic.onend = () => {
-        mic.isActive = false;
-      };
-
-      mic.onstart = () => {
-        //console.log("Mics on");
-      };
-
-      mic.onresult = (event) => {
-        const transcript = Array.from(event.results)
-          .map((result) => result[0])
-          .map((result) => result.transcript)
-          .join("");
-        setEnterMessage(transcript);
-      };
-
-      mic.onerror = (event) => {
-        console.log(event.error);
-      };
-    } else if (!isVoiceOn && mic.isActive) {
-      mic.stop();
-      mic.isActive = false;
-    }
-  }, [isVoiceOn, setEnterMessage, mic]);
 
   useEffect(() => {
-    handleListen();
-    return () => {
-      mic.stop();
-    };
-  }, [isVoiceOn, mic, handleListen]);
+    if (isVoiceOn) {
+      setEnterMessage("");
+      SpeechRecognition.startListening({ continuous: true });
+    } else {
+      SpeechRecognition.stopListening();
+    }
+  }, [isVoiceOn]);
+
+  const handleOnClickVoiceButton = (event) => {
+    event.preventDefault();
+    setIsVoiceOn((prevIsVoiceOn) => !prevIsVoiceOn);
+    resetTranscript(); // Reset the transcript when toggling voice on/off
+  };
+
+  useEffect(() => {
+    if (transcript) {
+      setEnterMessage(transcript);
+    }
+  }, [transcript]);
 
   //---------------------- Bot Change Function -------------------------------
   // const handleBotOptionChange = (event) => {
@@ -319,24 +294,25 @@ const PromptForm = (props) => {
         </div>
 
         {/*------------------------------ Voice Button -------------------------------*/}
-        <button
-          className={`${
-            isVoiceOn
-              ? classes["action-button-selected"]
-              : classes["action-button"]
-          }`}
-        >
-          <FaMicrophone
-            size={32}
+        {browserSupportsSpeechRecognition && isMicrophoneAvailable && (
+          <button
             className={`${
               isVoiceOn
-                ? classes["button-icon-selected"]
-                : classes["button-icon"]
+                ? classes["action-button-selected"]
+                : classes["action-button"]
             }`}
-            onClick={handleOnClickVoiceButton}
-          />
-        </button>
-
+          >
+            <FaMicrophone
+              size={32}
+              className={`${
+                isVoiceOn
+                  ? classes["button-icon-selected"]
+                  : classes["button-icon"]
+              }`}
+              onClick={handleOnClickVoiceButton}
+            />
+          </button>
+        )}
         {/*------------------------------- Dropdown Button ---------------------------*/}
         <div>
           <Select
