@@ -103,3 +103,56 @@
   color: #e3a442;
   margin-bottom: 3rem;
 }
+
+.alt-button-group {
+  display: none;
+}
+/* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
+@media screen and (max-width: 1024px) {
+  .body,
+  .header {
+    max-width: 45rem;
+    width: 100%;
+  }
+
+  .button-group {
+    display: none;
+  }
+
+  .alt-button-group {
+    display: flex;
+  }
+}
+
+/* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
+@media screen and (max-width: 600px) {
+  .body,
+  .header {
+    max-width: 18rem;
+    width: 100%;
+  }
+
+  .header h3 {
+    display: flex;
+    align-items: left;
+    white-space: normal;
+    overflow: hidden;
+  }
+
+  .alt-button-group {
+    margin-top: 0.5rem;
+  }
+
+  .room-name {
+    display: flex;
+    white-space: normal;
+    overflow: hidden;
+    text-align: left;
+  }
+
+  .roomInfo {
+    flex-direction: column;
+    align-items: left;
+    display: inline;
+  }
+}

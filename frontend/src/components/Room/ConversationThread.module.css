@@ -39,4 +39,26 @@
 
 .message-content {
   line-height: 1.5;
+  overflow: normal;
+  overflow-wrap: break-word;
+}
+
+/* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
+@media screen and (max-width: 1024px) {
+}
+
+/* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
+@media screen and (max-width: 600px) {
+  .writer-info {
+    flex-direction: column;
+  }
+  .sent-date {
+    margin-top: 1rem;
+    font-size: 75%;
+    margin-left: 0rem;
+    align-items: left;
+  }
+  .message-content {
+    font-size: 90%;
+  }
 }

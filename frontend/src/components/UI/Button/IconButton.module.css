@@ -1,0 +1,22 @@
+.action-button {
+  background-color: transparent;
+  border-color: var(--color-main);
+  border-width: 3px;
+  border-style: solid;
+  margin-right: 5px;
+  display: flex;
+  align-items: center;
+  transition: border-color 0.3s;
+}
+
+.action-button:hover {
+  border-color: var(--color-main-hover);
+}
+
+.button-icon {
+  color: var(--color-main);
+}
+
+.action-button:hover .button-icon {
+  color: var(--color-main-hover);
+}

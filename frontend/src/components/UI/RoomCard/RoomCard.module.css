@@ -129,10 +129,17 @@
   .roomcard__topic {
     text-align: left;
     width: 100%;
+    overflow: hidden;
   }
 
   .roomcard__member {
     width: 100%;
     text-align: left;
+  }
+
+  .roomcard__room-link {
+    display: flex;
+    align-items: left;
+    overflow: hidden;
   }
 }

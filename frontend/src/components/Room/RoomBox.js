@@ -9,6 +9,13 @@ import Cookies from "js-cookie";
 import Avatar from "../UI/Avatar/Avatar";
 import Pusher from "pusher-js";
 
+import { BsFillPersonCheckFill } from "react-icons/bs";
+import { MdPersonOff } from "react-icons/md";
+import { MdModeEdit } from "react-icons/md";
+import { TiDelete } from "react-icons/ti";
+
+import IconButton from "../UI/Button/IconButton";
+
 const RoomBox = (props) => {
   //================================ VARIABLEs ==============================
   //--------------------------------------- Room Info -----------------------------
@@ -288,6 +295,23 @@ const RoomBox = (props) => {
             {roomMetaContent.room_name}
           </div>
 
+          {/*=========== NORMAL MEMBER JOIN/LEAVE ROOM ================= */}
+          {!memberStatus.is_host && (
+            <div className={classes["alt-button-group"]}>
+              {memberStatus.is_member ? (
+                <IconButton
+                  icon={BsFillPersonCheckFill}
+                  onClickHandler={onLeaveRoomHandler}
+                />
+              ) : (
+                <IconButton
+                  icon={MdPersonOff}
+                  onClickHandler={onJoinRoomHandler}
+                />
+              )}
+            </div>
+          )}
+
           {!memberStatus.is_host && (
             <div className={classes["button-group"]}>
               {memberStatus.is_member ? (
@@ -307,6 +331,21 @@ const RoomBox = (props) => {
               )}
             </div>
           )}
+
+          {/*=========== HOST EDIT/DELETE ROOM ================= */}
+          {memberStatus.is_host && (
+            <div className={classes["alt-button-group"]}>
+              <IconButton
+                icon={MdModeEdit}
+                onClickHandler={onEditRoomHandler}
+              />
+              <IconButton
+                icon={TiDelete}
+                onClickHandler={onDeleteRoomHandler}
+              />
+            </div>
+          )}
+
           {memberStatus.is_host && (
             <div className={classes["button-group"]}>
               <button
