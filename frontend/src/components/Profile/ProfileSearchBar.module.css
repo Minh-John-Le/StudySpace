@@ -31,3 +31,14 @@
   color: var(--color-light-gray);
   margin-left: 10px;
 }
+
+/* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
+@media screen and (max-width: 1024px) {
+}
+
+/* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
+@media screen and (max-width: 600px) {
+  .searchInput {
+    width: 15rem;
+  }
+}

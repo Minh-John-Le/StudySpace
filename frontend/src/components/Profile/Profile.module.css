@@ -13,3 +13,14 @@
 .user-profile {
   flex: 2; /* Takes up 50% of the available space */
 }
+
+/* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
+@media screen and (max-width: 1024px) {
+  .side-card {
+    display: none;
+  }
+}
+
+/* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
+@media screen and (max-width: 600px) {
+}
