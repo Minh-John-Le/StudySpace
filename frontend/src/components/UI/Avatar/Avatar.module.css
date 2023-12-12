@@ -27,3 +27,18 @@
 .avatar-link__name {
   font-weight: bold;
 }
+
+/* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
+@media screen and (max-width: 1024px) {
+}
+
+/* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
+@media screen and (max-width: 600px) {
+  .avatar-link__avatar-border {
+    width: 30px;
+    height: 30px;
+  }
+  .avatar-link__name {
+    font-size: 80%;
+  }
+}

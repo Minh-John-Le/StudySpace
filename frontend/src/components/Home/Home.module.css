@@ -38,3 +38,18 @@
 .room {
   flex: 2; /* Takes up 50% of the available space */
 }
+
+/* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
+@media screen and (max-width: 1024px) {
+  .room {
+    flex: 1;
+  }
+  .side-card {
+    display: none; /* Takes up 25% of the available space */
+  }
+}
+
+/* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
+@media screen and (max-width: 600px) {
+
+}

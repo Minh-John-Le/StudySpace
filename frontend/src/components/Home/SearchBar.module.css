@@ -17,7 +17,7 @@
   border: 1px solid var(--color-main);
   background: transparent;
   color: var(--color-light);
-  margin-left: -25px; /* Adjust the negative margin as needed */
+  margin-left: -25px;
   text-align: left;
 }
 
@@ -30,4 +30,24 @@
 .searchIcon {
   color: var(--color-light-gray);
   margin-left: 40px;
+}
+
+/* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
+@media screen and (max-width: 1024px) {
+}
+
+/* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
+@media screen and (max-width: 600px) {
+  .searchInput {
+    flex: 3;
+    font: inherit;
+    width: 15rem;
+    padding: 0.5rem 2rem;
+    border-radius: 6px;
+    border: 1px solid var(--color-main);
+    background: transparent;
+    color: var(--color-light);
+    margin-left: -25px;
+    text-align: left;
+  }
 }
