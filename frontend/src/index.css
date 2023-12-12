@@ -30,7 +30,7 @@ main {
   --color-bg-red: rgba(239, 68, 68, 0.1);
   --color-border-red: rgba(239, 68, 68, 1);
   --color-main-hover: #ff6eff;
-
+  --color-bg-error-light: #fbdada;
   /* Neon Color */
   --color-neon-purple: #b55aff;
   --color-neon-pink: #ff6eff;
