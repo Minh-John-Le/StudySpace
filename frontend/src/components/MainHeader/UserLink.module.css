@@ -1,45 +1,9 @@
-.nav ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
+.user-display-name {
+  color: var(--color-light);
 }
 
-.nav li {
-  margin: 0;
-  margin-left: 2rem;
-}
-
-.nav a {
-  text-decoration: none;
-  color: var(--color-light-gray);
-}
-
-.nav a:hover,
-.nav a:active {
+.user-display-name:hover {
   color: var(--color-main);
-}
-
-.nav button {
-  font: inherit;
-  background: #dd0db0;
-  border: 1px solid #dd0db0;
-  padding: 0.5rem 1.5rem;
-  color: white;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.26);
-  border-radius: 20px;
-}
-
-.nav button:focus {
-  outline: none;
-}
-
-.nav button:hover,
-.nav button:active {
-  color: #f3cafb;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.26);
 }
 
 .avatarLink {
@@ -54,7 +18,7 @@
   height: 40px; /* Adjust the size as needed */
   border-radius: 50%;
   overflow: hidden;
-  margin-right: .5rem; /* Adjust the spacing as needed */
+  margin-right: 0.5rem; /* Adjust the spacing as needed */
   border-color: var(--color-main);
   border-style: solid;
 }
@@ -81,6 +45,11 @@
   display: block;
 }
 
-.roomcard__avatar-container__link {
+.login-link {
   font-weight: bold;
+  color: var(--color-light);
+}
+
+.login-link:hover {
+  color: var(--color-main);
 }

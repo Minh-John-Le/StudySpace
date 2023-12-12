@@ -20,8 +20,8 @@ function App() {
 
   return (
     <Router>
-      <MainHeader />
-      <main>
+      <React.Fragment>
+        <MainHeader />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -37,7 +37,7 @@ function App() {
           <Route path="/studybot" element={<StudyBotCard></StudyBotCard>} />
           <Route path="/video-chat" element={<VideoChatRoom></VideoChatRoom>} />
         </Routes>
-      </main>
+      </React.Fragment>
     </Router>
   );
 }

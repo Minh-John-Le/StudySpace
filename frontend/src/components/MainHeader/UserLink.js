@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 
-import classes from "./Navigation.module.css";
+import classes from "./UserLink.module.css";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import AuthContext from "../../store/auth-context";
 import Avatar from "../UI/Avatar/Avatar";
 
-const Navigation = (props) => {
+const UserLink = (props) => {
   //=============================== VARIABLE =======================================
   const ctx = useContext(AuthContext);
 
@@ -61,38 +61,31 @@ const Navigation = (props) => {
 
   //=============================== RETURN COMPONENT ===============================
   return (
-    <nav className={classes.nav}>
-      <ul>
-        {!authToken && (
-          <li>
-            <Link to="/login/" className={classes.avatarLink}>
-              <div className={classes.avatarContainer}>
-                <img
-                  src={`https://api.multiavatar.com/${avatar}.svg`}
-                  alt="Avatar"
-                  className={classes.avatar}
-                />
-              </div>
-              <span className={classes["roomcard__avatar-container__link"]}>
-                {"Login"}
-              </span>
-            </Link>
-          </li>
-        )}
-
-        {authToken && (
-          <li>
-            <Avatar
-              avatarLink={`/user/${profile.user}/`}
-              avatarName={profile.avatar_name}
-              displayName={profile.display_name}
-              includeDisplayName={true}
+    <div>
+      {!authToken && (
+        <Link to="/login/" className={classes.avatarLink}>
+          <div className={classes.avatarContainer}>
+            <img
+              src={`https://api.multiavatar.com/${avatar}.svg`}
+              alt="Avatar"
+              className={classes.avatar}
             />
-          </li>
-        )}
-      </ul>
-    </nav>
+          </div>
+          <span className={classes["login-link"]}>{"Login"}</span>
+        </Link>
+      )}
+
+      {authToken && (
+        <Avatar
+          avatarLink={`/user/${profile.user}/`}
+          avatarName={profile.avatar_name}
+          displayName={profile.display_name}
+          includeDisplayName={true}
+          displayNameClassName={classes["user-display-name"]}
+        />
+      )}
+    </div>
   );
 };
 
-export default Navigation;
+export default UserLink;

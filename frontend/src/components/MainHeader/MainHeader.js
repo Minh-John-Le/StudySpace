@@ -1,6 +1,6 @@
 import React from "react";
 
-import Navigation from "./Navigation";
+import UserLink from "./UserLink";
 import classes from "./MainHeader.module.css";
 import { SiStarship } from "react-icons/si";
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ const MainHeader = (props) => {
       <div className={classes["header-content"]}>
         <Link to={"/"} className={classes["main-header__home-link"]}>
           <span>
-            <SiStarship size={36} /> {/* Adjust the size as needed */}
+            <SiStarship size={36} />
           </span>
           <h2>Study Space</h2>
         </Link>
@@ -24,8 +24,10 @@ const MainHeader = (props) => {
             <span>Study Bot</span>
           </Link>
         </div>
+        <div className={classes["header-user-link"]}>
+          <UserLink />
+        </div>
       </div>
-      <Navigation />
     </header>
   );
 };
