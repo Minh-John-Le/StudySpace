@@ -144,19 +144,19 @@ const RoomBox = (props) => {
   // Reformat Message Time
   function formatCreatedAt(created_at) {
     const date = new Date(created_at);
-    // Convert to local time
-    const localDate = new Date(
-      date.getTime() - date.getTimezoneOffset() * 60000
-    );
 
-    const formattedDate = localDate.toLocaleString("en-US", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
+    // Set the time zone to 'GMT+7'
+    const options = {
+      timeZone: 'Etc/GMT+7',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    };
+  
+    // Use toLocaleString with the specified time zone options
+    const formattedDate = date.toLocaleString('en-US', options);
     return formattedDate;
   }
 

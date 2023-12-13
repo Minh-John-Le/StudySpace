@@ -14,6 +14,7 @@ import UpdateRoom from "./components/Room/UpdateRoomForm/UpdateRoom";
 import NewRoom from "./components/Room/NewRoomForm/NewRoom";
 import StudyBotCard from "./components/StudyBot/StudyBotCard";
 import VideoChatRoom from "./components/VideoChatRoom/VideoChatRoom";
+import Navigator from "./components/Navigation/Navigator";
 
 function App() {
   //const ctx = useContext(AuthContext);
@@ -37,6 +38,8 @@ function App() {
           <Route path="/studybot" element={<StudyBotCard></StudyBotCard>} />
           <Route path="/video-chat" element={<VideoChatRoom></VideoChatRoom>} />
         </Routes>
+        <br />
+        <Navigator></Navigator>
       </React.Fragment>
     </Router>
   );

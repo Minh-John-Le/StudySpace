@@ -1,7 +1,7 @@
 .header {
   background-color: var(--color-dark-light);
   width: 90%;
-  max-width: 100rem;
+  max-width: 60rem;
   margin-left: auto;
   margin-right: auto;
   padding: 0.1rem 1rem;
@@ -16,7 +16,7 @@
 
 .body {
   width: 90%;
-  max-width: 100rem;
+  max-width: 60rem;
   margin: 0rem auto;
   padding: 2rem 2rem;
   border-top-right-radius: 0px;
@@ -111,7 +111,7 @@
 @media screen and (max-width: 1024px) {
   .body,
   .header {
-    max-width: 45rem;
+    max-width: 40rem;
     width: 100%;
   }
 

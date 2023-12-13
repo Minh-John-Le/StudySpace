@@ -31,6 +31,7 @@ main {
   --color-border-red: rgba(239, 68, 68, 1);
   --color-main-hover: #ff6eff;
   --color-bg-error-light: #fbdada;
+
   /* Neon Color */
   --color-neon-purple: #b55aff;
   --color-neon-pink: #ff6eff;
@@ -41,4 +42,7 @@ main {
   --color-neon-hot-pink: #ff69b4;
   --color-neon-magenta: #ff00ff;
   --color-neon-yellow: #ffff00;
+
+  /* Blur Color */
+  --color-neon-bluish-purple-blur: #8c5aff47;
 }

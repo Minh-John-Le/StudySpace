@@ -7,11 +7,11 @@
 }
 
 .side-card {
-  flex: 1; /* Takes up 25% of the available space */
+  flex: 1;
 }
 
 .room-box {
-  flex: 3; /* Takes up 50% of the available space */
+  flex: 3;
 }
 
 /* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
@@ -27,5 +27,4 @@
 
 /* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
 @media screen and (max-width: 600px) {
-
 }
