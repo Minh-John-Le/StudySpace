@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import Button from "../UI/Button/Button";
 import classes from "./Home.module.css";
 //import AuthContext from "../../store/auth-context";
 import RoomCardList from "./RoomCardList";
@@ -9,6 +8,8 @@ import ScrollableSideCard from "../UI/SideCard/ScrollableSideCard";
 import Cookies from "js-cookie";
 import HotTopicSideCard from "../UI/SideCard/HotTopicSideCard";
 import SearchBar from "./SearchBar";
+import NeonButton from "../UI/Button/NeonButton";
+import Card from "../UI/Card/Card";
 
 const Home = (props) => {
   //======================================= VARIABLE ==============================
@@ -86,16 +87,16 @@ const Home = (props) => {
         ></HotTopicSideCard>
       </div>
       <div className={classes["room"]}>
-        <SearchBar></SearchBar>
-        <div className={classes.actions}>
-          <Button
-            type="button"
-            className={classes.btn}
-            onClick={addRoomHandler}
-          >
-            <div>+ New Room</div>
-          </Button>
-        </div>
+        <Card className={classes["search-button-display"]}>
+          <SearchBar></SearchBar>
+          <div className={classes["button-display"]}>
+            <NeonButton
+              buttonText={"+ New Room"}
+              onClickHandler={addRoomHandler}
+            ></NeonButton>
+          </div>
+        </Card>
+
         <RoomCardList></RoomCardList>
       </div>
       <div className={classes["side-card"]}>
