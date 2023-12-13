@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { useParams, useNavigate } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import Avatar from "../UI/Avatar/Avatar";
+import NeonButton from "../UI/Button/NeonButton";
 
 const ProfileInfo = (props) => {
   //=============================== VARIABLE ================================
@@ -166,32 +167,30 @@ const ProfileInfo = (props) => {
 
       {profile.is_auth_user && (
         <div className={classes["btn"]}>
-          <button
-            className={classes["btn__actions"]}
-            onClick={editProfileHandler}
-          >
-            <div>{"Edit Profile"}</div>
-          </button>
+          <NeonButton
+            buttonText={"Edit Profile"}
+            onClickHandler={editProfileHandler}
+          ></NeonButton>
 
-          <button className={classes["btn__actions"]} onClick={logoutHandler}>
-            <div>{"Logout"}</div>
-          </button>
+          <NeonButton
+            buttonText={"Logout"}
+            onClickHandler={logoutHandler}
+          ></NeonButton>
         </div>
       )}
 
       {!profile.is_auth_user && (
         <div className={classes["btn"]}>
           {followStatus.followStatus ? (
-            <button
-              className={classes["btn__actions"]}
-              onClick={unfollowHandler}
-            >
-              <div>{"Unfollow"}</div>
-            </button>
+            <NeonButton
+              buttonText={"Unfollow"}
+              onClickHandler={unfollowHandler}
+            ></NeonButton>
           ) : (
-            <button className={classes["btn__actions"]} onClick={followHandler}>
-              <div>{"Follow"}</div>
-            </button>
+            <NeonButton
+              buttonText={"Follow"}
+              onClickHandler={followHandler}
+            ></NeonButton>
           )}
         </div>
       )}
