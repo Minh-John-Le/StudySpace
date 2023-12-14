@@ -23,3 +23,14 @@
   border-top-right-radius: 0px;
   border-top-left-radius: 0px;
 }
+
+/* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
+@media screen and (max-width: 1024px) {
+  .body {
+    margin-bottom: 7rem;
+  }
+}
+
+/* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
+@media screen and (max-width: 600px) {
+}

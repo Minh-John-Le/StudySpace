@@ -10,6 +10,9 @@ import HotTopicSideCard from "../UI/SideCard/HotTopicSideCard";
 import SearchBar from "./SearchBar";
 import NeonButton from "../UI/Button/NeonButton";
 import Card from "../UI/Card/Card";
+import { IoAddCircle } from "react-icons/io5";
+import IconButton from "../UI/Button/IconButton";
+import { FaRankingStar } from "react-icons/fa6";
 
 const Home = (props) => {
   //======================================= VARIABLE ==============================
@@ -110,12 +113,25 @@ const Home = (props) => {
               ></NeonButton>
             </div>
           </div>
+          <div className={classes["alt-button-group-display"]}>
+            <div className={classes["alt-button-display"]}>
+              <IconButton icon={IoAddCircle} onClickHandler={addRoomHandler} />
+            </div>
+            <div className={classes["alt-button-display"]}>
+              <IconButton
+                icon={FaRankingStar}
+                onClickHandler={showTopHostHandler}
+              />
+            </div>
+          </div>
         </Card>
 
         <RoomCardList></RoomCardList>
       </div>
       <div className={classes["side-card"]}>
         <ScrollableSideCard
+          titleLink={"/top-host"}
+          hasTitleLink={true}
           title={"TOP HOSTS"}
           data={topMember}
         ></ScrollableSideCard>
