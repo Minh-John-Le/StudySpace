@@ -19,6 +19,7 @@ const UserCard = (props) => {
           includeDisplayName={true}
           avatarLinkClassName={[classes["avatar-link"]]}
         />
+        <div className={classes["date-format"]}>{`Since ${props.created_at}`}</div>
       </Card>
     </React.Fragment>
   );

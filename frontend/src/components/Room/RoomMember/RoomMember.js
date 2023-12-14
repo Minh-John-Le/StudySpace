@@ -48,11 +48,14 @@ const RoomMember = () => {
         }
 
         const allMember = await response.json();
-        setData(allMember.result);
-        //console.log(data);
 
+        const formattedMessages = allMember.result?.map((member) => ({
+          ...member,
+          created_at: formatCreatedAt(member.created_at), // Replace formatCreatedAt with your formatting logic
+        }));
+
+        setData(formattedMessages || []);
         setMaxPage(allMember.max_page);
-        //console.log(allMember);
       } catch (error) {
         // Handle errors here, e.g., display an error message
         console.error("Error fetching data:", error);
@@ -91,6 +94,22 @@ const RoomMember = () => {
     }
   }, [authToken, roomId]);
 
+  function formatCreatedAt(created_at) {
+    const date = new Date(created_at);
+
+    // Set the time zone to 'GMT+7'
+    const options = {
+      timeZone: "Etc/GMT+7",
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+    };
+
+    // Use toLocaleString with the specified time zone options
+    const formattedDate = date.toLocaleString("en-US", options);
+    return formattedDate;
+  }
+
   return (
     <React.Fragment>
       <Card className={classes["room-name-display"]}>
@@ -105,6 +124,7 @@ const RoomMember = () => {
             avatar_name={data.avatar_name}
             display_name={data.display_name}
             follower_count={data.follower_count}
+            created_at={data.created_at}
           />
         ))}
       </div>
