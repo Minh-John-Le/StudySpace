@@ -77,6 +77,12 @@ const Home = (props) => {
     fetchTopMember(); // Call the function here if authToken is available
   }, [authToken]);
 
+  //-------------------------------- Top Host ----------------------------I
+  const showTopHostHandler = (event) => {
+    event.preventDefault();
+    navigate("/top-host");
+  };
+
   //======================================= RETURN COMPONENT =====================================
   return (
     <div className={classes["home-container"]}>
@@ -89,11 +95,20 @@ const Home = (props) => {
       <div className={classes["room"]}>
         <Card className={classes["search-button-display"]}>
           <SearchBar></SearchBar>
-          <div className={classes["button-display"]}>
-            <NeonButton
-              buttonText={"+ New Room"}
-              onClickHandler={addRoomHandler}
-            ></NeonButton>
+
+          <div className={classes["button-group-display"]}>
+            <div className={classes["button-display"]}>
+              <NeonButton
+                buttonText={"+ New Room"}
+                onClickHandler={addRoomHandler}
+              ></NeonButton>
+            </div>
+            <div className={classes["button-display"]}>
+              <NeonButton
+                buttonText={"Top Host"}
+                onClickHandler={showTopHostHandler}
+              ></NeonButton>
+            </div>
           </div>
         </Card>
 

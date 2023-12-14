@@ -9,6 +9,12 @@
 .button-display {
   margin-top: 1rem;
   margin-left: -2rem;
+  margin-right: 3rem;
+}
+
+.button-group-display {
+  display: flex;
+  align-items: center;
 }
 
 .search-button-display {
@@ -53,5 +59,13 @@
     max-width: 18rem;
     min-width: 18rem;
     width: 90%;
+  }
+
+  .button-group-display {
+    display: inline;
+  }
+
+  .button-display {
+    margin-right: 0rem;
   }
 }

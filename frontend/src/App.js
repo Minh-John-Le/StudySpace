@@ -15,6 +15,7 @@ import NewRoom from "./components/Room/NewRoomForm/NewRoom";
 import StudyBotCard from "./components/StudyBot/StudyBotCard";
 import VideoChatRoom from "./components/VideoChatRoom/VideoChatRoom";
 import Navigator from "./components/Navigation/Navigator";
+import TopHost from "./components/TopHost/TopHost";
 
 function App() {
   //const ctx = useContext(AuthContext);
@@ -37,6 +38,7 @@ function App() {
           <Route path="/update-room/:id" element={<UpdateRoom></UpdateRoom>} />
           <Route path="/studybot" element={<StudyBotCard></StudyBotCard>} />
           <Route path="/video-chat" element={<VideoChatRoom></VideoChatRoom>} />
+          <Route path="/top-host" element={<TopHost></TopHost>} />
         </Routes>
         <br />
         <Navigator></Navigator>

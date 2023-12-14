@@ -1,0 +1,33 @@
+.card-display {
+  display: inline;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5rem auto;
+  min-width: 20rem;
+  max-width: 20rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.avatar-group {
+  margin-top: 1rem;
+}
+
+.avatar-link {
+  color: var(--color-main);
+  justify-content: center;
+  align-items: center;
+}
+
+.follower-display,
+.rank-display {
+  color: var(--color-main);
+  font-weight: bold;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.icon-display {
+  margin-bottom: 4px;
+}

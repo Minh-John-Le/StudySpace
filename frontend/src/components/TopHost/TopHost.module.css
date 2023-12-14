@@ -1,0 +1,24 @@
+.host-info-card-group {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 1.5rem;
+  margin-top: 5rem;
+  margin-bottom: 7rem;
+}
+
+/* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
+@media screen and (max-width: 1024px) {
+  .host-info-card-group {
+    grid-template-columns: repeat(2, auto);
+    gap: auto;
+    margin-bottom: 7rem;
+  }
+}
+
+/* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
+@media screen and (max-width: 600px) {
+  .host-info-card-group {
+    grid-template-columns: repeat(1, auto);
+    margin-bottom: 7rem;
+  }
+}

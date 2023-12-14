@@ -475,3 +475,14 @@ class TopMembersAPI(APIView):
         serializer = TopMemberSerializer(top_members, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class Top50MembersAPI(APIView):
+    def get(self, request):
+        # Query for the top 10 people with the most followers
+        top_members = UserProfile.objects.annotate(follower_count=Count(
+            'user__following')).order_by('-follower_count')[:50]
+
+        # Serialize the top members using the TopMemberSerializer
+        serializer = TopMemberSerializer(top_members, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
