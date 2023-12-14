@@ -8,6 +8,7 @@ import RecentActivitySideCard from "../UI/SideCard/RecentActivitySideCard";
 import ProfileRoomCardList from "./ProfileRoomCardList";
 import ProfileSearchBar from "./ProfileSearchBar";
 import AuthenticateChecker from "../Home/AuthenticateChecker";
+import Card from "../UI/Card/Card";
 
 const Profile = () => {
   //================================== VARIABLE ===================================
@@ -121,7 +122,9 @@ const Profile = () => {
       </div>
       <div className={classes["user-profile"]}>
         <ProfileInfo changeFollowStatus={setFollowStatus} />
-        <ProfileSearchBar></ProfileSearchBar>
+        <Card className={classes["search-button-display"]}>
+          <ProfileSearchBar></ProfileSearchBar>
+        </Card>
         <ProfileRoomCardList></ProfileRoomCardList>
       </div>
       <div className={classes["side-card"]}>

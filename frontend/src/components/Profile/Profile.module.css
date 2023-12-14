@@ -14,6 +14,16 @@
   flex: 2; /* Takes up 50% of the available space */
 }
 
+.search-button-display {
+  width: 90%;
+  max-width: 35rem;
+  min-width: 35rem;
+  padding: 3rem;
+  background-color: transparent;
+  box-shadow: none;
+  margin: -2.5rem auto;
+}
+
 /* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
 @media screen and (max-width: 1024px) {
   .side-card {
@@ -23,4 +33,9 @@
 
 /* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
 @media screen and (max-width: 600px) {
+  .search-button-display {
+    max-width: 18rem;
+    min-width: 18rem;
+    width: 90%;
+  }
 }

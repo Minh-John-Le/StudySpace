@@ -1,6 +1,7 @@
 .roomcard {
   width: 90%;
-  max-width: 40rem;
+  max-width: 35rem;
+  min-width: 35rem;
   padding: 3rem;
   margin: 2rem auto;
   text-align: center;
@@ -9,4 +10,20 @@
 .roomcard h2 {
   text-align: center;
   color: var(--color-light);
+}
+
+/* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
+@media screen and (max-width: 1024px) {
+}
+
+/* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
+@media screen and (max-width: 600px) {
+  .roomcard {
+    width: 90%;
+    max-width: 18rem;
+    min-width: 18rem;
+    padding: 3rem;
+    margin: 2rem auto;
+    text-align: center;
+  }
 }
