@@ -377,21 +377,62 @@ class SingleMemberInRoomAPI(APIView):
         return Response({"detail": "Data has been successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
 
 # ======================= REST API for All Member In Single Room ===================================
-
-
 class AllMembersInRoomAPI(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request, room_id):
+        page_number = request.query_params.get('page', '1')
+
         # Get the user's followers based on the 'id' parameter
         members = Rooms_Members.objects.filter(
-            room=room_id).order_by("created_at")
+            room=room_id).order_by("-created_at")
 
-        # Serialize the followers' data
+        # Set the number of items per page (e.g., 10)
+        per_page = 12
+        paginator = Paginator(members, per_page)
+
+        # Get the maximum page number
+        max_page = paginator.num_pages
+
+        # Process page
+        if page_number == "last":
+            page_number = max_page
+        elif page_number == "first" or not page_number.isdigit():
+            page_number = 1
+        else:
+            page_number = int(page_number)
+
+        try:
+            page = paginator.page(min(page_number, max_page))
+        except:
+            return Response([], status=status.HTTP_404_NOT_FOUND)
+
+        # Serialize the followers' data for the current page
+        serializer = AllMembersInRoomSerializer(page, many=True)
+
+        # Include the max page number in the response
+        response_data = {
+            "result": serializer.data,
+            "max_page": max_page,
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
+    
+class SomeMembersInRoomAPI(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, room_id):
+        # Get the first 10 members based on the 'id' parameter
+        members = Rooms_Members.objects.filter(
+            room=room_id).order_by("created_at")[:10]
+
+        # Serialize the first 10 members' data
         serializer = AllMembersInRoomSerializer(members, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 # ======================= REST API for Followers/ Following ===================================

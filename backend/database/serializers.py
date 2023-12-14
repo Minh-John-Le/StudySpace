@@ -179,8 +179,6 @@ class FollowingSerializer(serializers.ModelSerializer):
             return obj.user.userprofile.avatar_name
         return None
 
-# ================================= MESSAGE Serializer =================================
-
 
 # ================================= Top Member Serializer =================================
 

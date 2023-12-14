@@ -21,7 +21,7 @@ const Room = () => {
   //========================= FUNCTIONS ==================================
   // Get member list of the room
   async function fetchAllMemberInRoom(id, authToken) {
-    const apiUrl = `${backendUrl}/api/database/all-member-in-room/${id}/`;
+    const apiUrl = `${backendUrl}/api/database/some-member-in-room/${id}/`;
 
     try {
       const response = await fetch(apiUrl, {
@@ -61,6 +61,8 @@ const Room = () => {
         <ScrollableSideCard
           key={"memberCard"}
           title={"MEMBERS"}
+          hasTitleLink={true}
+          titleLink={`/room-member/${id}`}
           data={members}
         ></ScrollableSideCard>
       </div>

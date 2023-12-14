@@ -75,7 +75,7 @@ const RoomCardList = () => {
         ))}
       </div>
 
-      {data.length !== 0 && (
+      {data.length !== 0 && maxPage > 1 && (
         <RoomPagination max_page={maxPage}></RoomPagination>
       )}
     </React.Fragment>
