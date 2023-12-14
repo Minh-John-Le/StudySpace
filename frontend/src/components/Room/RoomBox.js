@@ -13,6 +13,7 @@ import { BsFillPersonCheckFill } from "react-icons/bs";
 import { MdPersonOff } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
 import { TiDelete } from "react-icons/ti";
+import { BsFillFileEarmarkPersonFill } from "react-icons/bs";
 
 import IconButton from "../UI/Button/IconButton";
 
@@ -147,16 +148,16 @@ const RoomBox = (props) => {
 
     // Set the time zone to 'GMT+7'
     const options = {
-      timeZone: 'Etc/GMT+7',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
+      timeZone: "Etc/GMT+7",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
     };
-  
+
     // Use toLocaleString with the specified time zone options
-    const formattedDate = date.toLocaleString('en-US', options);
+    const formattedDate = date.toLocaleString("en-US", options);
     return formattedDate;
   }
 
@@ -216,6 +217,11 @@ const RoomBox = (props) => {
   const onEditRoomHandler = (event) => {
     event.preventDefault();
     navigate(`/update-room/${id}`);
+  };
+
+  const onShowAllRoomMember = (event) => {
+    event.preventDefault();
+    navigate(`/room-member/${id}`);
   };
 
   // Function handle leave room
@@ -309,6 +315,10 @@ const RoomBox = (props) => {
                   onClickHandler={onJoinRoomHandler}
                 />
               )}
+              <IconButton
+                icon={BsFillFileEarmarkPersonFill}
+                onClickHandler={onShowAllRoomMember}
+              />
             </div>
           )}
 
@@ -338,6 +348,10 @@ const RoomBox = (props) => {
               <IconButton
                 icon={MdModeEdit}
                 onClickHandler={onEditRoomHandler}
+              />
+              <IconButton
+                icon={BsFillFileEarmarkPersonFill}
+                onClickHandler={onShowAllRoomMember}
               />
               <IconButton
                 icon={TiDelete}
