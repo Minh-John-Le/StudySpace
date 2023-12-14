@@ -15,11 +15,20 @@
 
 .avatar-link {
   color: var(--color-main);
-  justify-content: center;
+  justify-content: left;
   align-items: center;
+  margin-left: 1rem;
 }
 
-.follower-display,
+.follower-display {
+  color: var(--color-main);
+  font-weight: bold;
+  justify-content: left;
+  margin-top: 1rem;
+  align-items: center;
+  margin-left: 1rem;
+  font-size: 125%;
+}
 .rank-display {
   color: var(--color-main);
   font-weight: bold;
@@ -28,6 +37,10 @@
   justify-content: center;
 }
 
-.icon-display {
-  margin-bottom: 4px;
+.rank-icon-display {
+  margin-bottom: 3px;
+}
+
+.follower-icon-display {
+  margin-bottom: -3px;
 }

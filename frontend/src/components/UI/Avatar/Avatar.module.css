@@ -35,10 +35,10 @@
 /* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
 @media screen and (max-width: 600px) {
   .avatar-link__avatar-border {
-    width: 30px;
-    height: 30px;
+    width: 27px;
+    height: 27px;
   }
   .avatar-link__name {
-    font-size: 80%;
+    font-size: 75%;
   }
 }

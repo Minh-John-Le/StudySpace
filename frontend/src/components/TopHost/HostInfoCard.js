@@ -10,7 +10,7 @@ const HostInfoCard = (props) => {
     <React.Fragment>
       <Card className={classes["card-display"]}>
         <div className={classes["rank-display"]}>
-          <FaStar className={classes["icon-display"]} />
+          <FaStar className={classes["rank-icon-display"]} />
           {props.rank}
         </div>
         <Avatar
@@ -22,8 +22,8 @@ const HostInfoCard = (props) => {
           avatarLinkClassName={[classes["avatar-link"]]}
         />
         <div className={classes["follower-display"]}>
-          <FaHeart className={classes["icon-display"]} />
-          {props.follower_count}
+          <FaHeart className={classes["follower-icon-display"]} />
+          {" " + props.follower_count}
         </div>
       </Card>
     </React.Fragment>

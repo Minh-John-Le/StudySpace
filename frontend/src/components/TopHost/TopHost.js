@@ -45,7 +45,7 @@ const TopHost = () => {
             <HostInfoCard
               rank={index + 1}
               key={user.profile_id}
-              props={user.profile_i}
+              profile_id={user.profile_id}
               avatar_name={user.avatar_name}
               display_name={user.display_name}
               follower_count={user.follower_count}

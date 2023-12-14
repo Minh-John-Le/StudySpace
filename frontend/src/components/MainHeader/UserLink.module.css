@@ -1,9 +1,11 @@
 .user-display-name {
   color: var(--color-light);
+  text-wrap: nowrap;
 }
 
 .user-display-name:hover {
   color: var(--color-main);
+  text-wrap: nowrap;
 }
 
 .avatarLink {
