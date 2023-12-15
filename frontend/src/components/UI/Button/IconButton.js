@@ -16,10 +16,9 @@ const IconButton = (props) => {
       className={`${classes["action-button"]} ${buttonClassName}`}
       onClick={onClickHandler}
     >
-      <IconComponent
-        size={size}
-        className={`${classes["button-icon"]} ${iconClassName}`}
-      />
+      <i className={`${classes["button-icon"]} ${iconClassName}`}>
+        <IconComponent size={size} />
+      </i>
     </button>
   );
 };
