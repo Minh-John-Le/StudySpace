@@ -70,7 +70,8 @@
   border-style: solid;
   margin-right: 5px;
   display: flex;
-  align-items: center;
+  align-items: baseline;
+  justify-content: center;
   transition: border-color 0.3s;
 }
 
@@ -92,10 +93,11 @@
   overflow: hidden;
   background-color: transparent;
   border-color: transparent;
-  border-width: 0;
+  border-width: 3px;
   margin-right: 5px;
   display: flex;
-  align-items: center;
+  align-items: baseline;
+  justify-content: center;
 }
 
 .action-button-selected::before {

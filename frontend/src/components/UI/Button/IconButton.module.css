@@ -5,8 +5,8 @@
   border-style: solid;
   margin-right: 5px;
   display: flex;
-  align-items: center;
-  justify-content: center; /* Center horizontally */
+  align-items: baseline;
+  justify-content: center; 
   transition: border-color 0.3s;
 }
 

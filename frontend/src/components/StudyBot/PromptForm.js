@@ -14,6 +14,7 @@ import { RiRobotFill } from "react-icons/ri";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import IconButton from "../UI/Button/IconButton";
 
 const selectBotStyle = {
   control: (provided) => ({
@@ -270,13 +271,8 @@ const PromptForm = (props) => {
       {/* Action Button Group Component */}
       <div className={classes["action-button-group"]}>
         {/* Send Button */}
-        <button className={classes["action-button"]}>
-          <BiSend
-            size={32}
-            className={classes["button-icon"]}
-            onClick={handleFormSubmit}
-          />
-        </button>
+
+        <IconButton icon={BiSend} onClickHandler={handleFormSubmit} size={32} />
 
         {/*----------------------------- Image Input Button ------------------------- */}
         <div>
@@ -295,23 +291,21 @@ const PromptForm = (props) => {
 
         {/*------------------------------ Voice Button -------------------------------*/}
         {browserSupportsSpeechRecognition && isMicrophoneAvailable && (
-          <button
-            className={`${
+          <IconButton
+            buttonClassName={`${
               isVoiceOn
                 ? classes["action-button-selected"]
                 : classes["action-button"]
             }`}
-          >
-            <FaMicrophone
-              size={32}
-              className={`${
-                isVoiceOn
-                  ? classes["button-icon-selected"]
-                  : classes["button-icon"]
-              }`}
-              onClick={handleOnClickVoiceButton}
-            />
-          </button>
+            iconClassName={`${
+              isVoiceOn
+                ? classes["button-icon-selected"]
+                : classes["button-icon"]
+            }`}
+            icon={FaMicrophone}
+            onClickHandler={handleOnClickVoiceButton}
+            size={32}
+          />
         )}
         {/*------------------------------- Dropdown Button ---------------------------*/}
         <div>
