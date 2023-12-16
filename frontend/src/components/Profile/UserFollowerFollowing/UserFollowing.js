@@ -2,20 +2,20 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
-import RoomMemberPagination from "./RoomMemberPagination";
 import UserCard from "../../UI/User/UserCard";
-import classes from "./RoomMember.module.css";
 import Card from "../../UI/Card/Card";
 import { Link } from "react-router-dom";
+import UserFollowingPagination from "./UserFollowingPagination";
+import classes from "./UserFollower.module.css";
 
-const RoomMember = () => {
+const UserFollowing = () => {
   const [data, setData] = useState([]); // all rooms
   const [maxPage, setMaxPage] = useState(1); // max page
-  const [roomMetaContent, setRoomMetaContent] = useState([]);
+  const [userMetaContent, setUserMetaContent] = useState([]);
 
   //--------------------------------- API--------------------------------------
   const authToken = Cookies.get("authToken");
-  const { roomId } = useParams();
+  const { userId } = useParams();
   const backendUrl =
     process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
@@ -34,7 +34,7 @@ const RoomMember = () => {
 
   //===================================== GET DATA ================================
   // Url for room match topic and page
-  const apiUrl = `${backendUrl}/api/database/all-member-in-room/${roomId}/?page=${page}`;
+  const apiUrl = `${backendUrl}/api/database/user-following/${userId}/?page=${page}`;
 
   useEffect(() => {
     async function fetchAllMemberHandler() {
@@ -66,10 +66,10 @@ const RoomMember = () => {
     fetchAllMemberHandler();
   }, [page, apiUrl, authToken]);
 
-  // Get the room info (meta info) for the first time
+  // Get the user info (meta info) for the first time
   useEffect(() => {
     async function fetchData() {
-      const apiUrl = `${backendUrl}/api/database/room-manager/${roomId}/`;
+      const apiUrl = `${backendUrl}/api/auth/user/${userId}/`;
 
       try {
         const response = await fetch(apiUrl, {
@@ -84,7 +84,7 @@ const RoomMember = () => {
         }
 
         const roomMetaContent = await response.json();
-        setRoomMetaContent(roomMetaContent);
+        setUserMetaContent(roomMetaContent);
       } catch (error) {
         console.error("Error fetching profile:", error);
       }
@@ -93,7 +93,7 @@ const RoomMember = () => {
     if (authToken) {
       fetchData(); // Call the function here if authToken is available
     }
-  }, [authToken, roomId]);
+  }, [authToken, userId]);
 
   function formatCreatedAt(created_at) {
     const date = new Date(created_at);
@@ -114,12 +114,12 @@ const RoomMember = () => {
   return (
     <React.Fragment>
       <Card className={classes["room-name-display"]}>
-        <h2>{`${"Members of"}`}</h2>
+        <h2>{`${"Following of"}`}</h2>
         <Link
-          to={"/room/" + roomMetaContent.id}
+          to={"/user/" + userMetaContent.user}
           className={classes["room-name-link"]}
         >
-          <h2>{`"${roomMetaContent.room_name}"`}</h2>
+          <h2>{`"${userMetaContent.display_name}"`}</h2>
         </Link>
       </Card>
 
@@ -137,10 +137,10 @@ const RoomMember = () => {
       </div>
 
       {data.length !== 0 && maxPage > 1 && (
-        <RoomMemberPagination max_page={maxPage}></RoomMemberPagination>
+        <UserFollowingPagination max_page={maxPage}></UserFollowingPagination>
       )}
     </React.Fragment>
   );
 };
 
-export default RoomMember;
+export default UserFollowing;

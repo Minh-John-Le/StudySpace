@@ -17,6 +17,8 @@ import VideoChatRoom from "./components/VideoChatRoom/VideoChatRoom";
 import Navigator from "./components/Navigation/Navigator";
 import TopHost from "./components/TopHost/TopHost";
 import RoomMember from "./components/Room/RoomMember/RoomMember";
+import UserFollower from "./components/Profile/UserFollowerFollowing/UserFollower";
+import UserFollowing from "./components/Profile/UserFollowerFollowing/UserFollowing";
 
 function App() {
   //const ctx = useContext(AuthContext);
@@ -33,6 +35,14 @@ function App() {
           <Route
             path="/profile-setting"
             element={<ProfileSetting></ProfileSetting>}
+          />
+          <Route
+            path="/user-follower/:userId"
+            element={<UserFollower></UserFollower>}
+          />
+          <Route
+            path="/user-following/:userId"
+            element={<UserFollowing></UserFollowing>}
           />
           <Route path="/new-room" element={<NewRoom></NewRoom>} />
           <Route path="/room/:id" element={<Room></Room>} />

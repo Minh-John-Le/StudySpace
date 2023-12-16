@@ -1,0 +1,67 @@
+.user-card-group {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    gap: 1.5rem;
+    margin-top: 5rem;
+    margin-bottom: 7rem;
+  }
+  
+  .room-name-display {
+    width: 90%;
+    max-width: 35rem;
+    min-width: 35rem;
+    padding: 3rem;
+    background-color: transparent;
+    box-shadow: none;
+    margin: auto;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-bottom: -5rem;
+    flex-direction: column;
+  }
+  
+  .room-name-link {
+    text-decoration: none;
+  }
+  
+  .room-name-display h2 {
+    color: var(--color-light);
+  }
+  
+  .room-name-link h2 {
+    color: var(--color-light);
+  }
+  
+  .room-name-link h2:hover {
+    color: var(--color-main);
+  }
+  /* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
+  @media screen and (max-width: 1024px) {
+    .user-card-group {
+      grid-template-columns: repeat(2, auto);
+      gap: auto;
+      margin-bottom: 7rem;
+    }
+  }
+  
+  /* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
+  @media screen and (max-width: 600px) {
+    .user-card-group {
+      grid-template-columns: repeat(1, auto);
+      margin-bottom: 7rem;
+    }
+  
+    .room-name-display {
+      max-width: 18rem;
+      min-width: 18rem;
+      width: 90%;
+    }
+  
+    .room-name-link h2:hover,
+    .room-name-link h2,
+    .room-name-display h2 {
+      font-size: 100%;
+    }
+  }
+  

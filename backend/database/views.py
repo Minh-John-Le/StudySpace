@@ -484,7 +484,7 @@ class FollowerAPI(APIView):
 
     def get(self, request, id):
         # Get the user's followers based on the 'id' parameter
-        user_followers = Followers.objects.filter(user_id=id)
+        user_followers = Followers.objects.filter(user_id=id)[:10]
 
         # Serialize the followers' data
         serializer = FollowerSerializer(user_followers, many=True)
@@ -498,13 +498,94 @@ class FollowingAPI(APIView):
 
     def get(self, request, id):
         # Get the user's followers based on the 'id' parameter
-        user_followers = Followers.objects.filter(follower_id=id)
+        user_followers = Followers.objects.filter(follower_id=id)[:10]
 
         # Serialize the followers' data
         serializer = FollowingSerializer(user_followers, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+class UserFollowerAPI(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id):
+        page_number = request.query_params.get('page', '1')
+
+        # Get the user's followers based on the 'id' parameter
+        user_followers = Followers.objects.filter(user_id=id)
+
+        # Set the number of items per page (e.g., 10)
+        per_page = 12
+        paginator = Paginator(user_followers, per_page)
+
+        # Get the maximum page number
+        max_page = paginator.num_pages
+
+        # Process page
+        if page_number == "last":
+            page_number = max_page
+        elif page_number == "first" or not page_number.isdigit():
+            page_number = 1
+        else:
+            page_number = int(page_number)
+
+        try:
+            page = paginator.page(min(page_number, max_page))
+        except:
+            return Response([], status=status.HTTP_404_NOT_FOUND)
+
+        # Serialize the followers' data for the current page
+        serializer = FollowerSerializer(page, many=True)
+
+        # Include the max page number in the response
+        response_data = {
+            "result": serializer.data,
+            "max_page": max_page,
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
+
+class UserFollowingAPI(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id):
+        page_number = request.query_params.get('page', '1')
+
+        # Get the user's followers based on the 'id' parameter
+        user_followers = Followers.objects.filter(follower_id=id)
+
+        # Set the number of items per page (e.g., 10)
+        per_page = 3
+        paginator = Paginator(user_followers, per_page)
+
+        # Get the maximum page number
+        max_page = paginator.num_pages
+
+        # Process page
+        if page_number == "last":
+            page_number = max_page
+        elif page_number == "first" or not page_number.isdigit():
+            page_number = 1
+        else:
+            page_number = int(page_number)
+
+        try:
+            page = paginator.page(min(page_number, max_page))
+        except:
+            return Response([], status=status.HTTP_404_NOT_FOUND)
+
+        # Serialize the followers' data for the current page
+        serializer = FollowingSerializer(page, many=True)
+
+        # Include the max page number in the response
+        response_data = {
+            "result": serializer.data,
+            "max_page": max_page,
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
 
 class TopMembersAPI(APIView):
     def get(self, request):
