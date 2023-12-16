@@ -78,3 +78,11 @@
 .title-link {
   text-decoration: none;
 }
+
+.title-link h3 {
+  color: var(--color-light);
+}
+
+.title-link h3:hover {
+  color: var(--color-main);
+}
