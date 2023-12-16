@@ -38,6 +38,13 @@
   gap: 2rem;
 }
 
+.alt-btn {
+  display: none;
+  justify-content: center; /* Center the buttons horizontally */
+  margin-top: 0.5rem; /* Add spacing between followers and buttons */
+  gap: 2rem;
+}
+
 .subtitle {
   color: var(--color-dark-light);
   font-weight: bold;
@@ -48,4 +55,19 @@
 .description {
   color: var(--color-main-light);
   line-height: 1.5;
+}
+
+/* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
+@media screen and (max-width: 1024px) {
+  .btn {
+    display: none;
+  }
+
+  .alt-btn {
+    display: flex;
+  }
+}
+
+/* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
+@media screen and (max-width: 600px) {
 }

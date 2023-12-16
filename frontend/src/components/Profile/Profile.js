@@ -116,9 +116,19 @@ const Profile = () => {
     <div className={classes["profile-container"]}>
       <AuthenticateChecker></AuthenticateChecker>
       <div className={classes["side-card"]}>
-        <ScrollableSideCard title={"FOLLOWERS"} data={follower} />
+        <ScrollableSideCard
+          hasTitleLink={true}
+          titleLink={`/user-follower/${id}`}
+          title={"FOLLOWERS"}
+          data={follower}
+        />
         <br></br>
-        <ScrollableSideCard title={"FOLLOWING"} data={following} />
+        <ScrollableSideCard
+          hasTitleLink={true}
+          titleLink={`/user-following/${id}`}
+          title={"FOLLOWING"}
+          data={following}
+        />
       </div>
       <div className={classes["user-profile"]}>
         <ProfileInfo changeFollowStatus={setFollowStatus} />

@@ -5,6 +5,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import Avatar from "../UI/Avatar/Avatar";
 import NeonButton from "../UI/Button/NeonButton";
+import IconButton from "../UI/Button/IconButton";
+import { MdModeEdit } from "react-icons/md";
+import { RiLogoutBoxRFill } from "react-icons/ri";
+import { GoHeart } from "react-icons/go";
+import { GoHeartFill } from "react-icons/go";
 
 const ProfileInfo = (props) => {
   //=============================== VARIABLE ================================
@@ -164,7 +169,7 @@ const ProfileInfo = (props) => {
       <div className={classes["follower"]}>
         {profile.followers_count} Followers
       </div>
-
+      {/*================ LARGE MEDIA DISPLAY =============================*/}
       {profile.is_auth_user && (
         <div className={classes["btn"]}>
           <NeonButton
@@ -191,6 +196,24 @@ const ProfileInfo = (props) => {
               buttonText={"Follow"}
               onClickHandler={followHandler}
             ></NeonButton>
+          )}
+        </div>
+      )}
+
+      {/*================ SMALL MEDIA DISPLAY =============================*/}
+      {profile.is_auth_user && (
+        <div className={classes["alt-btn"]}>
+          <IconButton icon={MdModeEdit} onClickHandler={editProfileHandler} />
+          <IconButton icon={RiLogoutBoxRFill} onClickHandler={logoutHandler} />
+        </div>
+      )}
+
+      {!profile.is_auth_user && (
+        <div className={classes["alt-btn"]}>
+          {followStatus.followStatus ? (
+            <IconButton icon={GoHeartFill} onClickHandler={unfollowHandler} />
+          ) : (
+            <IconButton icon={GoHeart} onClickHandler={followHandler} />
           )}
         </div>
       )}
