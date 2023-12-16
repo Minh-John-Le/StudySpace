@@ -6,6 +6,7 @@ import RoomMemberPagination from "./RoomMemberPagination";
 import UserCard from "../../UI/User/UserCard";
 import classes from "./RoomMember.module.css";
 import Card from "../../UI/Card/Card";
+import { Link } from "react-router-dom";
 
 const RoomMember = () => {
   const [data, setData] = useState([]); // all rooms
@@ -113,8 +114,15 @@ const RoomMember = () => {
   return (
     <React.Fragment>
       <Card className={classes["room-name-display"]}>
-        <h2>{`Members in ${roomMetaContent.room_name}`}</h2>
+        <h2>{`${"Members of"}`}</h2>
+        <Link
+          to={"/room/" + roomMetaContent.id}
+          className={classes["room-name-link"]}
+        >
+          <h2>{`"${roomMetaContent.room_name}"`}</h2>
+        </Link>
       </Card>
+
       <div className={classes["user-card-group"]}>
         {data.map((data, index) => (
           <UserCard

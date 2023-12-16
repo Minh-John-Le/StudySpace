@@ -18,12 +18,24 @@
   display: flex;
   justify-content: center;
   margin-bottom: -5rem;
+  flex-direction: column;
+}
+
+.room-name-link {
+  text-decoration: none;
 }
 
 .room-name-display h2 {
   color: var(--color-light);
 }
 
+.room-name-link h2 {
+  color: var(--color-light);
+}
+
+.room-name-link h2:hover {
+  color: var(--color-main);
+}
 /* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
 @media screen and (max-width: 1024px) {
   .user-card-group {
@@ -44,5 +56,11 @@
     max-width: 18rem;
     min-width: 18rem;
     width: 90%;
+  }
+
+  .room-name-link h2:hover,
+  .room-name-link h2,
+  .room-name-display h2 {
+    font-size: 80%;
   }
 }
