@@ -3,6 +3,11 @@
   grid-template-columns: repeat(4, auto);
   gap: 1.5rem;
   margin-top: 5rem;
+  margin-bottom: 2rem;
+
+}
+
+.ending-space {
   margin-bottom: 7rem;
 }
 
@@ -41,7 +46,6 @@
   .user-card-group {
     grid-template-columns: repeat(2, auto);
     gap: auto;
-    margin-bottom: 7rem;
   }
 }
 
@@ -49,7 +53,6 @@
 @media screen and (max-width: 600px) {
   .user-card-group {
     grid-template-columns: repeat(1, auto);
-    margin-bottom: 7rem;
   }
 
   .room-name-display {

@@ -113,11 +113,11 @@ const UserFollowing = () => {
 
   return (
     <React.Fragment>
-      <Card className={classes["room-name-display"]}>
+      <Card className={classes["user-name-display"]}>
         <h2>{`${"Following of"}`}</h2>
         <Link
           to={"/user/" + userMetaContent.user}
-          className={classes["room-name-link"]}
+          className={classes["user-name-link"]}
         >
           <h2>{`"${userMetaContent.display_name}"`}</h2>
         </Link>
@@ -139,6 +139,7 @@ const UserFollowing = () => {
       {data.length !== 0 && maxPage > 1 && (
         <UserFollowingPagination max_page={maxPage}></UserFollowingPagination>
       )}
+      <div className={classes["ending-space"]}></div>
     </React.Fragment>
   );
 };

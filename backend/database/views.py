@@ -557,7 +557,7 @@ class UserFollowingAPI(APIView):
         user_followers = Followers.objects.filter(follower_id=id)
 
         # Set the number of items per page (e.g., 10)
-        per_page = 3
+        per_page = 12
         paginator = Paginator(user_followers, per_page)
 
         # Get the maximum page number

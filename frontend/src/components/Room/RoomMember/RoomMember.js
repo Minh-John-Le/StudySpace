@@ -139,6 +139,7 @@ const RoomMember = () => {
       {data.length !== 0 && maxPage > 1 && (
         <RoomMemberPagination max_page={maxPage}></RoomMemberPagination>
       )}
+      <div className={classes["ending-space"]}></div>
     </React.Fragment>
   );
 };
