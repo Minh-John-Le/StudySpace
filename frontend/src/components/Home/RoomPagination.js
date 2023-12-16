@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import classes from "./RoomPagination.module.css";
 import PaginationBox from "../UI/Pagination/PaginationBox";
 
 const RoomPagination = (props) => {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import classes from "./ProfileRoomPagination.module.css";
-
+import PaginationBox from "../UI/Pagination/PaginationBox";
 const ProfileRoomPagination = (props) => {
   //================================== VARIABLE =====================================
   const [pageNumberFromURL, setPageNumberFromURL] = useState(1); // URL's page
@@ -59,29 +58,13 @@ const ProfileRoomPagination = (props) => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleFormSubmit}>
-        <div className={classes.pagination}>
-          <button type="button" onClick={handleDecrement}>
-            {"<"}
-          </button>
-          <input
-            type="number"
-            id="page"
-            min="1"
-            step="1"
-            value={pageNumberInput}
-            onChange={(event) => {
-              const newPageNumber = parseInt(event.target.value);
-              setPageNumberInput(newPageNumber);
-            }}
-          />
-          <button type="button" onClick={handleIncrement}>
-            {">"}
-          </button>
-        </div>
-      </form>
-    </div>
+    <PaginationBox
+      handleFormSubmit={handleFormSubmit}
+      handleDecrement={handleDecrement}
+      pageNumberInput={pageNumberInput}
+      setPageNumberInput={setPageNumberInput}
+      handleIncrement={handleIncrement}
+    />
   );
 };
 
