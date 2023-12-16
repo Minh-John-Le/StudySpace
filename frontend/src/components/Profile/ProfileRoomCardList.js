@@ -92,7 +92,7 @@ const ProfileRoomCardList = () => {
         ))}
       </div>
 
-      {data.length !== 0 && (
+      {data.length !== 0 && maxPage > 1 && (
         <ProfileRoomPagination max_page={maxPage}></ProfileRoomPagination>
       )}
     </React.Fragment>
