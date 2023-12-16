@@ -23,12 +23,27 @@
   justify-content: center; /* Horizontal centering */
 }
 
-.follower {
+.follower-following-group {
   font-size: medium;
   color: var(--color-light-gray);
   display: flex;
   justify-content: center; /* Horizontal centering */
   align-items: center; /* Vertical centering */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  gap: 2rem;
+}
+
+.following-link,
+.follower-link {
+  text-decoration: none;
+  color: var(--color-light-gray);
+}
+
+.following-link:hover,
+.follower-link:hover {
+  text-decoration: none;
+  color: var(--color-main);
 }
 
 .btn {
@@ -42,7 +57,7 @@
   display: none;
   justify-content: center; /* Center the buttons horizontally */
   margin-top: 0.5rem; /* Add spacing between followers and buttons */
-  gap: 2rem;
+  gap: 0.5rem;
 }
 
 .subtitle {

@@ -10,6 +10,7 @@ import { MdModeEdit } from "react-icons/md";
 import { RiLogoutBoxRFill } from "react-icons/ri";
 import { GoHeart } from "react-icons/go";
 import { GoHeartFill } from "react-icons/go";
+import { Link } from "react-router-dom";
 
 const ProfileInfo = (props) => {
   //=============================== VARIABLE ================================
@@ -166,8 +167,15 @@ const ProfileInfo = (props) => {
       </div>
 
       <div className={classes["display-name"]}>{profile.display_name}</div>
-      <div className={classes["follower"]}>
-        {profile.followers_count} Followers
+      <div className={classes["follower-following-group"]}>
+        <Link
+          to={`/user-follower/${id}`}
+          className={classes["follower-link"]}
+        >{`${profile.followers_count} Followers`}</Link>
+        <Link
+          to={`/user-following/${id}`}
+          className={classes["following-link"]}
+        >{`${profile.following_count} Following`}</Link>
       </div>
       {/*================ LARGE MEDIA DISPLAY =============================*/}
       {profile.is_auth_user && (
