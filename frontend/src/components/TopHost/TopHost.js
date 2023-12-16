@@ -28,7 +28,7 @@ const TopHost = () => {
 
         const profile = await response.json();
         setTopMemberList(profile);
-        console.log(profile);
+        //console.log(profile);
       } catch (error) {
         console.error("Error fetching profile:", error);
       }
