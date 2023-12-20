@@ -54,6 +54,7 @@ function App() {
           <Route path="/studybot" element={<StudyBotCard></StudyBotCard>} />
           <Route path="/video-chat" element={<VideoChatRoom></VideoChatRoom>} />
           <Route path="/top-host" element={<TopHost></TopHost>} />
+          <Route path="/video-chat" element={<VideoChatRoom></VideoChatRoom>} />
         </Routes>
         <br />
         <Navigator></Navigator>

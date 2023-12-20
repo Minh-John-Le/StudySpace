@@ -7,6 +7,7 @@
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.5.0",
+    "agora-rtc-sdk-ng": "^4.20.0",
     "js-cookie": "^3.0.5",
     "pusher-js": "^8.4.0-rc2",
     "react": "^18.0.0",
