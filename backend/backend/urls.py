@@ -24,4 +24,5 @@ urlpatterns = [
     path('api/database/', include('database.urls')),
     path('api/chatbot/', include('chatbot.urls')),
     path('api/chat/', include('chat.urls')),
+    path('api/videochat/', include('videochat.urls')),
 ]
