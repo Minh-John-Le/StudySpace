@@ -136,3 +136,53 @@ class UpdateVideoChatRoomInvitationAPI(APIView):
                 {"error": {"room_does_not_exist": "Room not found."}},
                 status=status.HTTP_404_NOT_FOUND
             )
+        
+class JoinVideoChatRoomAPI(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        invitation_uuid = request.data.get('invitation_uuid', '')
+
+        # Check if the invitation_uuid is valid
+        try:
+            room = VideoChatRooms.objects.get(invitation_uuid=invitation_uuid)
+        except VideoChatRooms.DoesNotExist:
+            return Response(
+                {"error": {"invalid_invitation": "Invalid invitation UUID."}},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Check if the invitation has not expired
+        if room.invitation_exp and room.invitation_exp < timezone.now():
+            return Response(
+                {"error": {"invitation_expired": "Invitation has expired."}},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Check if the user is already a member of the room
+        if VideoChatRooms_Members.objects.filter(room=room, member=request.user).exists():
+            return Response(
+                {"error": {"already_member": "You are already a member of this room."}},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Add the user to the room
+        room_member_data = {
+            'room': room.id,
+            'member': request.user.id,
+            'is_host': False,
+        }
+        room_member_serializer = VideoChatRoomsMembersSerializer(data=room_member_data)
+        if room_member_serializer.is_valid():
+            room_member_serializer.save()
+
+            # Retrieve member details
+            return Response({
+                "success": "You have successfully joined the room.",
+                "room": room.id,
+                "member": request.user.id,
+                "room_name": room.room_name,
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response(room_member_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
