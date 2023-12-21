@@ -11,8 +11,8 @@ class VideoChatRoomMetaContentSerializer(serializers.ModelSerializer):
     host_display_name = serializers.SerializerMethodField(read_only=True)
     host_avatar_name = serializers.SerializerMethodField(read_only=True)
     created_ago = serializers.SerializerMethodField(read_only=True)
-    invitation_uuid = serializers.CharField(write_only=True, required=False)
-    invitation_exp = serializers.DateTimeField(write_only=True, required=False)
+    invitation_uuid = serializers.CharField(required=False)
+    invitation_exp = serializers.DateTimeField(required=False)
 
     class Meta:
         model = VideoChatRooms
@@ -54,3 +54,21 @@ class VideoChatRoomMetaContentSerializer(serializers.ModelSerializer):
 
         return data
 
+
+
+class SingleVideoChatRoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VideoChatRooms
+        fields = '__all__'  
+
+
+class VideoChatRoomsMembersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VideoChatRooms_Members
+        fields = '__all__'
+
+
+class VideoChatRoomUpdateInvitationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VideoChatRooms
+        fields = ['invitation_uuid', 'invitation_exp']
