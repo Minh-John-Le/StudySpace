@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import AgoraRTC from "agora-rtc-sdk-ng";
-import { VideoPlayer } from "./VideoPlayer";
 import { useNavigate, useParams } from "react-router-dom";
 import Cookies from "js-cookie";
+import MyVideoPlayer from "./MyVideoPlayer";
+import classes from "./VideoChatManager.module.css";
 
 const APP_ID = process.env.REACT_APP_AGORA_APP_ID;
 const client = AgoraRTC.createClient({
@@ -32,7 +33,7 @@ const VideoChatManager = () => {
     }
 
     if (mediaType === "audio") {
-      user.audioTrack.play()
+      user.audioTrack.play();
     }
   };
 
@@ -59,7 +60,12 @@ const VideoChatManager = () => {
       );
       const { token, channel_name, uid } = await response.json();
 
-      const uid_2 = await client.join(APP_ID, channel_name, token, uid);
+      const uid_2 = await client.join(
+        APP_ID,
+        channel_name,
+        token,
+        parseInt(uid)
+      );
 
       const newTracks = await AgoraRTC.createMicrophoneAndCameraTracks();
       const [audioTrack, videoTrack] = newTracks;
@@ -110,19 +116,14 @@ const VideoChatManager = () => {
   }, [localTracks, tracks, joined]);
 
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 200px)",
-        }}
-      >
+    <React.Fragment>
+      <div className={classes["user-video-player-group"]}>
         {users.map((user) => (
-          <VideoPlayer key={user.uid} user={user} />
+          <MyVideoPlayer key={user.uid} user={user} />
         ))}
       </div>
       <button onClick={leaveAndRemoveLocalStream}>Leave</button>
-    </div>
+    </React.Fragment>
   );
 };
 

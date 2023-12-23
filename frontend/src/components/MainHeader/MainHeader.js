@@ -23,6 +23,9 @@ const MainHeader = (props) => {
           <Link to={"/studybot"}>
             <span>Study Bot</span>
           </Link>
+          <Link to={"/video-chat"}>
+            <span>Video Call</span>
+          </Link>
         </div>
         <div className={classes["header-user-link"]}>
           <UserLink />
