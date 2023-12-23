@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import AgoraRTC from "agora-rtc-sdk-ng";
 import { VideoPlayer } from "./VideoPlayer";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const APP_ID = process.env.REACT_APP_AGORA_APP_ID;
-const TOKEN =
-  "007eJxTYIieonrq2awMuaWmm5TPupfyb6vT6lXLXdhdLGh2b5cJT64Cg5mlSVpKSrJpirmJpYlBWmJSkoWZeZqBaVKSSZqZhWHyke621IZARoa+zh2sjAwQCOKzMJSkFpcwMAAA6wsevw=="; // Replace with your actual token
-const CHANNEL = "test";
-
 const client = AgoraRTC.createClient({
   mode: "rtc",
   codec: "vp8",
@@ -20,6 +17,11 @@ const VideoChatManager = () => {
   const [localUid, setLocalUid] = useState(null);
   const [joined, setJoined] = useState(false); // Track if the client has joined successfully
 
+  //----------------------------------- API ----------------------------------
+  const authToken = Cookies.get("authToken");
+  const { roomId } = useParams();
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
   const navigate = useNavigate();
 
   const handleUserJoined = async (user, mediaType) => {
@@ -30,7 +32,7 @@ const VideoChatManager = () => {
     }
 
     if (mediaType === "audio") {
-      // user.audioTrack.play()
+      user.audioTrack.play()
     }
   };
 
@@ -45,8 +47,19 @@ const VideoChatManager = () => {
     client.on("user-left", handleUserLeft);
 
     try {
-      const uid = await client.join(APP_ID, CHANNEL, TOKEN, null);
-      setLocalUid(uid);
+      const response = await fetch(
+        `${backendUrl}/api/videochat/get-agora-token/${roomId}/`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Token ${authToken}`,
+          },
+        }
+      );
+      const { token, channel_name, uid } = await response.json();
+
+      const uid_2 = await client.join(APP_ID, channel_name, token, uid);
 
       const newTracks = await AgoraRTC.createMicrophoneAndCameraTracks();
       const [audioTrack, videoTrack] = newTracks;

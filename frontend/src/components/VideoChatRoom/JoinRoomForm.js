@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { GoSearch } from "react-icons/go";
 import classes from "./JoinRoomForm.module.css";
 import Cookies from "js-cookie";
+import Card from "../UI/Card/Card";
 
 const JoinRoomForm = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -45,19 +46,21 @@ const JoinRoomForm = () => {
   };
 
   return (
-    <form onSubmit={handleFormSubmit} className={classes.searchForm}>
-      <div className={classes.searchContainer}>
-        <GoSearch className={classes.searchIcon} />
-        <input
-          type="text"
-          id="invitation"
-          placeholder="Invitation Code"
-          value={searchQuery}
-          onChange={handleInputChange}
-          className={classes.searchInput}
-        />
-      </div>
-    </form>
+    <Card className={classes["search-button-display"]}>
+      <form onSubmit={handleFormSubmit} className={classes.searchForm}>
+        <div className={classes.searchContainer}>
+          <GoSearch className={classes.searchIcon} />
+          <input
+            type="text"
+            id="invitation"
+            placeholder="Invitation Code"
+            value={searchQuery}
+            onChange={handleInputChange}
+            className={classes.searchInput}
+          />
+        </div>
+      </form>
+    </Card>
   );
 };
 

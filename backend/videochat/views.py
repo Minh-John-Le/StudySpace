@@ -228,30 +228,24 @@ class GetAgoraTokenAPI(APIView):
             )
 
         # Replace with your actual Agora App ID and App Certificate
-        app_id = env('AGORA_APP_ID')
-        app_certificate = env("AGORA_APP_CERTIFICATE")
+        appId = env('AGORA_APP_ID')
+        appCertificate = env("AGORA_APP_CERTIFICATE")
 
         # Set the channel name to the room_id
-        channel_name = str(room_id)
+        channelName = str("room_")+str(room_id)
 
         # Set the user role to PUBLISHER
-        role = 1
+        role = 2
 
-        expirationTimeInSeconds = 3600
+        expirationTimeInSeconds = 3600 * 24 
         currentTimeStamp = int(time.time())
         privilegeExpiredTs = currentTimeStamp + expirationTimeInSeconds
         uid = str(request.user.id)
 
 
         # Build the Agora token
-        token = RtcTokenBuilder.buildTokenWithUid(
-            uid,
-            app_id,
-            app_certificate,
-            channel_name,
-            privilegeExpiredTs,
-            role
-        )
+        token = RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelName, uid, role, privilegeExpiredTs)
+
 
         # Return the token in the response
-        return Response({"token": token , "uid": uid, "channel_name": channel_name}, status=status.HTTP_200_OK)
+        return Response({"token": token , "uid": uid, "channel_name": channelName}, status=status.HTTP_200_OK)

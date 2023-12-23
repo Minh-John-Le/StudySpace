@@ -29,7 +29,17 @@
 
 .searchIcon {
   color: var(--color-light-gray);
-  /* margin-left: -2rem; */
+  margin-left: -2rem;
+}
+
+.search-button-display {
+  width: 90%;
+  max-width: 35rem;
+  min-width: 35rem;
+  padding: 3rem;
+  background-color: transparent;
+  box-shadow: none;
+  margin: -2.5rem auto;
 }
 
 /* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
@@ -40,5 +50,11 @@
 @media screen and (max-width: 600px) {
   .searchInput {
     width: 15rem;
+  }
+
+  .search-button-display {
+    max-width: 18rem;
+    min-width: 18rem;
+    width: 90%;
   }
 }
