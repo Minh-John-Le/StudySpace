@@ -13,12 +13,13 @@ import Room from "./components/Room/Room";
 import UpdateRoom from "./components/Room/UpdateRoomForm/UpdateRoom";
 import NewRoom from "./components/Room/NewRoomForm/NewRoom";
 import StudyBotCard from "./components/StudyBot/StudyBotCard";
-import VideoChatRoom from "./components/VideoChatRoom/VideoChatRoom";
 import Navigator from "./components/Navigation/Navigator";
 import TopHost from "./components/TopHost/TopHost";
 import RoomMember from "./components/Room/RoomMember/RoomMember";
 import UserFollower from "./components/Profile/UserFollowerFollowing/UserFollower";
 import UserFollowing from "./components/Profile/UserFollowerFollowing/UserFollowing";
+import VideoChat from "./components/VideoChatRoom/VideoChat";
+import VideoChatManager from "./components/VideoChatRoom/VideoChatManager";
 
 function App() {
   //const ctx = useContext(AuthContext);
@@ -52,9 +53,13 @@ function App() {
           />
           <Route path="/update-room/:id" element={<UpdateRoom></UpdateRoom>} />
           <Route path="/studybot" element={<StudyBotCard></StudyBotCard>} />
-          <Route path="/video-chat" element={<VideoChatRoom></VideoChatRoom>} />
+          <Route
+            path="/video-chat-room/:roomId"
+            element={<VideoChatManager></VideoChatManager>}
+          />
+          <Route path="/video-chat" element={<VideoChat></VideoChat>} />
+
           <Route path="/top-host" element={<TopHost></TopHost>} />
-          <Route path="/video-chat" element={<VideoChatRoom></VideoChatRoom>} />
         </Routes>
         <br />
         <Navigator></Navigator>

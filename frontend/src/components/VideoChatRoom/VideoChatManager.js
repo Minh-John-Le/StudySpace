@@ -4,7 +4,7 @@ import { VideoPlayer } from "./VideoPlayer";
 
 const APP_ID = process.env.REACT_APP_AGORA_APP_ID;
 const TOKEN =
-  "007eJxTYGiOWKZYoss/27DuCo/xy4Ys+UlvT+ucdythWnXX/keXpaICg5mlSVpKSrJpirmJpYlBWmJSkoWZeZqBaVKSSZqZhWEyZ19jakMgIwNHvj8rIwMEgvgsDCWpxSUMDADKAR1p"; // Replace with your actual token
+  "007eJxTYIieonrq2awMuaWmm5TPupfyb6vT6lXLXdhdLGh2b5cJT64Cg5mlSVpKSrJpirmJpYlBWmJSkoWZeZqBaVKSSZqZhWHyke621IZARoa+zh2sjAwQCOKzMJSkFpcwMAAA6wsevw=="; // Replace with your actual token
 const CHANNEL = "test";
 
 const client = AgoraRTC.createClient({
@@ -12,7 +12,7 @@ const client = AgoraRTC.createClient({
   codec: "vp8",
 });
 
-const VideoChatRoom = () => {
+const VideoChatManager = () => {
   const [users, setUsers] = useState([]);
   const [localTracks, setLocalTracks] = useState([]);
   const [tracks, setTracks] = useState([]);
@@ -110,4 +110,4 @@ const VideoChatRoom = () => {
   );
 };
 
-export default VideoChatRoom;
+export default VideoChatManager;

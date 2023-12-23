@@ -1,0 +1,163 @@
+.roomcard {
+  width: 90%;
+  max-width: 35rem;
+  min-width: 35rem;
+  padding: 3rem;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.roomcard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.roomcard-header-left {
+  text-align: left;
+  margin-top: -2rem;
+}
+
+.roomcard-header-right {
+  text-align: right;
+  margin-top: -0.5rem;
+  color: var(--color-light-gray);
+}
+
+.avatar__display-name {
+  color: var(--color-main);
+}
+
+.avatar__link {
+  margin-top: 1.5rem;
+}
+
+.roomcard__room-link {
+  display: flex;
+  align-items: left;
+  text-decoration: none;
+  color: var(--color-main-light);
+  margin-bottom: -1rem;
+}
+
+.roomcard__room-link :hover {
+  color: var(--color-main);
+}
+
+.roomcard__member {
+  display: flex;
+  color: var(--color-light-gray);
+  align-items: left;
+}
+
+.roomcard__member-icon {
+  size: 16;
+  color: var(--color-main);
+  margin-right: 0.5rem;
+}
+
+.room-card hr {
+  border-color: var(--color-gray);
+}
+
+.roomcard__meta {
+  border-top: 1px solid var(--color-dark-medium);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: -2rem;
+}
+
+.roomcard__room_name {
+  margin-top: 1rem;
+  text-align: left;
+  color: var(--color-light);
+  font-size: 150%;
+  font-weight: bold;
+}
+
+/* Add the following styles for the invitation box and button */
+.invitation-button-group {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 1rem;
+}
+
+.videocall-button-group {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+.invitation-box {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--color-dark-medium);
+  background-color: var(--color-dark);
+}
+
+.invitation-box p {
+  color: var(--color-light);
+}
+
+.invitation-code {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background-color: var(--color-dark-light);
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+.expire-code {
+  color: var(--color-error);
+  margin-bottom: 1rem;
+}
+
+.remaining-duration {
+  color: var(--color-light);
+  margin-bottom: 1rem;
+}
+
+.expire-code {
+  color: var(--color-error);
+  margin-top: 1rem;
+}
+/* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
+@media screen and (max-width: 1024px) {
+}
+
+/* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
+@media screen and (max-width: 600px) {
+  .roomcard {
+    width: 90%;
+    max-width: 18rem;
+    min-width: 18rem;
+    padding: 3rem;
+    margin: 2rem auto;
+    text-align: center;
+  }
+
+  .roomcard_room-member {
+    display: none;
+  }
+
+  .roomcard-header {
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .roomcard-header-left {
+    width: 100%;
+    text-align: left;
+  }
+
+  .roomcard-header-right {
+    width: 100%;
+    text-align: left;
+    margin-top: 1rem;
+  }
+
+  .roomcard__meta {
+    flex-direction: column;
+    text-align: left;
+  }
+}

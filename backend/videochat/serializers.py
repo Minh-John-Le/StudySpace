@@ -13,6 +13,8 @@ class VideoChatRoomMetaContentSerializer(serializers.ModelSerializer):
     created_ago = serializers.SerializerMethodField(read_only=True)
     invitation_uuid = serializers.CharField(required=False)
     invitation_exp = serializers.DateTimeField(required=False)
+    remaining_duration = serializers.SerializerMethodField(read_only=True)
+
 
     class Meta:
         model = VideoChatRooms
@@ -50,9 +52,21 @@ class VideoChatRoomMetaContentSerializer(serializers.ModelSerializer):
             # If the user is not the host, hide invitation_uuid and invitation_exp
             data.pop('invitation_uuid', None)
             data.pop('invitation_exp', None)
+            data.pop('remaining_duration', None)
             data['is_host'] = False
 
         return data
+    
+    def get_remaining_duration(self, obj):
+        if obj.invitation_exp:
+            remaining_time = obj.invitation_exp - datetime.now(obj.invitation_exp.tzinfo)
+            if remaining_time.total_seconds() > 0:
+                return {
+                    'days': remaining_time.days,
+                    'hours': remaining_time.seconds // 3600,
+                    'minutes': (remaining_time.seconds // 60) % 60,
+                }
+        return None
 
 
 
@@ -69,6 +83,20 @@ class VideoChatRoomsMembersSerializer(serializers.ModelSerializer):
 
 
 class VideoChatRoomUpdateInvitationSerializer(serializers.ModelSerializer):
+    remaining_duration = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = VideoChatRooms
-        fields = ['invitation_uuid', 'invitation_exp']
+        fields = ['invitation_uuid', 'invitation_exp', 'remaining_duration', ]
+
+
+    def get_remaining_duration(self, obj):
+        if obj.invitation_exp:
+            remaining_time = obj.invitation_exp - datetime.now(obj.invitation_exp.tzinfo)
+            if remaining_time.total_seconds() > 0:
+                return {
+                    'days': remaining_time.days,
+                    'hours': remaining_time.seconds // 3600,
+                    'minutes': (remaining_time.seconds // 60) % 60,
+                }
+        return None

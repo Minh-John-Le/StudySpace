@@ -17,7 +17,7 @@ from .serializers import VideoChatRoomMetaContentSerializer, SingleVideoChatRoom
 
 # Create your views here.
 #====================================================================================
-#------------ Get Room Meta Data --------------------------------------------
+#--------------------------------- Get Room Meta Data -------------------------------
 class VideoChatRoomManagerAPI(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -34,7 +34,27 @@ class VideoChatRoomManagerAPI(APIView):
         # Pass the context with the request to the serializer
         serializer = VideoChatRoomMetaContentSerializer(item, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class VideoChatRoomListAPI(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
+    def get(self, request):
+        user = request.user
+
+        try:
+            # Get all rooms that the user is a member of, ordered by join date (created_at)
+            rooms = VideoChatRooms_Members.objects.filter(member=user).order_by('-created_at').values_list('room', flat=True)
+            room_objects = VideoChatRooms.objects.filter(id__in=rooms)
+        except VideoChatRooms.DoesNotExist:
+            return Response(
+                {"error": {"rooms_not_found": "No rooms found for the user."}},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # Serialize the list of rooms
+        serializer = VideoChatRoomMetaContentSerializer(room_objects, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 #----------------- Create new room --------------------------------------------
 class NewVideoChatRoomAPI(APIView):
