@@ -5,6 +5,8 @@ import Avatar from "../UI/Avatar/Avatar";
 import { useState } from "react";
 import NeonButton from "../UI/Button/NeonButton";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+
 const VideoChatRoomCard = (props) => {
   const [isCopied, setIsCopied] = useState(false);
   const [isCodeVisible, setIsCodeVisible] = useState(false);
@@ -12,6 +14,8 @@ const VideoChatRoomCard = (props) => {
   const [invitationRemainDuration, setInvitationRemainDuration] = useState(
     props.remaining_duration
   );
+
+  const navigate = useNavigate();
 
   //----------------------------------- API ----------------------------------
   const authToken = Cookies.get("authToken");
@@ -48,6 +52,10 @@ const VideoChatRoomCard = (props) => {
     }
   };
 
+  const joinRoom = (event) => {
+    event.preventDefault();
+    navigate(`/video-chat-room/${props.id}`);
+  };
   const copyToClipboard = () => {
     navigator.clipboard.writeText(invitationCode);
     setIsCopied(true);
@@ -81,7 +89,7 @@ const VideoChatRoomCard = (props) => {
       <div className={classes["roomcard__room_name"]}>{props.room_name}</div>
       {/* ======================= Join Call Room ============================*/}
       <div className={classes["videocall-button-group"]}>
-        <NeonButton onClickHandler={copyToClipboard} buttonText={"Join Call"} />
+        <NeonButton onClickHandler={joinRoom} buttonText={"Join Call"} />
       </div>
 
       {/* ======================= Invitation Code ============================*/}

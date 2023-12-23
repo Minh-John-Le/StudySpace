@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AgoraRTC from "agora-rtc-sdk-ng";
 import { VideoPlayer } from "./VideoPlayer";
+import { useNavigate } from "react-router-dom";
 
 const APP_ID = process.env.REACT_APP_AGORA_APP_ID;
 const TOKEN =
@@ -17,6 +18,9 @@ const VideoChatManager = () => {
   const [localTracks, setLocalTracks] = useState([]);
   const [tracks, setTracks] = useState([]);
   const [localUid, setLocalUid] = useState(null);
+  const [joined, setJoined] = useState(false); // Track if the client has joined successfully
+
+  const navigate = useNavigate();
 
   const handleUserJoined = async (user, mediaType) => {
     await client.subscribe(user, mediaType);
@@ -60,6 +64,8 @@ const VideoChatManager = () => {
 
       client.publish(newTracks);
 
+      setJoined(true); // Set joined to true after successful join
+
       console.log("useEffect");
       console.log(users);
     } catch (error) {
@@ -69,14 +75,7 @@ const VideoChatManager = () => {
   };
 
   const leaveAndRemoveLocalStream = async () => {
-    for (let localTrack of localTracks) {
-      localTrack.stop();
-      localTrack.close();
-    }
-
-    await client.leave();
-    setLocalUid(null);
-    //window.location.reload(); // Reload the page or navigate to another page
+    navigate(`/video-chat`);
   };
 
   useEffect(() => {
@@ -89,9 +88,13 @@ const VideoChatManager = () => {
       }
       client.off("user-published", handleUserJoined);
       client.off("user-left", handleUserLeft);
-      client.unpublish(tracks).then(() => client.leave());
+
+      if (joined) {
+        // Only unpublish and leave if the client has successfully joined
+        client.unpublish(tracks).then(() => client.leave());
+      }
     };
-  }, []);
+  }, [localTracks, tracks, joined]);
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>

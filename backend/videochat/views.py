@@ -6,6 +6,10 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import serializers
+from agora_token_builder import RtcTokenBuilder
+import time
+
+import environ
 import uuid
 from django.utils import timezone
 from django.db import models, transaction
@@ -14,6 +18,8 @@ from .serializers import VideoChatRoomMetaContentSerializer, SingleVideoChatRoom
     VideoChatRoomsMembersSerializer, VideoChatRoomUpdateInvitationSerializer
 
 
+env = environ.Env()
+environ.Env.read_env()
 
 # Create your views here.
 #====================================================================================
@@ -206,3 +212,46 @@ class JoinVideoChatRoomAPI(APIView):
             }, status=status.HTTP_200_OK)
         else:
             return Response(room_member_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class GetAgoraTokenAPI(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, room_id):
+        # Check if the user is a member of the specified room
+        try:
+            room_member = VideoChatRooms_Members.objects.get(room__id=room_id, member=request.user)
+        except VideoChatRooms_Members.DoesNotExist:
+            return Response(
+                {"error": {"invalid_membership": "User is not a member of the specified room."}},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # Replace with your actual Agora App ID and App Certificate
+        app_id = env('AGORA_APP_ID')
+        app_certificate = env("AGORA_APP_CERTIFICATE")
+
+        # Set the channel name to the room_id
+        channel_name = str(room_id)
+
+        # Set the user role to PUBLISHER
+        role = 1
+
+        expirationTimeInSeconds = 3600
+        currentTimeStamp = int(time.time())
+        privilegeExpiredTs = currentTimeStamp + expirationTimeInSeconds
+        uid = str(request.user.id)
+
+
+        # Build the Agora token
+        token = RtcTokenBuilder.buildTokenWithUid(
+            uid,
+            app_id,
+            app_certificate,
+            channel_name,
+            privilegeExpiredTs,
+            role
+        )
+
+        # Return the token in the response
+        return Response({"token": token , "uid": uid, "channel_name": channel_name}, status=status.HTTP_200_OK)
