@@ -4,6 +4,18 @@
   justify-content: center;
 }
 
+.userName {
+  position: absolute;
+  align-items: top;
+  justify-content: center;
+  font-size: 150%;
+  top: 20%;
+  color: var(--color-light);
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
 .videoContainer {
   width: 30rem;
   height: 30rem;

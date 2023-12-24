@@ -58,7 +58,7 @@ const VideoChatManager = () => {
           },
         }
       );
-      const { token, channel_name, uid } = await response.json();
+      const { token, channel_name, uid, display_name } = await response.json();
 
       const uid_2 = await client.join(
         APP_ID,
@@ -78,12 +78,13 @@ const VideoChatManager = () => {
           uid,
           videoTrack,
           audioTrack,
+          display_name,
         },
       ]);
 
       client.publish(newTracks);
 
-      setJoined(true); // Set joined to true after successful join
+      setJoined(true); 
 
       console.log("useEffect");
       console.log(users);
@@ -119,7 +120,7 @@ const VideoChatManager = () => {
     <React.Fragment>
       <div className={classes["user-video-player-group"]}>
         {users.map((user) => (
-          <MyVideoPlayer key={user.uid} user={user} />
+          <MyVideoPlayer key={user.uid} user={user} displayName={user.display_name} />
         ))}
       </div>
       <button onClick={leaveAndRemoveLocalStream}>Leave</button>

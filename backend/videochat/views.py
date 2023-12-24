@@ -16,6 +16,7 @@ from django.db import models, transaction
 from .models import VideoChatRooms, VideoChatRooms_Members
 from .serializers import VideoChatRoomMetaContentSerializer, SingleVideoChatRoomSerializer, \
     VideoChatRoomsMembersSerializer, VideoChatRoomUpdateInvitationSerializer
+from authentication.models import UserProfile
 
 
 env = environ.Env()
@@ -226,6 +227,16 @@ class GetAgoraTokenAPI(APIView):
                 {"error": {"invalid_membership": "User is not a member of the specified room."}},
                 status=status.HTTP_403_FORBIDDEN
             )
+        
+        # Retrieve UserProfile associated with the user
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+        except UserProfile.DoesNotExist:
+            return Response(
+                {"error": {"profile_not_found": "User profile not found."}},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
 
         # Replace with your actual Agora App ID and App Certificate
         appId = env('AGORA_APP_ID')
@@ -248,4 +259,10 @@ class GetAgoraTokenAPI(APIView):
 
 
         # Return the token in the response
-        return Response({"token": token , "uid": uid, "channel_name": channelName}, status=status.HTTP_200_OK)
+        # Return the token and display_name in the response
+        return Response({
+            "token": token,
+            "uid": uid,
+            "channel_name": channelName,
+            "display_name": user_profile.display_name,
+        }, status=status.HTTP_200_OK)
