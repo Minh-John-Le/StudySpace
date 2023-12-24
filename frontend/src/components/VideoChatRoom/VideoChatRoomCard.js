@@ -6,6 +6,15 @@ import { useState } from "react";
 import NeonButton from "../UI/Button/NeonButton";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import IconButton from "../UI/Button/IconButton";
+import { TbPhoneFilled } from "react-icons/tb";
+import { MdModeEdit } from "react-icons/md";
+import { TiDelete } from "react-icons/ti";
+import { HiEye } from "react-icons/hi";
+import { HiEyeOff } from "react-icons/hi";
+import { FaFile } from "react-icons/fa6";
+import { FaFileCircleCheck } from "react-icons/fa6";
+import { HiRefresh } from "react-icons/hi";
 
 const VideoChatRoomCard = (props) => {
   const [isCopied, setIsCopied] = useState(false);
@@ -149,7 +158,8 @@ const VideoChatRoomCard = (props) => {
       </div>
       <div className={classes["roomcard__room_name"]}>{props.room_name}</div>
 
-      {/* ======================= Join Call Room ============================*/}
+      {/* ======================= Room Button ============================*/}
+      {/*--------------------- Big Screen --------------------- */}
       <div className={classes["videocall-button-group"]}>
         <NeonButton onClickHandler={joinRoom} buttonText={"Join Call"} />
 
@@ -162,6 +172,21 @@ const VideoChatRoomCard = (props) => {
         )}
         {props.is_host && (
           <NeonButton onClickHandler={deleteRoom} buttonText={"Delete"} />
+        )}
+      </div>
+      {/*--------------------- Small Screen --------------------- */}
+      <div className={classes["videocall-button-group-alt"]}>
+        <IconButton onClickHandler={joinRoom} icon={TbPhoneFilled} />
+
+        {!props.is_host && (
+          <IconButton onClickHandler={leaveRoom} icon={TiDelete} />
+        )}
+
+        {props.is_host && (
+          <IconButton onClickHandler={editRoomHandler} icon={MdModeEdit} />
+        )}
+        {props.is_host && (
+          <IconButton onClickHandler={deleteRoom} icon={TiDelete} />
         )}
       </div>
 
@@ -193,6 +218,8 @@ const VideoChatRoomCard = (props) => {
               <div className={classes["expire-code"]}>Code has expired</div>
             )}
 
+            {/* ======================= Room Code Button ============================*/}
+            {/* ----------------------- Big Screen ----------------------------*/}
             <div className={classes["invitation-button-group"]}>
               <NeonButton
                 onClickHandler={copyToClipboard}
@@ -203,11 +230,28 @@ const VideoChatRoomCard = (props) => {
                 buttonText={isCodeVisible ? "Hide Code" : "Reveal Code"}
               />
             </div>
+
             <div className={classes["invitation-button-group"]}>
               <NeonButton
                 onClickHandler={generateNewCode}
                 buttonText={"New Code"}
               />
+            </div>
+
+            {/* ----------------------- Small Screen ----------------------------*/}
+            <div className={classes["invitation-button-group-alt"]}>
+              <IconButton
+                onClickHandler={copyToClipboard}
+                icon={isCopied ? FaFileCircleCheck : FaFile}
+              />
+              <IconButton
+                onClickHandler={toggleCodeVisibility}
+                icon={isCodeVisible ? HiEyeOff : HiEye}
+              />
+            </div>
+
+            <div className={classes["invitation-button-group-alt"]}>
+              <IconButton onClickHandler={generateNewCode} icon={HiRefresh} />
             </div>
           </div>
         </div>

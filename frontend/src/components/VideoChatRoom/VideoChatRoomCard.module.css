@@ -83,12 +83,26 @@
   margin-bottom: 1rem;
 }
 
+.invitation-button-group-alt {
+  display: none;
+  gap: 5px;
+  margin-bottom: 1rem;
+}
+
 .videocall-button-group {
   display: flex;
   gap: 5px;
   margin-bottom: 1rem;
   margin-top: 1rem;
 }
+
+.videocall-button-group-alt {
+  display: none;
+  gap: 5px;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
 .invitation-box {
   margin-top: 1rem;
   padding: 1rem;
@@ -124,6 +138,21 @@
 
 /* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
 @media screen and (max-width: 1024px) {
+  .videocall-button-group {
+    display: none;
+  }
+
+  .videocall-button-group-alt {
+    display: flex;
+  }
+
+  .invitation-button-group {
+    display: none;
+  }
+
+  .invitation-button-group-alt {
+    display: flex;
+  }
 }
 
 /* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/

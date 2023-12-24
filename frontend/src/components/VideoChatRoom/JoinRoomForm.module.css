@@ -52,8 +52,19 @@
 .button-group-display {
   display: flex;
 }
+
+.button-group-display-alt {
+  display: none;
+}
 /* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
 @media screen and (max-width: 1024px) {
+  .button-group-display {
+    display: none;
+  }
+
+  .button-group-display-alt {
+    display: flex;
+  }
 }
 
 /* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/

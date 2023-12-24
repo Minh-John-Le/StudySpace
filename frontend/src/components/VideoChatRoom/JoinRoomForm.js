@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import Card from "../UI/Card/Card";
 import { useNavigate } from "react-router-dom";
 import NeonButton from "../UI/Button/NeonButton";
+import IconButton from "../UI/Button/IconButton";
+import { IoAddCircle } from "react-icons/io5";
 
 const JoinRoomForm = (props) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -77,6 +79,12 @@ const JoinRoomForm = (props) => {
             buttonText={"+ New Room"}
             onClickHandler={addRoomHandler}
           ></NeonButton>
+        </div>
+      </div>
+
+      <div className={classes["button-group-display-alt"]}>
+        <div className={classes["button-display"]}>
+          <IconButton icon={IoAddCircle} onClickHandler={addRoomHandler} />
         </div>
       </div>
     </Card>
