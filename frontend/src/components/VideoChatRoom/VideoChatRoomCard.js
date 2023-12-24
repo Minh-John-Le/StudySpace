@@ -89,6 +89,34 @@ const VideoChatRoomCard = (props) => {
     }
   };
 
+  const leaveRoom = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await fetch(
+        `${backendUrl}/api/videochat/leave-videochat-room/${props.id}/`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Token ${authToken}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        props.deleteRoomById(props.id);
+        //navigate(`/video-chat`);
+      } else {
+        // Handle error response
+        console.error("Failed to generate a new code");
+      }
+    } catch (error) {
+      // Handle network error
+      console.error("Network error:", error.message);
+    }
+  };
+
   const copyToClipboard = () => {
     navigator.clipboard.writeText(invitationCode);
     setIsCopied(true);
@@ -126,7 +154,7 @@ const VideoChatRoomCard = (props) => {
         <NeonButton onClickHandler={joinRoom} buttonText={"Join Call"} />
 
         {!props.is_host && (
-          <NeonButton onClickHandler={joinRoom} buttonText={"Leave"} />
+          <NeonButton onClickHandler={leaveRoom} buttonText={"Leave"} />
         )}
 
         {props.is_host && (

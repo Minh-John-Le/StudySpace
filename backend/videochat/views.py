@@ -125,6 +125,24 @@ class VideoChatRoomListAPI(APIView):
         serializer = VideoChatRoomMetaContentSerializer(room_objects, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+class LeaveVideoChatRoomAPI(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, room_id):
+        try:
+            # Try to get the room member entry and delete it
+            room_member_entry = VideoChatRooms_Members.objects.get(room_id=room_id, member=request.user)
+            room_member_entry.delete()
+
+            return Response({"success": "Successfully left the room."}, status=status.HTTP_200_OK)
+
+        except VideoChatRooms_Members.DoesNotExist:
+            return Response(
+                {"error": {"not_member": "You are not a member of this room."}},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
 #----------------- Create new room --------------------------------------------
 class NewVideoChatRoomAPI(APIView):
     authentication_classes = [TokenAuthentication]
@@ -265,7 +283,7 @@ class JoinVideoChatRoomAPI(APIView):
             room_member_serializer.save()
 
             # Retrieve member details
-            member_details = RoomMemberResponseSerializer({
+            member_details = RoomMemberResponseSerializer(data={
                 "success": "You have successfully joined the room.",
                 "room": room.id,
                 "id": room.id,
@@ -275,11 +293,15 @@ class JoinVideoChatRoomAPI(APIView):
                 "host_display_name": room.host.userprofile.display_name,
                 "host_avatar_name": room.host.userprofile.avatar_name,
                 "created_at": room.created_at,
-            }).data
+            })
 
-            return Response(member_details, status=status.HTTP_200_OK)
+            if member_details.is_valid():
+                return Response(member_details.validated_data, status=status.HTTP_200_OK)
+            else:
+                return Response(member_details.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(room_member_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class GetAgoraTokenAPI(APIView):
     authentication_classes = [TokenAuthentication]

@@ -43,6 +43,7 @@ const JoinRoomForm = (props) => {
 
       if (response.ok) {
         const data = await response.json();
+
         props.addNewRoom(data);
         //console.log("Success:", data);
       } else {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import JoinRoomForm from "./JoinRoomForm";
 import VideoChatRoomCardList from "./VideoChatRoomCardList";
 import Cookies from "js-cookie";
+import classes from "./VideoChat.module.css";
 
 const VideoChat = () => {
   const [roomList, setRoomList] = useState([]);
@@ -59,6 +60,7 @@ const VideoChat = () => {
         deleteRoomById={deleteRoomById}
         roomList={roomList}
       ></VideoChatRoomCardList>
+      <div className={classes["ending-space"]}></div>
     </div>
   );
 };

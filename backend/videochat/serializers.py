@@ -111,3 +111,15 @@ class RoomMemberResponseSerializer(serializers.Serializer):
     host_display_name = serializers.CharField()
     host_avatar_name = serializers.CharField()
     created_at = serializers.DateTimeField()
+    created_ago = serializers.SerializerMethodField(read_only=True)
+
+
+    def get_created_ago(self, obj):
+        if obj.created_at:
+            created_at = datetime.fromisoformat(str(obj.created_at))
+            time_difference = timesince(created_at)
+            return time_difference
+        return ""
+    
+    class Meta:
+        fields = '__all__'
