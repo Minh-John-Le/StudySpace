@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 class VideoChatRooms(models.Model):
     host = models.ForeignKey(User, on_delete=models.CASCADE)
     room_name = models.CharField(max_length=32)
-    description = models.TextField(max_length=256, blank=True, default="")
     invitation_uuid = models.CharField(max_length=36, unique=True, null=True, blank=True)
     invitation_exp = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

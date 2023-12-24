@@ -13,7 +13,7 @@ const MyVideoPlayer = (props) => {
   return (
     <div className={classes.videoPlayer}>
       <div ref={ref} className={classes.videoContainer}></div>
-      <div className={classes.userName}>{props.displayName}</div>
+      {/* <div className={classes.userName}>{props.displayName}</div> */}
     </div>
   );
 };

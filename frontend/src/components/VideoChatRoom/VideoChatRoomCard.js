@@ -87,6 +87,10 @@ const VideoChatRoomCard = (props) => {
         </div>
       </div>
       <div className={classes["roomcard__room_name"]}>{props.room_name}</div>
+
+      <div className={classes.subtitle}>ROOM INFO</div>
+      <div className={classes.description}>{props.description}</div>
+
       {/* ======================= Join Call Room ============================*/}
       <div className={classes["videocall-button-group"]}>
         <NeonButton onClickHandler={joinRoom} buttonText={"Join Call"} />

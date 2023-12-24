@@ -88,7 +88,7 @@ const VideoChatManager = () => {
           uid,
           videoTrack,
           audioTrack,
-          display_name,
+          // display_name,
         },
       ]);
 
