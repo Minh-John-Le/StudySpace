@@ -6,7 +6,7 @@ import Card from "../UI/Card/Card";
 import { useNavigate } from "react-router-dom";
 import NeonButton from "../UI/Button/NeonButton";
 
-const JoinRoomForm = () => {
+const JoinRoomForm = (props) => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
@@ -43,7 +43,8 @@ const JoinRoomForm = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Success:", data);
+        props.addNewRoom(data);
+        //console.log("Success:", data);
       } else {
         const errorData = await response.json();
         console.error("Error:", errorData);

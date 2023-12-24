@@ -99,3 +99,15 @@ class VideoChatRoomUpdateInvitationSerializer(serializers.ModelSerializer):
                     'minutes': (remaining_time.seconds // 60) % 60,
                 }
         return None
+
+
+class RoomMemberResponseSerializer(serializers.Serializer):
+    success = serializers.CharField()
+    room = serializers.IntegerField()
+    id = serializers.IntegerField()
+    member = serializers.IntegerField()
+    room_name = serializers.CharField()
+    host = serializers.IntegerField()
+    host_display_name = serializers.CharField()
+    host_avatar_name = serializers.CharField()
+    created_at = serializers.DateTimeField()

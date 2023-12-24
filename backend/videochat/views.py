@@ -15,7 +15,8 @@ from django.utils import timezone
 from django.db import models, transaction
 from .models import VideoChatRooms, VideoChatRooms_Members
 from .serializers import VideoChatRoomMetaContentSerializer, SingleVideoChatRoomSerializer, \
-    VideoChatRoomsMembersSerializer, VideoChatRoomUpdateInvitationSerializer
+    VideoChatRoomsMembersSerializer, VideoChatRoomUpdateInvitationSerializer, RoomMemberResponseSerializer \
+    
 from authentication.models import UserProfile
 
 
@@ -129,58 +130,58 @@ class NewVideoChatRoomAPI(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     def post(self, request):
-            try:
-                with transaction.atomic():
-                    room_name = request.data.get('room_name', '')
+        try:
+            with transaction.atomic():
+                room_name = request.data.get('room_name', '')
 
-                    existing_data = {
-                        'room_name': room_name,
-                    }
+                existing_data = {
+                    'room_name': room_name,
+                }
 
-                    # Generate a random UUID
-                    invitation_uuid = str(uuid.uuid4())
+                # Generate a random UUID
+                invitation_uuid = str(uuid.uuid4())
 
-                    # Set expiration date to 1 day away from the creation date
-                    expiration_date = timezone.now() + timezone.timedelta(days=1)
+                # Set expiration date to 1 day away from the creation date
+                expiration_date = timezone.now() + timezone.timedelta(days=1)
 
-                    # Append additional data
-                    additional_data = {
-                        "host": request.user.id,
-                        "invitation_uuid": invitation_uuid,
-                        "invitation_exp": expiration_date,
-                    }
+                # Append additional data
+                additional_data = {
+                    "host": request.user.id,
+                    "invitation_uuid": invitation_uuid,
+                    "invitation_exp": expiration_date,
+                }
 
-                    # Combine existing data and additional data
-                    updated_data = {**existing_data, **additional_data}
-                    serialized_item = SingleVideoChatRoomSerializer(data=updated_data)
+                # Combine existing data and additional data
+                updated_data = {**existing_data, **additional_data}
+                serialized_item = SingleVideoChatRoomSerializer(data=updated_data)
 
-                    if not serialized_item.is_valid():
-                        raise serializers.ValidationError(
-                            serialized_item.errors)
-                    serialized_item.save()
+                if not serialized_item.is_valid():
+                    raise serializers.ValidationError(
+                        serialized_item.errors)
+                serialized_item.save()
 
-                    # After creating the room, get the room_id
-                    room_id = serialized_item.instance.id
+                # After creating the room, get the room_id
+                room_id = serialized_item.instance.id
 
-                    # Create a new entry in the Rooms_Members table
-                    room_member_data = {
-                        'member': request.user.id,
-                        'room': room_id,
-                        'is_host': True,
-                    }
-                    room_member_serializer = VideoChatRoomsMembersSerializer(
-                        data=room_member_data)
-                    if not room_member_serializer.is_valid():
-                        raise serializers.ValidationError(
-                            room_member_serializer.errors)
-                    room_member_serializer.save()
+                # Create a new entry in the Rooms_Members table
+                room_member_data = {
+                    'member': request.user.id,
+                    'room': room_id,
+                    'is_host': True,
+                }
+                room_member_serializer = VideoChatRoomsMembersSerializer(
+                    data=room_member_data)
+                if not room_member_serializer.is_valid():
+                    raise serializers.ValidationError(
+                        room_member_serializer.errors)
+                room_member_serializer.save()
 
-                    return Response(serialized_item.data, status=status.HTTP_200_OK)
-            except serializers.ValidationError as e:
-                return Response({'error': e.detail}, status=status.HTTP_400_BAD_REQUEST)
-            except Exception as e:
-                error_message = str(e)
-                return Response({'error': error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response(serialized_item.data, status=status.HTTP_200_OK)
+        except serializers.ValidationError as e:
+            return Response({'error': e.detail}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            error_message = str(e)
+            return Response({'error': error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
 
 #----------------- Update room invitation uuid --------------------------------------------
@@ -264,12 +265,19 @@ class JoinVideoChatRoomAPI(APIView):
             room_member_serializer.save()
 
             # Retrieve member details
-            return Response({
+            member_details = RoomMemberResponseSerializer({
                 "success": "You have successfully joined the room.",
                 "room": room.id,
+                "id": room.id,
                 "member": request.user.id,
                 "room_name": room.room_name,
-            }, status=status.HTTP_200_OK)
+                "host": room.host.id,
+                "host_display_name": room.host.userprofile.display_name,
+                "host_avatar_name": room.host.userprofile.avatar_name,
+                "created_at": room.created_at,
+            }).data
+
+            return Response(member_details, status=status.HTTP_200_OK)
         else:
             return Response(room_member_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
