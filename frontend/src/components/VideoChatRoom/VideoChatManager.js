@@ -4,6 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import MyVideoPlayer from "./MyVideoPlayer";
 import classes from "./VideoChatManager.module.css";
+import IconButton from "../UI/Button/IconButton";
+import { RiDoorOpenFill } from "react-icons/ri";
+import { BsFillCameraVideoFill } from "react-icons/bs";
+import { BsMicFill } from "react-icons/bs";
+import { BsMicMuteFill } from "react-icons/bs";
+import { BsCameraVideoOffFill } from "react-icons/bs";
 
 const APP_ID = process.env.REACT_APP_AGORA_APP_ID;
 const client = AgoraRTC.createClient({
@@ -16,7 +22,9 @@ const VideoChatManager = () => {
   const [localTracks, setLocalTracks] = useState([]);
   const [tracks, setTracks] = useState([]);
   const [localUid, setLocalUid] = useState(null);
-  const [joined, setJoined] = useState(false); // Track if the client has joined successfully
+  const [joined, setJoined] = useState(false);
+  const [isCameraEnabled, setIsCameraEnabled] = useState(true);
+  const [isMicEnabled, setIsMicEnabled] = useState(true);
 
   //----------------------------------- API ----------------------------------
   const authToken = Cookies.get("authToken");
@@ -60,6 +68,8 @@ const VideoChatManager = () => {
       );
       const { token, channel_name, uid, display_name } = await response.json();
 
+      setLocalUid(parseInt(uid));
+
       const uid_2 = await client.join(
         APP_ID,
         channel_name,
@@ -84,18 +94,35 @@ const VideoChatManager = () => {
 
       client.publish(newTracks);
 
-      setJoined(true); 
-
-      console.log("useEffect");
-      console.log(users);
+      setJoined(true);
     } catch (error) {
       console.error(error);
-      // Handle join error
     }
   };
 
   const leaveAndRemoveLocalStream = async () => {
     navigate(`/video-chat`);
+  };
+
+  const toggleCamera = async (e) => {
+    if (localTracks[1].muted) {
+      await localTracks[1].setMuted(false);
+      setIsCameraEnabled(true);
+    } else {
+      await localTracks[1].setMuted(true);
+      setIsCameraEnabled(false);
+    }
+  };
+
+  let toggleMic = async (e) => {
+    console.log("TOGGLE MIC TRIGGERED");
+    if (localTracks[0].muted) {
+      await localTracks[0].setMuted(false);
+      setIsMicEnabled(true);
+    } else {
+      await localTracks[0].setMuted(true);
+      setIsMicEnabled(false);
+    }
   };
 
   useEffect(() => {
@@ -120,10 +147,27 @@ const VideoChatManager = () => {
     <React.Fragment>
       <div className={classes["user-video-player-group"]}>
         {users.map((user) => (
-          <MyVideoPlayer key={user.uid} user={user} displayName={user.display_name} />
+          <MyVideoPlayer
+            key={user.uid}
+            user={user}
+            displayName={user.display_name}
+          />
         ))}
       </div>
-      <button onClick={leaveAndRemoveLocalStream}>Leave</button>
+      <div className={classes["button-group"]}>
+        <IconButton
+          icon={isCameraEnabled ? BsFillCameraVideoFill : BsCameraVideoOffFill}
+          onClickHandler={toggleCamera}
+        />
+        <IconButton
+          icon={isMicEnabled ? BsMicFill : BsMicMuteFill}
+          onClickHandler={toggleMic}
+        />
+        <IconButton
+          icon={RiDoorOpenFill}
+          onClickHandler={leaveAndRemoveLocalStream}
+        />
+      </div>
     </React.Fragment>
   );
 };

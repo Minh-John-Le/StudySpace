@@ -16,7 +16,10 @@
   border-radius: 5px;
   font-weight: bold;
 }
+
 .videoContainer {
   width: 30rem;
   height: 30rem;
+  border: 5px solid var(--color-light);
+  background-color: black;
 }
