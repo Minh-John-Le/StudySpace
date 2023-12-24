@@ -205,11 +205,11 @@ class RoomManagerAPI(APIView):
                 room_profile.topic = data['topic']
 
             # Validate the serializer
-            print(room_profile)
+            #print(room_profile)
             serializer = SingleRoomSerializer(
                 room_profile, data=data, partial=True)
 
-            print(serializer.is_valid())
+            #print(serializer.is_valid())
             if not serializer.is_valid():
                 raise serializers.ValidationError(serializer.errors)
 

@@ -69,7 +69,6 @@ class VideoChatRoomMetaContentSerializer(serializers.ModelSerializer):
         return None
 
 
-
 class SingleVideoChatRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = VideoChatRooms

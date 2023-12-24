@@ -56,7 +56,53 @@ class VideoChatRoomManagerAPI(APIView):
         room.delete()
 
         return Response({"message": "Room deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
-        
+    
+    def patch(self, request, room_id):
+        try:
+            # Retrieve the room
+            room = VideoChatRooms.objects.get(id=room_id, host=request.user)
+        except VideoChatRooms.DoesNotExist:
+            return Response(
+                {"error": {"room_does_not_exist": "Room not found."}},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        try:
+            # Check if the authenticated user is the host of the room
+            if request.user != room.host:
+                raise PermissionDenied("You do not have permission to edit this room.")
+
+            data = request.data  # Assuming the request data is in JSON format
+
+            # Validate and update fields
+            if 'room_name' in data:
+                room.room_name = data['room_name']
+
+            # You can add similar checks for other fields like description, topic, etc.
+
+            # Validate the serializer
+            serializer = SingleVideoChatRoomSerializer(
+                room, data=data, partial=True)
+
+            if not serializer.is_valid():
+                raise serializers.ValidationError(serializer.errors)
+
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except serializers.ValidationError as e:
+            return Response({'error': e.detail}, status=status.HTTP_400_BAD_REQUEST)
+        except PermissionDenied as e:
+            return Response({'error': {"Permission_Denied": str(e)}}, status=status.HTTP_403_FORBIDDEN)
+        except VideoChatRooms.DoesNotExist:
+            return Response(
+                {"error": {"room_does_not_exist": "Room not found."}},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            error_message = str(e)
+            return Response({'error': {error_message}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class VideoChatRoomListAPI(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]

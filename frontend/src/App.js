@@ -21,6 +21,7 @@ import UserFollowing from "./components/Profile/UserFollowerFollowing/UserFollow
 import VideoChat from "./components/VideoChatRoom/VideoChat";
 import VideoChatManager from "./components/VideoChatRoom/VideoChatManager";
 import NewVideoChatRoom from "./components/VideoChatRoom/NewVideoChatRoom/NewVideoChatRoom";
+import UpdateVideoChatRoom from "./components/VideoChatRoom/UpdateVideoChatRoom/UpdateVideoChatRoom";
 
 function App() {
   //const ctx = useContext(AuthContext);
@@ -58,7 +59,15 @@ function App() {
             path="/video-chat-room/:roomId"
             element={<VideoChatManager></VideoChatManager>}
           />
-          <Route path="/new-video-chat-room"element={<NewVideoChatRoom></NewVideoChatRoom>} />
+          <Route
+            path="/new-video-chat-room"
+            element={<NewVideoChatRoom></NewVideoChatRoom>}
+          />
+
+          <Route
+            path="/update-video-chat-room/:id"
+            element={<UpdateVideoChatRoom></UpdateVideoChatRoom>}
+          />
 
           <Route path="/video-chat" element={<VideoChat></VideoChat>} />
 

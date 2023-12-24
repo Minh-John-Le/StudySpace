@@ -21,6 +21,7 @@ const JoinRoomForm = () => {
   };
 
   const addRoomHandler = (event) => {
+    event.preventDefault();
     navigate("/new-video-chat-room");
   };
 

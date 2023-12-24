@@ -96,7 +96,7 @@ const NewVideoChatRoom = () => {
     <React.Fragment>
       <AuthenticateChecker></AuthenticateChecker>
       {hasSubmitError && <ErrorCard errorMessages={errorMessage}></ErrorCard>}
-      <FormCard title={"Room Info"}>
+      <FormCard title={"VideoChat Room Info"}>
         <form onSubmit={submitHandler}>
           <Input
             id="room_name"

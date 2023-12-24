@@ -3,13 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import useInput from "../../../hooks/use-input";
 import Button from "../../UI/Button/Button";
 import Input from "../../UI/Input/Input";
-import classes from "./UpdateRoom.module.css";
+import classes from "./UpdateVideoChatRoom.module.css";
 import Cookies from "js-cookie";
 import ErrorCard from "../../UI/ErrorCard/ErrorCard";
 import FormCard from "../../UI/FormCard/FormCard";
 import AuthenticateChecker from "../../Home/AuthenticateChecker";
 
-const UpdateRoom = () => {
+const UpdateVideoChatRoom = () => {
   //==================================== VARIABLE ===========================
 
   const [roomInfo, setRoomInfo] = useState([""]);
@@ -27,15 +27,6 @@ const UpdateRoom = () => {
 
   // -------------------------------------- Room Info --------------------------
   const {
-    value: enteredTopic,
-    isValid: enteredTopicIsValid,
-    hasError: topicInputHasError,
-    valueChangeHandler: topicChangedHandler,
-    inputBlurHandler: topicBlurHandler,
-    reset: resetTopicInput,
-  } = useInput((value) => value.trim().length > 0 && value.trim().length <= 20);
-
-  const {
     value: enteredRoomName,
     isValid: enteredRoomNameIsValid,
     hasError: roomNameInputHasError,
@@ -44,19 +35,10 @@ const UpdateRoom = () => {
     reset: resetroomNameInput,
   } = useInput((value) => value.trim().length > 0 && value.trim().length <= 32);
 
-  const {
-    value: enteredDescription,
-    isValid: enteredDescriptionIsValid,
-    hasError: descriptionInputHasError,
-    valueChangeHandler: descriptionChangedHandler,
-    inputBlurHandler: descriptionBlurHandler,
-    reset: resetDescriptionInput,
-  } = useInput((value) => value.trim().length <= 256);
-
   //==================================== FUNCTIONS ===========================
   const cancelHandler = (event) => {
     event.preventDefault();
-    navigate(`/room/${id}`);
+    navigate(`/video-chat`);
   };
 
   // Update Room Info
@@ -64,14 +46,12 @@ const UpdateRoom = () => {
     event.preventDefault();
     const roomData = {
       room_name: enteredRoomName,
-      description: enteredDescription,
-      topic: enteredTopic,
     };
 
     try {
       // Send a PATCH request to your backend login endpoint
       const response = await fetch(
-        `${backendUrl}/api/database/room-manager/${id}/`,
+        `${backendUrl}/api/videochat/videochat-room-manager/${id}/`,
         {
           method: "PATCH",
           headers: {
@@ -106,7 +86,7 @@ const UpdateRoom = () => {
       }
 
       setHasSubmitError(false);
-      navigate(`/room/${id}`);
+      navigate(`/video-chat`);
     } catch (error) {
       console.error("An error occurred:", error);
     }
@@ -116,7 +96,7 @@ const UpdateRoom = () => {
   useEffect(() => {
     const fetchRoomInfo = async () => {
       try {
-        const url = `${backendUrl}/api/database/room-manager/${id}/`;
+        const url = `${backendUrl}/api/videochat/videochat-room-manager/${id}/`;
 
         const response = await fetch(url, {
           method: "GET",
@@ -155,8 +135,6 @@ const UpdateRoom = () => {
 
         // Set input values based on the received data
         resetroomNameInput(roomInfoRs.room_name);
-        resetTopicInput(roomInfoRs.topic);
-        resetDescriptionInput(roomInfoRs.description);
       } catch (error) {
         // Handle any errors that occur during the fetch or state updates
         console.error("Error fetching room info:", error);
@@ -174,18 +152,6 @@ const UpdateRoom = () => {
       <FormCard title={"Update Room Info"}>
         <form onSubmit={submitHandler}>
           <Input
-            id="topic"
-            label="Topic"
-            type="text"
-            isValid={!topicInputHasError}
-            value={enteredTopic}
-            onChange={topicChangedHandler}
-            onBlur={topicBlurHandler}
-            errorMessage={
-              "Topic cannot be empty and max length is 20 characters."
-            }
-          ></Input>
-          <Input
             id="room_name"
             label="Room Name"
             type="text"
@@ -196,16 +162,6 @@ const UpdateRoom = () => {
             errorMessage={
               "Room Name cannot be empty and max length is 32 characters."
             }
-          ></Input>
-          <Input
-            id="descripion"
-            label="Descripion"
-            type="textarea"
-            isValid={!descriptionInputHasError}
-            value={enteredDescription}
-            onChange={descriptionChangedHandler}
-            onBlur={descriptionBlurHandler}
-            errorMessage={"description's maxlength is 256 characters."}
           ></Input>
 
           <div className={classes.actions}>
@@ -226,4 +182,4 @@ const UpdateRoom = () => {
   );
 };
 
-export default UpdateRoom;
+export default UpdateVideoChatRoom;

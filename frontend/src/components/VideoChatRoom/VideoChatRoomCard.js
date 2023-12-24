@@ -57,6 +57,10 @@ const VideoChatRoomCard = (props) => {
     navigate(`/video-chat-room/${props.id}`);
   };
 
+  const editRoomHandler = (event) => {
+    event.preventDefault();
+    navigate(`/update-video-chat-room/${props.id}`);
+  };
   const deleteRoom = async (event) => {
     event.preventDefault();
 
@@ -126,7 +130,7 @@ const VideoChatRoomCard = (props) => {
         )}
 
         {props.is_host && (
-          <NeonButton onClickHandler={joinRoom} buttonText={"Edit"} />
+          <NeonButton onClickHandler={editRoomHandler} buttonText={"Edit"} />
         )}
         {props.is_host && (
           <NeonButton onClickHandler={deleteRoom} buttonText={"Delete"} />
