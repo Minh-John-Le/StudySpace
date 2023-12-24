@@ -154,6 +154,8 @@ const VideoChatManager = () => {
           />
         ))}
       </div>
+      <div className={classes["ending-space"]}></div>
+
       <div className={classes["button-group"]}>
         <IconButton
           icon={isCameraEnabled ? BsFillCameraVideoFill : BsCameraVideoOffFill}

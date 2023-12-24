@@ -18,8 +18,24 @@
 }
 
 .videoContainer {
-  width: 30rem;
-  height: 30rem;
+  width: 42rem;
+  height: 42rem;
   border: 5px solid var(--color-light);
   background-color: black;
+}
+
+/* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
+@media screen and (max-width: 1024px) {
+  .videoContainer {
+    width: 35rem;
+    height: 35rem;
+  }
+}
+
+/* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
+@media screen and (max-width: 600px) {
+  .videoContainer {
+    width: 20rem;
+    height: 20rem;
+  }
 }
