@@ -20,8 +20,6 @@ const client = AgoraRTC.createClient({
 const VideoChatManager = () => {
   const [users, setUsers] = useState([]);
   const [localTracks, setLocalTracks] = useState([]);
-  const [tracks, setTracks] = useState([]);
-  const [localUid, setLocalUid] = useState(null);
   const [joined, setJoined] = useState(false);
   const [isCameraEnabled, setIsCameraEnabled] = useState(true);
   const [isMicEnabled, setIsMicEnabled] = useState(true);
@@ -37,7 +35,11 @@ const VideoChatManager = () => {
     await client.subscribe(user, mediaType);
 
     if (mediaType === "video") {
-      setUsers((previousUsers) => [...previousUsers, user]);
+      const updatedUsers = users.filter(
+        (existingUser) => existingUser.uid !== user.uid
+      );
+
+      setUsers([...updatedUsers, user]);
     }
 
     if (mediaType === "audio") {
@@ -68,8 +70,6 @@ const VideoChatManager = () => {
       );
       const { token, channel_name, uid, display_name } = await response.json();
 
-      setLocalUid(parseInt(uid));
-
       const uid_2 = await client.join(
         APP_ID,
         channel_name,
@@ -81,7 +81,6 @@ const VideoChatManager = () => {
       const [audioTrack, videoTrack] = newTracks;
 
       setLocalTracks(newTracks);
-      setTracks(newTracks);
       setUsers((previousUsers) => [
         ...previousUsers,
         {
@@ -127,7 +126,7 @@ const VideoChatManager = () => {
 
   useEffect(() => {
     joinAndDisplayLocalStream();
-
+    console.log(users.length);
     return () => {
       for (let localTrack of localTracks) {
         localTrack.stop();
@@ -138,10 +137,10 @@ const VideoChatManager = () => {
 
       if (joined) {
         // Only unpublish and leave if the client has successfully joined
-        client.unpublish(tracks).then(() => client.leave());
+        client.unpublish(localTracks).then(() => client.leave());
       }
     };
-  }, [localTracks, tracks, joined]);
+  }, [localTracks, joined]);
 
   return (
     <React.Fragment>
@@ -150,6 +149,7 @@ const VideoChatManager = () => {
           <MyVideoPlayer
             key={user.uid}
             user={user}
+            id={user.uid}
             displayName={user.display_name}
           />
         ))}
