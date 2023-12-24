@@ -1,0 +1,22 @@
+.actions {
+  display: flex;
+  justify-content: center; /* Center the buttons horizontally */
+  margin-top: 0.5rem; /* Add spacing between followers and buttons */
+  gap: 2rem;
+}
+
+.signup {
+  color: var(--color-light-gray);
+  margin-top: 4px;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.actions div {
+  margin-left: -30px;
+  margin-top: -4px;
+}
+
+.btn {
+  text-align: center;
+}

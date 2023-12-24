@@ -40,6 +40,12 @@ const VideoChatRoomCardList = () => {
     fetchRoomList();
   }, []);
 
+  const deleteRoomById = (roomId) => {
+    setRoomList((prevRoomList) =>
+      prevRoomList.filter((room) => room.id !== roomId)
+    );
+  };
+
   return (
     <div>
       {roomList.map((room) => (
@@ -54,6 +60,7 @@ const VideoChatRoomCardList = () => {
           is_host={room.is_host}
           invitation_uuid={room.invitation_uuid}
           remaining_duration={room.remaining_duration}
+          deleteRoomById = {deleteRoomById}
         />
       ))}
     </div>

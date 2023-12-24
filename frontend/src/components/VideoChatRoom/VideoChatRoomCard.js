@@ -56,6 +56,35 @@ const VideoChatRoomCard = (props) => {
     event.preventDefault();
     navigate(`/video-chat-room/${props.id}`);
   };
+
+  const deleteRoom = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await fetch(
+        `${backendUrl}/api/videochat/videochat-room-manager/${props.id}/`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Token ${authToken}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        props.deleteRoomById(props.id);
+        //navigate(`/video-chat`);
+      } else {
+        // Handle error response
+        console.error("Failed to generate a new code");
+      }
+    } catch (error) {
+      // Handle network error
+      console.error("Network error:", error.message);
+    }
+  };
+
   const copyToClipboard = () => {
     navigator.clipboard.writeText(invitationCode);
     setIsCopied(true);
@@ -88,12 +117,20 @@ const VideoChatRoomCard = (props) => {
       </div>
       <div className={classes["roomcard__room_name"]}>{props.room_name}</div>
 
-      <div className={classes.subtitle}>ROOM INFO</div>
-      <div className={classes.description}>{props.description}</div>
-
       {/* ======================= Join Call Room ============================*/}
       <div className={classes["videocall-button-group"]}>
         <NeonButton onClickHandler={joinRoom} buttonText={"Join Call"} />
+
+        {!props.is_host && (
+          <NeonButton onClickHandler={joinRoom} buttonText={"Leave"} />
+        )}
+
+        {props.is_host && (
+          <NeonButton onClickHandler={joinRoom} buttonText={"Edit"} />
+        )}
+        {props.is_host && (
+          <NeonButton onClickHandler={deleteRoom} buttonText={"Delete"} />
+        )}
       </div>
 
       {/* ======================= Invitation Code ============================*/}
@@ -109,7 +146,7 @@ const VideoChatRoomCard = (props) => {
               </div>
             )}
 
-            {props.remaining_duration && (
+            {invitationRemainDuration && (
               <div className={classes["remaining-duration"]}>
                 {"Expire in "}
                 {invitationRemainDuration.days > 0 &&

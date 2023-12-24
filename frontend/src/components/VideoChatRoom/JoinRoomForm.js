@@ -3,9 +3,12 @@ import { GoSearch } from "react-icons/go";
 import classes from "./JoinRoomForm.module.css";
 import Cookies from "js-cookie";
 import Card from "../UI/Card/Card";
+import { useNavigate } from "react-router-dom";
+import NeonButton from "../UI/Button/NeonButton";
 
 const JoinRoomForm = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   //----------------------------------- API ----------------------------------
   const authToken = Cookies.get("authToken");
@@ -15,6 +18,10 @@ const JoinRoomForm = () => {
   //================================= FUNCTIONS =============================
   const handleInputChange = (event) => {
     setSearchQuery(event.target.value);
+  };
+
+  const addRoomHandler = (event) => {
+    navigate("/new-video-chat-room");
   };
 
   const handleFormSubmit = async (event) => {
@@ -60,6 +67,15 @@ const JoinRoomForm = () => {
           />
         </div>
       </form>
+
+      <div className={classes["button-group-display"]}>
+        <div className={classes["button-display"]}>
+          <NeonButton
+            buttonText={"+ New Room"}
+            onClickHandler={addRoomHandler}
+          ></NeonButton>
+        </div>
+      </div>
     </Card>
   );
 };

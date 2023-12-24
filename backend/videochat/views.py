@@ -42,6 +42,21 @@ class VideoChatRoomManagerAPI(APIView):
         serializer = VideoChatRoomMetaContentSerializer(item, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+    def delete(self, request, room_id):
+        try:
+            # Attempt to get the room with the specified ID and check if the user is the host
+            room = VideoChatRooms.objects.get(id=room_id, host=request.user)
+        except VideoChatRooms.DoesNotExist:
+            # If the room does not exist, return a 404 response
+            return Response(
+                {"error": {"room_does_not_exist": "Room not found."}},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        room.delete()
+
+        return Response({"message": "Room deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        
 class VideoChatRoomListAPI(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -71,10 +86,8 @@ class NewVideoChatRoomAPI(APIView):
             try:
                 with transaction.atomic():
                     room_name = request.data.get('room_name', '')
-                    description = request.data.get('description', '')
 
                     existing_data = {
-                        'description': description,
                         'room_name': room_name,
                     }
 
