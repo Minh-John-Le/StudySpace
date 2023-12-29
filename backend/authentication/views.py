@@ -11,6 +11,8 @@ from django.db import models, transaction
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.conf import settings 
 
 
 class SignupView(generics.CreateAPIView):
@@ -127,3 +129,22 @@ class TokenValidationView(APIView):
     def get(self, request):
         # If the request reached here, it means the token is valid
         return Response({'valid': True}, status=status.HTTP_200_OK)
+    
+
+class SendEmailAPIView(APIView):
+    def post(self, request):
+        subject = request.data.get('subject', '')
+        message = request.data.get('message', '')
+        recipient = request.data.get('recipient', '')
+        html_message = """<p>This is an HTML-formatted message.</p>
+    <a href="https://example.com">This is a link</a>"""
+
+
+        if subject and message and recipient:
+            try:
+                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [recipient], html_message=html_message)
+                return Response({'success': True, 'message': 'Email sent successfully'}, status=status.HTTP_200_OK)
+            except Exception as e:
+                return Response({'success': False, 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response({'success': False, 'message': 'Missing required data'}, status=status.HTTP_400_BAD_REQUEST)

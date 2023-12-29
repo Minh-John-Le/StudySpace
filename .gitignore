@@ -3,3 +3,4 @@ backend/chatbot/.env
 myenv/
 frontend/.env
 backend/chat/.env
+backend/backend/.env
