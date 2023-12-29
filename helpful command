@@ -1,0 +1,19 @@
+python3 -m venv myenv
+
+source myenv/bin/activate
+
+pip3 install django
+
+django-admin startproject backend
+
+pip3 install djangorestframework
+
+python3 manage.py runserver
+
+# get a start app
+python -m django startapp myapp
+
+# make migration
+python3 manage.py makemigrations
+
+ptyhon3 manage.py migrate
