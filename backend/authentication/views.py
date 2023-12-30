@@ -42,7 +42,6 @@ class SignupView(generics.CreateAPIView):
 
                 user = User.objects.create_user(
                     username=username, email=email, password=password)
-                print(user.password)
 
                 token, created = Token.objects.get_or_create(user=user)
 
