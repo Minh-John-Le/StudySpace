@@ -59,6 +59,7 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
 
+
 class UserProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='user.email', read_only=True)
     username = serializers.CharField(source='user.username', read_only=True)
@@ -85,3 +86,45 @@ class SingleUserProfileSerializer(serializers.ModelSerializer):
     def get_following_count(self, obj):
         # Count the number of followers for the UserProfile object (obj)
         return Followers.objects.filter(follower_id=obj.user).count()
+
+#=================================== AUTHENTICATION UPDATE =======================================
+class UpdatePasswordSerializer(serializers.Serializer):
+    new_password = serializers.CharField(required=True)
+    confirm_password = serializers.CharField(required=True)
+    old_password = serializers.CharField(required=True)
+
+    def validate(self, value):
+        new_password = value.get('new_password', '')
+        confirm_password = value.get('confirm_password', '')
+
+        if new_password != confirm_password:
+            raise serializers.ValidationError({
+                'new password errors': "New password and confirm password do not match."})
+
+        # Validate the new password using the same logic as the UserSerializer
+        errors = []
+
+        if len(new_password) < 8:
+            errors.append("Password must be at least 8 characters long.")
+
+        if not any(char.isupper() for char in new_password):
+            errors.append("Password must contain at least 1 UPPERCASE letter.")
+
+        if not any(char.islower() for char in new_password):
+            errors.append("Password must contain at least 1 lowercase letter.")
+
+        if not any(char.isdigit() for char in new_password):
+            errors.append("Password must contain at least 1 number.")
+
+        if ' ' in new_password:
+            errors.append("Password cannot contain spaces.")
+
+        if errors:
+            raise serializers.ValidationError({
+                'new password errors': errors
+            })
+
+        return value
+    
+    class Meta:
+        fields = '__all__'
