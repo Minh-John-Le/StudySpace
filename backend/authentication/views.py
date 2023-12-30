@@ -147,3 +147,5 @@ class SendEmailAPIView(APIView):
                 return Response({'success': False, 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response({'success': False, 'message': 'Missing required data'}, status=status.HTTP_400_BAD_REQUEST)
+
+

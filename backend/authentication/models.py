@@ -25,4 +25,4 @@ class SecurityToken(models.Model):
     used = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.token_type) + " token of " + str(self.user)
+        return str(self.token_type) + " token of " + str(self.user.username)

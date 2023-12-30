@@ -174,7 +174,7 @@ const ProfileSetting = (props) => {
     <React.Fragment>
       <AuthenticateChecker></AuthenticateChecker>
       {hasSubmitError && <ErrorCard errorMessages={errorMessage}></ErrorCard>}
-      <FormCard title={"Profile Settings"}>
+      <FormCard title={"My Account"}>
         <form onSubmit={submitHandler}>
           <Input
             id="email"
