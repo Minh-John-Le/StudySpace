@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import UserProfile
 from .serializers import UserProfileSerializer, SingleUserProfileSerializer, \
-    UpdatePasswordSerializer
+    UpdatePasswordSerializer, UpdateUsernameSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.db import models, transaction
@@ -14,6 +14,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.conf import settings 
+from django.contrib.auth import authenticate
 
 
 class SignupView(generics.CreateAPIView):
@@ -154,7 +155,29 @@ class UpdatePasswordView(APIView):
             return Response({'success': 'Password updated successfully.'}, status=status.HTTP_200_OK)
         else:
             return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-        
+
+class UpdateUsernameView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        current_password = request.data.get('current_password', '')
+        user = authenticate(username=request.user.username, password=current_password)
+
+        if user:
+            serializer = UpdateUsernameSerializer(data=request.data, instance=request.user)
+
+            if serializer.is_valid():
+                new_username = serializer.validated_data['new_username']
+                request.user.username = new_username
+                request.user.save()
+                return Response({'success': True, 'message': 'Username updated successfully'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'success': False, 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'success': False, 'errors': 'Authentication failed. Please provide the correct current password.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+          
 class SendEmailAPIView(APIView):
     def post(self, request):
         subject = request.data.get('subject', '')

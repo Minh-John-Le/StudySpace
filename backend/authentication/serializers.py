@@ -128,3 +128,13 @@ class UpdatePasswordSerializer(serializers.Serializer):
     
     class Meta:
         fields = '__all__'
+
+
+class UpdateUsernameSerializer(serializers.Serializer):
+    new_username = serializers.CharField(min_length=8, max_length=32)
+
+    def validate_new_username(self, value):
+        existing_user = User.objects.filter(username=value).exclude(pk=self.instance.pk).first()
+        if existing_user:
+            raise serializers.ValidationError("This username is already in use.")
+        return value
