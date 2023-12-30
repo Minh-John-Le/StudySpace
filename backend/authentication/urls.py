@@ -1,7 +1,8 @@
 from django.urls import path
 from rest_framework.authtoken.views import obtain_auth_token
 from .views import SignupView, PersonalProfileView, SingleUserProfileView, TokenValidationView, \
-    SendEmailAPIView, UpdatePasswordView, UpdateUsernameView
+    SendEmailAPIView, UpdatePasswordView, UpdateUsernameView, VerifyEmailView, \
+    UnbindEmailView, RefreshSecurityTokenView, UpdateEmailView
 
 urlpatterns = [
     path('signup/', SignupView.as_view(), name='signup'),
@@ -13,5 +14,10 @@ urlpatterns = [
     #------------------ Authentication Update -------------------------
     path('update-password/', UpdatePasswordView.as_view()),
     path('update-username/', UpdateUsernameView.as_view()),
+    path('update-email/', UpdateEmailView.as_view()),
+    #------------------ Verify Account -------------------------
+    path('verify-email/', VerifyEmailView.as_view()),
+    path('unbind-email/', UnbindEmailView.as_view()),
+    path('refresh-security-token/', RefreshSecurityTokenView.as_view()),
 
 ]

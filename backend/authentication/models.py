@@ -20,7 +20,7 @@ class UserProfile(models.Model):
 class SecurityToken(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     token_type = models.CharField(max_length=20)
-    token_value = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    token_value = models.UUIDField(default=uuid.uuid4, unique=True)
     expire_at = models.DateTimeField()
     used = models.BooleanField(default=False)
 

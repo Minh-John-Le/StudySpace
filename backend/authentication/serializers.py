@@ -138,3 +138,23 @@ class UpdateUsernameSerializer(serializers.Serializer):
         if existing_user:
             raise serializers.ValidationError("This username is already in use.")
         return value
+    
+
+class UpdateEmailSerializer(serializers.Serializer):
+    new_email = serializers.EmailField()
+
+    def validate_new_email(self, value):
+        errors = []
+
+        # Check if email contains '@' symbol
+        if '@' not in value:
+            errors.append("Email must contain the '@' symbol.")
+
+        # Check if email is already in use
+        if User.objects.filter(email=value).exists():
+            errors.append("This email is already in use.")
+
+        if errors:
+            raise serializers.ValidationError(errors)
+
+        return value

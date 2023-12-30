@@ -3,9 +3,9 @@ from .serializers import UserSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import UserProfile
+from .models import UserProfile, SecurityToken
 from .serializers import UserProfileSerializer, SingleUserProfileSerializer, \
-    UpdatePasswordSerializer, UpdateUsernameSerializer
+    UpdatePasswordSerializer, UpdateUsernameSerializer, UpdateEmailSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.db import models, transaction
@@ -15,6 +15,10 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.conf import settings 
 from django.contrib.auth import authenticate
+import datetime
+from django.utils import timezone
+import uuid
+
 
 
 class SignupView(generics.CreateAPIView):
@@ -132,6 +136,9 @@ class TokenValidationView(APIView):
         return Response({'valid': True}, status=status.HTTP_200_OK)
 
 #==================================== AUTHENTICATION UPDATE =====================================  
+#------------------------------------ Generate Authentication Token -------------------------------------
+
+#------------------------------------ Update Authentication -------------------------------------
 class UpdatePasswordView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -177,7 +184,136 @@ class UpdateUsernameView(APIView):
         else:
             return Response({'success': False, 'errors': 'Authentication failed. Please provide the correct current password.'}, status=status.HTTP_401_UNAUTHORIZED)
 
-          
+class UpdateEmailView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+
+            if not user_profile or user_profile.email_verified:
+                return Response({'message': 'Please unbind email before updating it'}, status=status.HTTP_400_BAD_REQUEST)
+
+            new_email = request.data.get('new_email', '')
+            email_validation_serializer = UpdateEmailSerializer(data={'new_email': new_email})
+            if not email_validation_serializer.is_valid():
+                return Response({'error': email_validation_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+ 
+            request.user.email = new_email
+            request.user.save()
+
+            return Response({'success': 'Email updated successfully'}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            # Handle any other exceptions if needed
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+#------------------------------------ Verify Authentication -------------------------------------
+class VerifyEmailView(APIView):
+    def patch(self, request):
+        token_value = request.data.get('token_value', '')
+        token_type = request.data.get('token_type', 'email_verify')
+
+        try:
+            with transaction.atomic():
+                # Find the token
+                token = SecurityToken.objects.get(token_value=token_value, token_type=token_type, used=False)
+
+                if not token:
+                        return Response({'message': 'Invalid or expired token'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+                            # Check if the invitation has not expired
+                if token.expire_at and token.expire_at < timezone.now():
+                    return Response(
+                        {"error": {"invitation_expired": "Invitation has expired."}},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
+                # Mark the token as used
+                token.used = True
+                token.save()
+
+                user = token.user
+
+                # Update email_verified to False in UserProfile
+                user_profile = UserProfile.objects.get(user=user)
+                user_profile.email_verified = True
+                user_profile.save()
+            
+                return Response({'message': 'Verify Email successfully'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            # Token not found or expired
+            return Response({'errors': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+class UnbindEmailView(APIView):
+    def patch(self, request):
+        token_value = request.data.get('token_value', '')
+        token_type = request.data.get('token_type', 'email_unbind')
+
+        try:
+            with transaction.atomic():
+                # Find the token
+                token = SecurityToken.objects.get(token_value=token_value, token_type=token_type, used=False)
+
+                if not token:
+                        return Response({'message': 'Invalid or expired token'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+                            # Check if the invitation has not expired
+                if token.expire_at and token.expire_at < timezone.now():
+                    return Response(
+                        {"error": {"invitation_expired": "Invitation has expired."}},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
+                # Mark the token as used
+                token.used = True
+                token.save()
+
+                user = token.user
+
+                # Update email_verified to False in UserProfile
+                user_profile = UserProfile.objects.get(user=user)
+                user_profile.email_verified = False
+                user_profile.save()
+            
+                return Response({'message': 'Unbind Email successfully'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            # Token not found or expired
+            return Response({'errors': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class RefreshSecurityTokenView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        token_type = request.data.get('token_type', '')
+
+        # Find the user's token based on token_type
+        try:
+            user = request.user
+            token = SecurityToken.objects.get(user=user, token_type=token_type)
+
+            # Update the existing token with a new uuid4 and expire time is 24 hours from now
+            token.token_value = uuid.uuid4()
+            token.expire_at = timezone.now() + timezone.timedelta(days=1)
+            token.used = False
+            token.save()
+
+            return Response({'token_value': str(token.token_value), 'token_type': token.token_type}, status=status.HTTP_200_OK)
+        except SecurityToken.DoesNotExist:
+            # Create a new token if it doesn't exist
+            new_token = SecurityToken.objects.create(user=user, token_type=token_type, expire_at=timezone.now() + timezone.timedelta(days=1))
+
+            return Response({'token_value': str(new_token.token_value), 'token_type': new_token.token_type}, status=status.HTTP_200_OK)
+        except Exception as e:
+            # Raise a more specific error for other exceptions
+            raise ValueError(f"An error occurred: {str(e)}")
+
+
+
 class SendEmailAPIView(APIView):
     def post(self, request):
         subject = request.data.get('subject', '')

@@ -7,3 +7,4 @@ from .models import UserProfile, SecurityToken
 admin.site.register(UserProfile)
 admin.site.register(SecurityToken)
 
+
