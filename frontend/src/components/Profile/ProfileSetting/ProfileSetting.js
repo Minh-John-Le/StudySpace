@@ -73,6 +73,7 @@ const ProfileSetting = (props) => {
     reset: resetAvatarNameInput,
   } = useInput((value) => value.trim().length > 0 && value.trim().length <= 32);
   //====================================== FUNCTION =========================
+  //-------------------------------- Account Form Button ----------------------------
   // Going back to user profile main page
   const cancelHandler = (event) => {
     event.preventDefault();
@@ -135,6 +136,21 @@ const ProfileSetting = (props) => {
     }
   };
 
+  //-------------------------------- Auth Form Button ----------------------------
+  const editEmailHandler = (event) => {
+    event.preventDefault();
+    navigate(`/user/${profile.user}`);
+  };
+
+  const editUsernameHandler = (event) => {
+    event.preventDefault();
+    navigate(`/user/${profile.user}`);
+  };
+
+  const editPasswordHandler = (event) => {
+    event.preventDefault();
+    navigate(`/user/${profile.user}`);
+  };
   //===================================== GET DATA =============================
   // Get user data so it initially fill in all the field
   const authToken = Cookies.get("authToken");
@@ -174,30 +190,9 @@ const ProfileSetting = (props) => {
     <React.Fragment>
       <AuthenticateChecker></AuthenticateChecker>
       {hasSubmitError && <ErrorCard errorMessages={errorMessage}></ErrorCard>}
-      <FormCard title={"My Account"}>
+      {/*====================== EDIT ACCOUNT FORM ==================================*/}
+      <FormCard title={"My Account"} bodyClassName={classes["form-body"]}>
         <form onSubmit={submitHandler}>
-          <Input
-            id="email"
-            label="Email"
-            type="email"
-            isValid={!emailInputHasError}
-            value={profile.email}
-            onChange={emailChangedHandler}
-            onBlur={emailBlurHandler}
-            errorMessage={"Email must include @"}
-            readOnly={true}
-          ></Input>
-          <Input
-            id="username"
-            label="Username"
-            type="text"
-            isValid={!usernameInputHasError}
-            value={profile.username}
-            onChange={usernameChangedHandler}
-            onBlur={usernameBlurHandler}
-            errorMessage={"Username must be length 8 or more"}
-            readOnly={true}
-          ></Input>
           <Avatar avatarName={enteredAvatarName}></Avatar>
           <Input
             id="avatarname"
@@ -234,17 +229,12 @@ const ProfileSetting = (props) => {
             errorMessage={""}
           ></Input>
 
-          <div className={classes.actions}>
-            <Button
-              type="button"
-              className={classes.btn}
-              onClick={cancelHandler}
-            >
+          <div className={classes["account-btn-group"]}>
+            <Button type="button" onClick={cancelHandler}>
               <div>Cancel</div>
             </Button>
             <Button
               type="submit"
-              className={classes.btn}
               // disabled={!formIsValid}
             >
               <div>Update</div>
@@ -252,6 +242,57 @@ const ProfileSetting = (props) => {
           </div>
         </form>
       </FormCard>
+      {/*====================== EDIT AUTH FORM ==================================*/}
+
+      <FormCard title={"Authentication"}>
+        <Input
+          id="email"
+          label="Email"
+          type="email"
+          isValid={!emailInputHasError}
+          value={profile.email}
+          onChange={emailChangedHandler}
+          onBlur={emailBlurHandler}
+          errorMessage={"Email must include @"}
+          readOnly={true}
+        ></Input>
+        <div className={classes["edit-email-btn-group"]}>
+        <Button type="button" onClick={editEmailHandler}>
+          <div>Edit</div>
+        </Button>
+        <Button type="button" onClick={editUsernameHandler}>
+          <div>Verify</div>
+        </Button>
+        </div>
+
+        <Input
+          id="username"
+          label="Username"
+          type="text"
+          isValid={!usernameInputHasError}
+          value={profile.username}
+          onChange={usernameChangedHandler}
+          onBlur={usernameBlurHandler}
+          errorMessage={"Username must be length 8 or more"}
+          readOnly={true}
+        ></Input>
+        <Button type="button" onClick={editUsernameHandler}>
+          <div>Edit</div>
+        </Button>
+
+        <Input
+          id="password"
+          label="Password"
+          type="text"
+          value={"*********************"}
+          readOnly={true}
+        ></Input>
+        <Button type="button" onClick={editPasswordHandler}>
+          <div>Edit</div>
+        </Button>
+      </FormCard>
+
+      <div className={classes["ending-space"]}></div>
     </React.Fragment>
   );
 };

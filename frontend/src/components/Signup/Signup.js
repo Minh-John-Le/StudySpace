@@ -212,12 +212,8 @@ const Signup = (props) => {
             }
           ></Input>
 
-          <div className={classes.actions}>
-            <Button
-              type="submit"
-              className={classes.btn}
-              disabled={!formIsValid}
-            >
+          <div>
+            <Button type="submit" disabled={!formIsValid}>
               <div>Signup</div>
             </Button>
           </div>

@@ -26,9 +26,6 @@
 
 /* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
 @media screen and (max-width: 1024px) {
-  .body {
-    margin-bottom: 7rem;
-  }
 }
 
 /* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/

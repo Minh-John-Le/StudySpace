@@ -139,8 +139,8 @@ const Login = (props) => {
             ></Input>
           }
 
-          <div className={classes.actions}>
-            <Button type="submit" className={classes.btn}>
+          <div>
+            <Button type="submit">
               <div>Login</div>
             </Button>
           </div>
