@@ -139,17 +139,17 @@ const ProfileSetting = (props) => {
   //-------------------------------- Auth Form Button ----------------------------
   const editEmailHandler = (event) => {
     event.preventDefault();
-    navigate(`/user/${profile.user}`);
+    navigate(`/update-email`);
   };
 
   const editUsernameHandler = (event) => {
     event.preventDefault();
-    navigate(`/user/${profile.user}`);
+    navigate(`/update-username`);
   };
 
   const editPasswordHandler = (event) => {
     event.preventDefault();
-    navigate(`/user/${profile.user}`);
+    navigate(`/update-password`);
   };
   //===================================== GET DATA =============================
   // Get user data so it initially fill in all the field
@@ -183,7 +183,17 @@ const ProfileSetting = (props) => {
     resetDisplayNameInput(profile.display_name);
     resetBioInput(profile.bio);
     resetAvatarNameInput(profile.avatar_name);
-  }, [authToken, profile.display_name, profile.bio, profile.avatar_name]);
+    resetEmailInput(profile.email);
+    resetUsernameInput(profile.username);
+  }, [
+    authToken,
+    profile.display_name,
+    profile.bio,
+    profile.avatar_name,
+    profile.email,
+    profile.username,
+    profile.email_verified,
+  ]);
 
   //====================================== RETURN COMPONENTS =================================
   return (
@@ -256,14 +266,21 @@ const ProfileSetting = (props) => {
           errorMessage={"Email must include @"}
           readOnly={true}
         ></Input>
-        <div className={classes["edit-email-btn-group"]}>
-        <Button type="button" onClick={editEmailHandler}>
-          <div>Edit</div>
-        </Button>
-        <Button type="button" onClick={editUsernameHandler}>
-          <div>Verify</div>
-        </Button>
-        </div>
+        {!profile.email_verified && (
+          <div className={classes["edit-email-btn-group"]}>
+            <Button type="button" onClick={editEmailHandler}>
+              <div>Edit</div>
+            </Button>
+            <Button type="button" onClick={editUsernameHandler}>
+              <div>Verify</div>
+            </Button>
+          </div>
+        )}
+        {profile.email_verified && (
+          <Button type="button" onClick={editUsernameHandler}>
+            <div>Unbind</div>
+          </Button>
+        )}
 
         <Input
           id="username"

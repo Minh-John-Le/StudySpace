@@ -182,18 +182,24 @@ class UpdateUsernameView(APIView):
             else:
                 return Response({'success': False, 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({'success': False, 'errors': 'Authentication failed. Please provide the correct current password.'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'success': False, 'error': {'password':'Authentication failed. Please provide the correct current password.'}}, status=status.HTTP_401_UNAUTHORIZED)
 
 class UpdateEmailView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def patch(self, request):
+        current_password = request.data.get('current_password', '')
+        user = authenticate(username=request.user.username, password=current_password)
+
+        if not user:
+            return Response({'success': False, 'error': {'password':'Authentication failed. Please provide the correct current password.'}}, status=status.HTTP_401_UNAUTHORIZED)
+
         try:
             user_profile = UserProfile.objects.get(user=request.user)
 
             if not user_profile or user_profile.email_verified:
-                return Response({'message': 'Please unbind email before updating it'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': {'Please unbind email before updating it'}}, status=status.HTTP_400_BAD_REQUEST)
 
             new_email = request.data.get('new_email', '')
             email_validation_serializer = UpdateEmailSerializer(data={'new_email': new_email})

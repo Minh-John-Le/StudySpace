@@ -22,6 +22,8 @@ import VideoChat from "./components/VideoChatRoom/VideoChat";
 import VideoChatManager from "./components/VideoChatRoom/VideoChatManager";
 import NewVideoChatRoom from "./components/VideoChatRoom/NewVideoChatRoom/NewVideoChatRoom";
 import UpdateVideoChatRoom from "./components/VideoChatRoom/UpdateVideoChatRoom/UpdateVideoChatRoom";
+import UpdateEmail from "./components/Profile/ProfileSetting/UpdateEmail";
+import UpdateUsername from "./components/Profile/ProfileSetting/UpdateUsername";
 
 function App() {
   //const ctx = useContext(AuthContext);
@@ -31,9 +33,14 @@ function App() {
       <React.Fragment>
         <MainHeader />
         <Routes>
+          {/*============================= MAIN PAGE =============================*/}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup></Signup>} />
+          <Route path="/top-host" element={<TopHost></TopHost>} />
+
+          {/*============================= USER PROFILE =============================*/}
+
           <Route path="/user/:id" element={<Profile></Profile>} />
           <Route
             path="/profile-setting"
@@ -47,6 +54,14 @@ function App() {
             path="/user-following/:userId"
             element={<UserFollowing></UserFollowing>}
           />
+
+          <Route path="/update-email" element={<UpdateEmail></UpdateEmail>} />
+          <Route
+            path="/update-username"
+            element={<UpdateUsername></UpdateUsername>}
+          />
+
+          {/*============================= CHAT ROOM =============================*/}
           <Route path="/new-room" element={<NewRoom></NewRoom>} />
           <Route path="/room/:id" element={<Room></Room>} />
           <Route
@@ -54,7 +69,11 @@ function App() {
             element={<RoomMember></RoomMember>}
           />
           <Route path="/update-room/:id" element={<UpdateRoom></UpdateRoom>} />
+
+          {/*============================= STUDY BOT =============================*/}
           <Route path="/studybot" element={<StudyBotCard></StudyBotCard>} />
+
+          {/*============================= VIDEO CHAT =============================*/}
           <Route
             path="/video-chat-room/:roomId"
             element={<VideoChatManager></VideoChatManager>}
@@ -70,8 +89,6 @@ function App() {
           />
 
           <Route path="/video-chat" element={<VideoChat></VideoChat>} />
-
-          <Route path="/top-host" element={<TopHost></TopHost>} />
         </Routes>
         <br />
         <Navigator></Navigator>
