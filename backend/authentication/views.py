@@ -18,6 +18,7 @@ from django.contrib.auth import authenticate
 import datetime
 from django.utils import timezone
 import uuid
+from django.template.loader import render_to_string
 
 
 
@@ -66,6 +67,16 @@ class SignupView(generics.CreateAPIView):
                         user_profile_serializers.errors)
 
                 user_profile_serializers.save()
+
+
+                #--------------------------- SEND GREETING EMAIL ----------------------------
+                new_token = SecurityToken.objects.create(user=user, token_type="email_verify", expire_at=timezone.now() + timezone.timedelta(days=1))
+                # Customize the sender name and email
+                from_email = f'{settings.EMAIL_SENDER_NAME} <{settings.DEFAULT_FROM_EMAIL}>'
+                verification_link = f'https://mystudyspace.net/verify-email/{new_token.token_value}'
+
+                html_message = render_to_string('authentication/greeting_email.html', {'username': username, 'verification_link': verification_link})
+                send_mail("Greeting From MyStudySpace", '', from_email, [email], html_message=html_message)
 
                 return Response({'message': 'User and profile created successfully'}, status=status.HTTP_201_CREATED)
 
@@ -318,24 +329,54 @@ class RefreshSecurityTokenView(APIView):
             # Raise a more specific error for other exceptions
             raise ValueError(f"An error occurred: {str(e)}")
 
+class SendVerifyEmailView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            user = request.user
+
+            # Check if a token exists and update it, otherwise create a new one
+            try:
+                token = SecurityToken.objects.get(user=user, token_type="email_verify")
+                token.token_value = uuid.uuid4()
+                token.expire_at = timezone.now() + timezone.timedelta(days=1)
+                token.used = False
+                token.save()
+            except SecurityToken.DoesNotExist:
+                token = SecurityToken.objects.create(user=user, token_type="email_verify", expire_at=timezone.now() + timezone.timedelta(days=1))
+
+            # Send the greeting email
+            from_email = f'{settings.EMAIL_SENDER_NAME} <{settings.DEFAULT_FROM_EMAIL}>'
+            verification_link = f'https://mystudyspace.net/verify-email/{token.token_value}'
+
+            html_message = render_to_string('authentication/verify_email.html', {'username': user.username, 'verification_link': verification_link})
+            send_mail("Email Verification", '', from_email, [user.email], html_message=html_message)
+
+            return Response({'message': 'Verification link sent successfully'}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({'success': False, 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class SendEmailAPIView(APIView):
     def post(self, request):
         subject = request.data.get('subject', '')
-        message = request.data.get('message', '')
         recipient = request.data.get('recipient', '')
-        html_message = """<p>This is an HTML-formatted message.</p>
-    <a href="https://example.com">This is a link</a>"""
+        username = request.data.get('username', '')
+        verification_link = request.data.get('verification_link', '')
 
-
-        if subject and message and recipient:
+        if subject and recipient and username and verification_link:
             try:
-                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [recipient], html_message=html_message)
+                # Customize the sender name and email
+                from_email = f'{settings.EMAIL_SENDER_NAME} <{settings.DEFAULT_FROM_EMAIL}>'
+
+                html_message = render_to_string('authentication/greeting_email.html', {'username': username, 'verification_link': verification_link})
+                send_mail(subject, '', from_email, [recipient], html_message=html_message)
+
                 return Response({'success': True, 'message': 'Email sent successfully'}, status=status.HTTP_200_OK)
             except Exception as e:
                 return Response({'success': False, 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response({'success': False, 'message': 'Missing required data'}, status=status.HTTP_400_BAD_REQUEST)
-
-

@@ -151,6 +151,11 @@ const ProfileSetting = (props) => {
     event.preventDefault();
     navigate(`/update-password`);
   };
+
+  const verifyEmailHandler = (event) => {
+    event.preventDefault();
+    
+  };
   //===================================== GET DATA =============================
   // Get user data so it initially fill in all the field
   const authToken = Cookies.get("authToken");
@@ -271,7 +276,7 @@ const ProfileSetting = (props) => {
             <Button type="button" onClick={editEmailHandler}>
               <div>Edit</div>
             </Button>
-            <Button type="button" onClick={editUsernameHandler}>
+            <Button type="button" onClick={verifyEmailHandler}>
               <div>Verify</div>
             </Button>
           </div>
