@@ -24,6 +24,7 @@ import NewVideoChatRoom from "./components/VideoChatRoom/NewVideoChatRoom/NewVid
 import UpdateVideoChatRoom from "./components/VideoChatRoom/UpdateVideoChatRoom/UpdateVideoChatRoom";
 import UpdateEmail from "./components/Profile/ProfileSetting/UpdateEmail";
 import UpdateUsername from "./components/Profile/ProfileSetting/UpdateUsername";
+import UpdatePassword from "./components/Profile/ProfileSetting/UpdatePassword";
 
 function App() {
   //const ctx = useContext(AuthContext);
@@ -59,6 +60,10 @@ function App() {
           <Route
             path="/update-username"
             element={<UpdateUsername></UpdateUsername>}
+          />
+          <Route
+            path="/update-password"
+            element={<UpdatePassword></UpdatePassword>}
           />
 
           {/*============================= CHAT ROOM =============================*/}

@@ -152,7 +152,7 @@ class UpdatePasswordView(APIView):
 
             # Check if the old password is correct
             if not user.check_password(old_password):
-                return Response({'detail': 'Old password is incorrect.'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': {'Old password':'Old password is incorrect.'}}, status=status.HTTP_400_BAD_REQUEST)
 
             # Update the password
             new_password = serializer.validated_data['new_password']
