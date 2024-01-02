@@ -139,7 +139,7 @@ const Login = (props) => {
             ></Input>
           }
           <div className={classes["forgot-password"]}>
-            <Link to="/reset-account/" className={classes["signup-link"]}>
+            <Link to="/forgot-account/" className={classes["signup-link"]}>
               Forgot Password?
             </Link>
           </div>

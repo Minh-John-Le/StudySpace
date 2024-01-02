@@ -1,18 +1,16 @@
 import React, { useContext, useState } from "react";
 
-import Card from "../UI/Card/Card";
-import classes from "./ResetAccount.module.css";
+import classes from "./ForgotAccount.module.css";
 import Button from "../UI/Button/Button";
 import AuthContext from "../../store/auth-context";
 import Input from "../UI/Input/Input";
 import useInput from "../../hooks/use-input";
 import { useNavigate } from "react-router-dom";
 
-import { Link } from "react-router-dom";
 import FormCard from "../UI/FormCard/FormCard";
 import ErrorCard from "../UI/ErrorCard/ErrorCard";
 
-const ResetAccount = (props) => {
+const ForgotAccount = (props) => {
   // const [enteredEmail, setEnteredEmail] = useState('');
   // const [emailIsValid, setEmailIsValid] = useState();
   // const [enteredPassword, setEnteredPassword] = useState('');
@@ -135,4 +133,4 @@ const ResetAccount = (props) => {
   );
 };
 
-export default ResetAccount;
+export default ForgotAccount;

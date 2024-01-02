@@ -27,7 +27,7 @@ import UpdateUsername from "./components/Profile/ProfileSetting/UpdateUsername";
 import UpdatePassword from "./components/Profile/ProfileSetting/UpdatePassword";
 import EmailVerification from "./components/TokenLink/EmailVerification";
 import EmailUnbind from "./components/TokenLink/EmailUnbind";
-import ResetAccount from "./components/ResetAccount/ResetAccount";
+import ForgotAccount from "./components/ForgotAccount/ForgotAccount";
 
 function App() {
   //const ctx = useContext(AuthContext);
@@ -60,8 +60,8 @@ function App() {
           />
 
           <Route
-            path="/reset-account"
-            element={<ResetAccount></ResetAccount>}
+            path="/forgot-account"
+            element={<ForgotAccount></ForgotAccount>}
           />
 
           {/*============================= USER PROFILE =============================*/}

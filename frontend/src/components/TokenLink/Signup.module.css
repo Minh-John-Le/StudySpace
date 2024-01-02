@@ -1,0 +1,20 @@
+.loginLink {
+  color: var(--color-main); /* Set the initial color to white */
+  text-decoration: none; /* Remove underlines */
+  transition: color 0.3s; /* Add a smooth color transition on hover */
+}
+
+.loginLink:hover {
+  color: var(--color-main); /* Change the color to blue on hover */
+}
+
+.loginPrompt {
+  color: var(--color-light-gray);
+  margin-top: 4px;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.ending-space {
+  margin-bottom: 7rem;
+}
