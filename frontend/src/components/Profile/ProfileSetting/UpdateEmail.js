@@ -145,7 +145,6 @@ const UpdateEmail = (props) => {
           </div>
         </form>
       </FormCard>
-      <div className={classes["ending-space"]}></div>
     </React.Fragment>
   );
 };

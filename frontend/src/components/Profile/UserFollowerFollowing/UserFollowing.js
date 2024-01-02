@@ -139,7 +139,6 @@ const UserFollowing = () => {
       {data.length !== 0 && maxPage > 1 && (
         <UserFollowingPagination max_page={maxPage}></UserFollowingPagination>
       )}
-      <div className={classes["ending-space"]}></div>
     </React.Fragment>
   );
 };

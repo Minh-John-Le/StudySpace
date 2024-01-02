@@ -1,8 +1,7 @@
 import React, { useContext, useState } from "react";
 
-import classes from "./Signup.module.css";
+import classes from "./ResetAccount.module.css";
 import Button from "../UI/Button/Button";
-import AuthContext from "../../store/auth-context";
 import Input from "../UI/Input/Input";
 import useInput from "../../hooks/use-input";
 import { useNavigate } from "react-router-dom";
@@ -10,16 +9,14 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import FormCard from "../UI/FormCard/FormCard";
 import ErrorCard from "../UI/ErrorCard/ErrorCard";
+import { useParams } from "react-router-dom";
 
-const Signup = (props) => {
-  // const [enteredEmail, setEnteredEmail] = useState('');
-  // const [emailIsValid, setEmailIsValid] = useState();
-  // const [enteredPassword, setEnteredPassword] = useState('');
-  // const [passwordIsValid, setPasswordIsValid] = useState();
-
+const ResetAccount = (props) => {
   //============================== VARIABLE ===============================
   //--------------------------------- API ------------------------------
   const navigate = useNavigate();
+  //----------------------- API --------------------------------------
+  const { secToken } = useParams();
   const backendUrl =
     process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
@@ -48,14 +45,18 @@ const Signup = (props) => {
   } = useInput(isPasswordValid);
 
   //=========================================== FUNCTION =========================
+
+  const isPasswordValid = (password) => {
+    // Regular expression for password requirements
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*\s).{8,}$/;
+    return passwordPattern.test(password);
+  };
+
   const submitHandler = async (event) => {
     event.preventDefault();
     const data = {
-      username: enteredUsername,
-      email: enteredEmail,
       password: enteredPassword,
       repeat_password: enteredRepeatedPassword,
-      display_name: enteredDisplayName,
     };
 
     try {
@@ -152,9 +153,8 @@ const Signup = (props) => {
           </div>
         </form>
       </FormCard>
-      <div className={classes["ending-space"]}></div>
     </React.Fragment>
   );
 };
 
-export default Signup;
+export default ResetAccount;

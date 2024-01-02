@@ -60,7 +60,6 @@ const VideoChat = () => {
         deleteRoomById={deleteRoomById}
         roomList={roomList}
       ></VideoChatRoomCardList>
-      <div className={classes["ending-space"]}></div>
     </div>
   );
 };

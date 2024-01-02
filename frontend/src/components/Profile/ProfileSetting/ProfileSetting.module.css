@@ -31,9 +31,6 @@
   color: var(--color-main); /* Change the color to blue on hover */
 }
 
-.ending-space {
-  margin-bottom: 7rem;
-}
 
 .success {
   color: var(--color-light);

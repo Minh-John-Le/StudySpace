@@ -435,7 +435,6 @@ const ProfileSetting = (props) => {
         </Button>
       </FormCard>
 
-      <div className={classes["ending-space"]}></div>
     </React.Fragment>
   );
 };
