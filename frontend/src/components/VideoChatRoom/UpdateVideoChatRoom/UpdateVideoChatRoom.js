@@ -164,15 +164,11 @@ const UpdateVideoChatRoom = () => {
             }
           ></Input>
 
-          <div className={classes.actions}>
-            <Button
-              type="button"
-              className={classes.btn}
-              onClick={cancelHandler}
-            >
+          <div className={classes["btn-group"]}>
+            <Button type="button" onClick={cancelHandler}>
               <div>Cancel</div>
             </Button>
-            <Button type="submit" className={classes.btn}>
+            <Button type="submit">
               <div>Update</div>
             </Button>
           </div>
