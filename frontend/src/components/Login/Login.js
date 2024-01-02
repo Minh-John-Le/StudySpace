@@ -139,6 +139,9 @@ const Login = (props) => {
             ></Input>
           }
 
+          <Link to="/signup/" className={classes["signup-link"]}>
+            Forgot Password
+          </Link>
           <div>
             <Button type="submit">
               <div>Login</div>

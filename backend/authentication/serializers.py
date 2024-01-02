@@ -130,6 +130,47 @@ class UpdatePasswordSerializer(serializers.Serializer):
         fields = '__all__'
 
 
+class ResetAccountSerializer(serializers.Serializer):
+    new_password = serializers.CharField(required=True)
+    confirm_password = serializers.CharField(required=True)
+
+    def validate(self, value):
+        new_password = value.get('new_password', '')
+        confirm_password = value.get('confirm_password', '')
+
+        if new_password != confirm_password:
+            raise serializers.ValidationError({
+                'new password errors': "New password and confirm password do not match."})
+
+        # Validate the new password using the same logic as the UserSerializer
+        errors = []
+
+        if len(new_password) < 8:
+            errors.append("Password must be at least 8 characters long.")
+
+        if not any(char.isupper() for char in new_password):
+            errors.append("Password must contain at least 1 UPPERCASE letter.")
+
+        if not any(char.islower() for char in new_password):
+            errors.append("Password must contain at least 1 lowercase letter.")
+
+        if not any(char.isdigit() for char in new_password):
+            errors.append("Password must contain at least 1 number.")
+
+        if ' ' in new_password:
+            errors.append("Password cannot contain spaces.")
+
+        if errors:
+            raise serializers.ValidationError({
+                'new password errors': errors
+            })
+
+        return value
+    
+    class Meta:
+        fields = '__all__'
+
+
 class UpdateUsernameSerializer(serializers.Serializer):
     new_username = serializers.CharField(min_length=8, max_length=32)
 

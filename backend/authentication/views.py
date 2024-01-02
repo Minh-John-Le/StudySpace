@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import UserProfile, SecurityToken
 from .serializers import UserProfileSerializer, SingleUserProfileSerializer, \
-    UpdatePasswordSerializer, UpdateUsernameSerializer, UpdateEmailSerializer
+    UpdatePasswordSerializer, UpdateUsernameSerializer, UpdateEmailSerializer, \
+    ResetAccountSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.db import models, transaction
@@ -227,6 +228,7 @@ class UpdateEmailView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 #------------------------------------ Verify Authentication -------------------------------------
+#++++++++++++++++++++++++++++++++++++ Consume Token ++++++++++++++++++++++++++++++++++++
 class VerifyEmailView(APIView):
     def patch(self, request):
         token_value = request.data.get('token_value', '')
@@ -262,7 +264,7 @@ class VerifyEmailView(APIView):
                 return Response({'message': 'Verify Email successfully'}, status=status.HTTP_200_OK)
         except Exception as e:
             # Token not found or expired
-            return Response({'errors': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
 class UnbindEmailView(APIView):
     def patch(self, request):
@@ -299,7 +301,52 @@ class UnbindEmailView(APIView):
                 return Response({'message': 'Unbind Email successfully'}, status=status.HTTP_200_OK)
         except Exception as e:
             # Token not found or expired
-            return Response({'errors': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ResetAccountView(APIView):
+    def patch(self, request):
+        token_value = request.data.get('token_value', '')
+        token_type = request.data.get('token_type', 'reset_account')
+
+        try:
+            with transaction.atomic():
+                # Find the token
+                token = SecurityToken.objects.get(token_value=token_value, token_type=token_type, used=False)
+
+                if token is None:
+                    return Response({'error': {'token': 'Invalid or expired token'}}, status=status.HTTP_400_BAD_REQUEST)
+
+                # Check if the invitation has not expired
+                if token.expire_at and token.expire_at < timezone.now():
+                    return Response(
+                        {"error": {"invitation_expired": "Invitation has expired."}},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
+                serializer = ResetAccountSerializer(data=request.data, context={'request': request})
+
+                if serializer.is_valid():
+                    user = token.user
+
+                    # Check if the old password is correct
+
+                    # Update the password
+                    new_password = serializer.validated_data['new_password']
+                    user.set_password(new_password)
+                    user.save()
+
+                    # Mark the token as used
+                    token.used = True
+                    token.save()
+
+                    return Response({'success': 'Reset account successfully.'}, status=status.HTTP_200_OK)
+                else:
+                    return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            # Token not found or expired
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
 
 class RefreshSecurityTokenView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -329,6 +376,8 @@ class RefreshSecurityTokenView(APIView):
             # Raise a more specific error for other exceptions
             raise ValueError(f"An error occurred: {str(e)}")
 
+#++++++++++++++++++++++++++++++++++++ Send Token ++++++++++++++++++++++++++++++++++++
+
 class SendVerifyEmailView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -345,7 +394,7 @@ class SendVerifyEmailView(APIView):
                 token.used = False
                 token.save()
             except SecurityToken.DoesNotExist:
-                token = SecurityToken.objects.create(user=user, token_type="email_verify", expire_at=timezone.now() + timezone.timedelta(minutes=10))
+                token = SecurityToken.objects.create(user=user, token_type="email_verify", expire_at=timezone.now() + timezone.timedelta(hours=1))
 
             # Send the greeting email
             from_email = f'{settings.EMAIL_SENDER_NAME} <{settings.DEFAULT_FROM_EMAIL}>'
@@ -357,7 +406,7 @@ class SendVerifyEmailView(APIView):
             return Response({'message': 'Verification link sent successfully'}, status=status.HTTP_201_CREATED)
 
         except Exception as e:
-            return Response({'success': False, 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'success': False, 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class SendUnbindEmailView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -375,7 +424,7 @@ class SendUnbindEmailView(APIView):
                 token.used = False
                 token.save()
             except SecurityToken.DoesNotExist:
-                token = SecurityToken.objects.create(user=user, token_type="email_unbind", expire_at=timezone.now() + timezone.timedelta(minutes=10))
+                token = SecurityToken.objects.create(user=user, token_type="email_unbind", expire_at=timezone.now() + timezone.timedelta(hours=1))
 
             # Send the greeting email
             from_email = f'{settings.EMAIL_SENDER_NAME} <{settings.DEFAULT_FROM_EMAIL}>'
@@ -387,7 +436,43 @@ class SendUnbindEmailView(APIView):
             return Response({'message': 'Unbind link sent successfully'}, status=status.HTTP_201_CREATED)
 
         except Exception as e:
-            return Response({'success': False, 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'success': False, 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class SendResetAccountEmailView(APIView):
+
+    def post(self, request):
+        try:
+            email = request.data.get("email", "")
+            if email == "":
+                return Response({'error': {'email':'Email is required'}}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Get the user based on the email
+            user = User.objects.get(email=email)
+
+            # Check if a token exists and update it, otherwise create a new one
+            try:
+                token = SecurityToken.objects.get(user=user, token_type="reset_account")
+                token.token_value = uuid.uuid4()
+                token.expire_at = timezone.now() + timezone.timedelta(days=1)
+                token.used = False
+                token.save()
+            except SecurityToken.DoesNotExist:
+                token = SecurityToken.objects.create(user=user, token_type="reset_account", expire_at=timezone.now() + timezone.timedelta(hours=1))
+
+            # Send the unbind email
+            from_email = f'{settings.EMAIL_SENDER_NAME} <{settings.DEFAULT_FROM_EMAIL}>'
+            reset_link = f'https://mystudyspace.net/reset-account/{token.token_value}'
+
+            html_message = render_to_string('authentication/reset_account_email.html', {'username': user.username, 'reset_link': reset_link})
+            send_mail("Reset Account Request", '', from_email, [user.email], html_message=html_message)
+
+            return Response({'message': 'reset account link sent successfully'}, status=status.HTTP_201_CREATED)
+
+        except User.DoesNotExist:
+            return Response({'error': {'email':'User not found for given email'}}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            return Response({'success': False, 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class SendEmailAPIView(APIView):

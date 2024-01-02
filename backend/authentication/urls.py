@@ -3,7 +3,8 @@ from rest_framework.authtoken.views import obtain_auth_token
 from .views import SignupView, PersonalProfileView, SingleUserProfileView, TokenValidationView, \
     SendEmailAPIView, UpdatePasswordView, UpdateUsernameView, VerifyEmailView, \
     UnbindEmailView, RefreshSecurityTokenView, UpdateEmailView, \
-    SendVerifyEmailView, SendUnbindEmailView
+    SendVerifyEmailView, SendUnbindEmailView, SendResetAccountEmailView, \
+    ResetAccountView
 
 urlpatterns = [
     path('signup/', SignupView.as_view(), name='signup'),
@@ -21,6 +22,9 @@ urlpatterns = [
     path('send-verify-email/', SendVerifyEmailView.as_view()),
     path('unbind-email/', UnbindEmailView.as_view()),
     path('send-unbind-email/', SendUnbindEmailView.as_view()),
+    #------------------ Reset Account -------------------------
+    path('reset-account/', ResetAccountView.as_view()),
+    path('send-reset-account-email/', SendResetAccountEmailView.as_view()),
     path('refresh-security-token/', RefreshSecurityTokenView.as_view()),
 
 ]

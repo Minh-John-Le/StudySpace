@@ -26,3 +26,6 @@ class SecurityToken(models.Model):
 
     def __str__(self):
         return str(self.token_type) + " token of " + str(self.user.username)
+    
+    class Meta:
+        unique_together = ('user', 'token_type')
