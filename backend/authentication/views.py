@@ -343,9 +343,11 @@ class ResetAccountView(APIView):
                     return Response({'success': 'Reset account successfully.'}, status=status.HTTP_200_OK)
                 else:
                     return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        except SecurityToken.DoesNotExist:
+            return Response({'error': {'token':'token might be incorrected or expired!'}}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             # Token not found or expired
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': {'error': str(e)}}, status=status.HTTP_400_BAD_REQUEST)
         
 
 class RefreshSecurityTokenView(APIView):
@@ -406,7 +408,7 @@ class SendVerifyEmailView(APIView):
             return Response({'message': 'Verification link sent successfully'}, status=status.HTTP_201_CREATED)
 
         except Exception as e:
-            return Response({'success': False, 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'success': False, 'error': {'error': str(e)}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class SendUnbindEmailView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -436,7 +438,7 @@ class SendUnbindEmailView(APIView):
             return Response({'message': 'Unbind link sent successfully'}, status=status.HTTP_201_CREATED)
 
         except Exception as e:
-            return Response({'success': False, 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'success': False, 'error': {'error': str(e)}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class SendResetAccountEmailView(APIView):
 
@@ -472,7 +474,7 @@ class SendResetAccountEmailView(APIView):
             return Response({'error': {'email':'User not found for given email'}}, status=status.HTTP_404_NOT_FOUND)
 
         except Exception as e:
-            return Response({'success': False, 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'success': False, 'error': {'error': str(e)}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class SendEmailAPIView(APIView):

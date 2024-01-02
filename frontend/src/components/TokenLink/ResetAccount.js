@@ -23,9 +23,17 @@ const ResetAccount = (props) => {
   //--------------------------------- Error ------------------------------
   const [errorMessage, setErrorMessage] = useState("Please fill in the form!");
   const [hasSubmitError, setHasSubmitError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const formIsValid = true;
 
   //--------------------------------- User Input ------------------------------
+
+  const isPasswordValid = (password) => {
+    // Regular expression for password requirements
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*\s).{8,}$/;
+    return passwordPattern.test(password);
+  };
+
   const {
     value: enteredPassword,
     isValid: enteredPasswordIsValid,
@@ -46,22 +54,17 @@ const ResetAccount = (props) => {
 
   //=========================================== FUNCTION =========================
 
-  const isPasswordValid = (password) => {
-    // Regular expression for password requirements
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*\s).{8,}$/;
-    return passwordPattern.test(password);
-  };
-
   const submitHandler = async (event) => {
     event.preventDefault();
     const data = {
-      password: enteredPassword,
-      repeat_password: enteredRepeatedPassword,
+      token_value: secToken,
+      new_password: enteredPassword,
+      confirm_password: enteredRepeatedPassword,
     };
 
     try {
-      const response = await fetch(`${backendUrl}/api/auth/signup/`, {
-        method: "POST",
+      const response = await fetch(`${backendUrl}/api/auth/reset-account/`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -97,7 +100,12 @@ const ResetAccount = (props) => {
       resetRepeatedPasswordInput();
       setHasSubmitError(false);
 
-      navigate("/login");
+      setIsSuccess(true);
+
+      setTimeout(() => {
+        setIsSuccess(false);
+        navigate("/login");
+      }, 5000);
     } catch (error) {
       // Handle signup failure
       setHasSubmitError(true);
@@ -136,20 +144,16 @@ const ResetAccount = (props) => {
               "Password must meet the following requirements: at least 8 characters in length, contain at least 1 uppercase letter, 1 lowercase letter, and 1 digit."
             }
           ></Input>
-
+          {isSuccess && (
+            <div className={classes["success"]}>
+              Successfully reset your account! Auto navigate to login in 5
+              seconds!
+            </div>
+          )}
           <div>
             <Button type="submit" disabled={!formIsValid}>
               <div>Submit</div>
             </Button>
-          </div>
-
-          <br></br>
-          <div className={classes.loginPrompt}>
-            Have already signed up?
-            <br></br>
-            <Link to="/login/" className={classes.loginLink}>
-              Log in
-            </Link>
           </div>
         </form>
       </FormCard>
