@@ -27,6 +27,7 @@ import UpdateUsername from "./components/Profile/ProfileSetting/UpdateUsername";
 import UpdatePassword from "./components/Profile/ProfileSetting/UpdatePassword";
 import EmailVerification from "./components/TokenLink/EmailVerification";
 import EmailUnbind from "./components/TokenLink/EmailUnbind";
+import ResetAccount from "./components/ResetAccount/ResetAccount";
 
 function App() {
   //const ctx = useContext(AuthContext);
@@ -51,6 +52,16 @@ function App() {
           <Route
             path="/unbind-email/:secToken"
             element={<EmailUnbind></EmailUnbind>}
+          />
+
+          <Route
+            path="/unbind-email/:secToken"
+            element={<EmailUnbind></EmailUnbind>}
+          />
+
+          <Route
+            path="/reset-account"
+            element={<ResetAccount></ResetAccount>}
           />
 
           {/*============================= USER PROFILE =============================*/}

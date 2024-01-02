@@ -1,4 +1,3 @@
-
 .signup {
   color: var(--color-light-gray);
   margin-top: 4px;
@@ -6,8 +5,11 @@
   text-align: center;
 }
 
-
-
+.forgot-password {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
 
 .signup-link {
   color: var(--color-main); /* Set the initial color to white */
@@ -17,4 +19,8 @@
 
 .signup-link:hover {
   color: var(--color-main);
+}
+
+.ending-space {
+  margin-bottom: 7rem;
 }

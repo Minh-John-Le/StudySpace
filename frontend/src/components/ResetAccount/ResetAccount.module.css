@@ -1,0 +1,13 @@
+.success {
+  color: var(--color-light);
+  background-color: var(--color-bg-green);
+  border: solid 1px var(--color-border-green);
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+  padding: 1rem 1rem;
+  margin-top: 1rem;
+}
+
+.ending-space {
+  margin-bottom: 7rem;
+}

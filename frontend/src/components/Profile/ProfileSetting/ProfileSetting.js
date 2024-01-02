@@ -254,7 +254,7 @@ const ProfileSetting = (props) => {
 
       setSentUnbindEmail(true);
 
-      // Reset the button text to its original state after 3 seconds
+      // Reset the button text to its original state after 30 seconds
       setTimeout(() => {
         setSentUnbindEmail(false);
       }, 30000);

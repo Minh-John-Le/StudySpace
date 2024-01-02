@@ -138,10 +138,12 @@ const Login = (props) => {
               }
             ></Input>
           }
+          <div className={classes["forgot-password"]}>
+            <Link to="/reset-account/" className={classes["signup-link"]}>
+              Forgot Password?
+            </Link>
+          </div>
 
-          <Link to="/signup/" className={classes["signup-link"]}>
-            Forgot Password
-          </Link>
           <div>
             <Button type="submit">
               <div>Login</div>
@@ -158,6 +160,7 @@ const Login = (props) => {
           </div>
         </form>
       </FormCard>
+      <div className={classes["ending-space"]}></div>
     </React.Fragment>
   );
 };
