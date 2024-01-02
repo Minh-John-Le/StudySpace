@@ -345,7 +345,7 @@ class SendVerifyEmailView(APIView):
                 token.used = False
                 token.save()
             except SecurityToken.DoesNotExist:
-                token = SecurityToken.objects.create(user=user, token_type="email_verify", expire_at=timezone.now() + timezone.timedelta(days=1))
+                token = SecurityToken.objects.create(user=user, token_type="email_verify", expire_at=timezone.now() + timezone.timedelta(minutes=10))
 
             # Send the greeting email
             from_email = f'{settings.EMAIL_SENDER_NAME} <{settings.DEFAULT_FROM_EMAIL}>'
@@ -355,6 +355,36 @@ class SendVerifyEmailView(APIView):
             send_mail("Email Verification", '', from_email, [user.email], html_message=html_message)
 
             return Response({'message': 'Verification link sent successfully'}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({'success': False, 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class SendUnbindEmailView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            user = request.user
+
+            # Check if a token exists and update it, otherwise create a new one
+            try:
+                token = SecurityToken.objects.get(user=user, token_type="email_unbind")
+                token.token_value = uuid.uuid4()
+                token.expire_at = timezone.now() + timezone.timedelta(days=1)
+                token.used = False
+                token.save()
+            except SecurityToken.DoesNotExist:
+                token = SecurityToken.objects.create(user=user, token_type="email_unbind", expire_at=timezone.now() + timezone.timedelta(minutes=10))
+
+            # Send the greeting email
+            from_email = f'{settings.EMAIL_SENDER_NAME} <{settings.DEFAULT_FROM_EMAIL}>'
+            unbind_link = f'https://mystudyspace.net/unbind-email/{token.token_value}'
+
+            html_message = render_to_string('authentication/unbind_email.html', {'username': user.username, 'unbind_link': unbind_link})
+            send_mail("Email Unbind", '', from_email, [user.email], html_message=html_message)
+
+            return Response({'message': 'Unbind link sent successfully'}, status=status.HTTP_201_CREATED)
 
         except Exception as e:
             return Response({'success': False, 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

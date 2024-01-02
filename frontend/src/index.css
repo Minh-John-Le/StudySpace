@@ -29,6 +29,8 @@ main {
   --color-error: #fc4b0b;
   --color-bg-red: rgba(239, 68, 68, 0.1);
   --color-border-red: rgba(239, 68, 68, 1);
+  --color-bg-green: rgba(68, 239, 68, 0.1);
+  --color-border-green: rgba(68, 239, 68, 1);
   --color-main-hover: #ff6eff;
   --color-bg-error-light: #fbdada;
 

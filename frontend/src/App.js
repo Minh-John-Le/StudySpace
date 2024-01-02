@@ -25,6 +25,8 @@ import UpdateVideoChatRoom from "./components/VideoChatRoom/UpdateVideoChatRoom/
 import UpdateEmail from "./components/Profile/ProfileSetting/UpdateEmail";
 import UpdateUsername from "./components/Profile/ProfileSetting/UpdateUsername";
 import UpdatePassword from "./components/Profile/ProfileSetting/UpdatePassword";
+import EmailVerification from "./components/TokenLink/EmailVerification";
+import EmailUnbind from "./components/TokenLink/EmailUnbind";
 
 function App() {
   //const ctx = useContext(AuthContext);
@@ -39,6 +41,17 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup></Signup>} />
           <Route path="/top-host" element={<TopHost></TopHost>} />
+
+          {/*============================= Token Link =============================*/}
+
+          <Route
+            path="/verify-email/:secToken"
+            element={<EmailVerification></EmailVerification>}
+          />
+          <Route
+            path="/unbind-email/:secToken"
+            element={<EmailUnbind></EmailUnbind>}
+          />
 
           {/*============================= USER PROFILE =============================*/}
 

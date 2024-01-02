@@ -16,6 +16,8 @@ import AuthenticateChecker from "../../Home/AuthenticateChecker";
 const ProfileSetting = (props) => {
   //==================================== VARIABLE =====================
   const [profile, setProfile] = useState([""]);
+  const [sentVerifyEmail, setSentVerifyEmail] = useState(false);
+  const [sentUnbindEmail, setSentUnbindEmail] = useState(false);
 
   //----------------------------------- Profile --------------------------------------
   const [errorMessage, setErrorMessage] = useState("Please fill in the form!");
@@ -152,9 +154,116 @@ const ProfileSetting = (props) => {
     navigate(`/update-password`);
   };
 
-  const verifyEmailHandler = (event) => {
+  const verifyEmailHandler = async (event) => {
     event.preventDefault();
-    
+
+    try {
+      // Send a POST request to your backend login endpoint
+      const response = await fetch(
+        `${backendUrl}/api/auth/send-verify-email/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Token ${authToken}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorObject = await response.json(); // Parse the error response
+        const errorData = errorObject;
+        console.log(errorData);
+
+        // Create an array to store error messages
+        const errorMessages = [];
+
+        // Format all error messages dynamically
+        Object.keys(errorData).forEach((key) => {
+          if (Array.isArray(errorData[key])) {
+            errorData[key].forEach((error) => {
+              errorMessages.push(`${key}: ${error}`);
+            });
+          } else {
+            errorMessages.push(`${key}: ${errorData[key]}`);
+          }
+        });
+
+        setHasSubmitError(true);
+        setErrorMessage(errorMessages);
+        throw new Error(errorMessages);
+      }
+      // Assuming your backend responds with a JSON object containing a "token" field
+      //const data = await response.json();
+
+      setSentVerifyEmail(true);
+
+      // Reset the button text to its original state after 3 seconds
+      setTimeout(() => {
+        setSentVerifyEmail(false);
+      }, 30000);
+
+      setHasSubmitError(false);
+    } catch (error) {
+      // Handle any other errors (e.g., network issues)
+      console.error("An error occurred:", error);
+    }
+  };
+
+  const unbindEmailHandler = async (event) => {
+    event.preventDefault();
+
+    try {
+      // Send a POST request to your backend login endpoint
+      const response = await fetch(
+        `${backendUrl}/api/auth/send-unbind-email/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Token ${authToken}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorObject = await response.json(); // Parse the error response
+        const errorData = errorObject;
+        console.log(errorData);
+
+        // Create an array to store error messages
+        const errorMessages = [];
+
+        // Format all error messages dynamically
+        Object.keys(errorData).forEach((key) => {
+          if (Array.isArray(errorData[key])) {
+            errorData[key].forEach((error) => {
+              errorMessages.push(`${key}: ${error}`);
+            });
+          } else {
+            errorMessages.push(`${key}: ${errorData[key]}`);
+          }
+        });
+
+        setHasSubmitError(true);
+        setErrorMessage(errorMessages);
+        throw new Error(errorMessages);
+      }
+      // Assuming your backend responds with a JSON object containing a "token" field
+      //const data = await response.json();
+
+      setSentUnbindEmail(true);
+
+      // Reset the button text to its original state after 3 seconds
+      setTimeout(() => {
+        setSentUnbindEmail(false);
+      }, 30000);
+
+      setHasSubmitError(false);
+    } catch (error) {
+      // Handle any other errors (e.g., network issues)
+      console.error("An error occurred:", error);
+    }
   };
   //===================================== GET DATA =============================
   // Get user data so it initially fill in all the field
@@ -282,11 +391,23 @@ const ProfileSetting = (props) => {
           </div>
         )}
         {profile.email_verified && (
-          <Button type="button" onClick={editUsernameHandler}>
+          <Button type="button" onClick={unbindEmailHandler}>
             <div>Unbind</div>
           </Button>
         )}
+        {sentVerifyEmail && (
+          <div className={classes["success"]}>
+            Successfully sent verification email. Please check your Inbox / Spam
+            folder.
+          </div>
+        )}
 
+        {sentUnbindEmail && (
+          <div className={classes["success"]}>
+            Successfully sent unbind email. Please check your Inbox / Spam
+            folder.
+          </div>
+        )}
         <Input
           id="username"
           label="Username"
