@@ -20,7 +20,11 @@ import datetime
 from django.utils import timezone
 import uuid
 from django.template.loader import render_to_string
+import environ
 
+env = environ.Env()
+environ.Env.read_env()
+Domain_url = env("DOMAIN_URL")
 
 
 class SignupView(generics.CreateAPIView):
@@ -400,7 +404,7 @@ class SendVerifyEmailView(APIView):
 
             # Send the greeting email
             from_email = f'{settings.EMAIL_SENDER_NAME} <{settings.DEFAULT_FROM_EMAIL}>'
-            verification_link = f'https://mystudyspace.net/verify-email/{token.token_value}'
+            verification_link = f'{Domain_url}/verify-email/{token.token_value}'
 
             html_message = render_to_string('authentication/verify_email.html', {'username': user.username, 'verification_link': verification_link})
             send_mail("Email Verification", '', from_email, [user.email], html_message=html_message)
@@ -430,7 +434,7 @@ class SendUnbindEmailView(APIView):
 
             # Send the greeting email
             from_email = f'{settings.EMAIL_SENDER_NAME} <{settings.DEFAULT_FROM_EMAIL}>'
-            unbind_link = f'https://mystudyspace.net/unbind-email/{token.token_value}'
+            unbind_link = f'{Domain_url}/unbind-email/{token.token_value}'
 
             html_message = render_to_string('authentication/unbind_email.html', {'username': user.username, 'unbind_link': unbind_link})
             send_mail("Email Unbind", '', from_email, [user.email], html_message=html_message)
@@ -463,7 +467,7 @@ class SendResetAccountEmailView(APIView):
 
             # Send the unbind email
             from_email = f'{settings.EMAIL_SENDER_NAME} <{settings.DEFAULT_FROM_EMAIL}>'
-            reset_link = f'https://mystudyspace.net/reset-account/{token.token_value}'
+            reset_link = f'{Domain_url}/reset-account/{token.token_value}'
 
             html_message = render_to_string('authentication/reset_account_email.html', {'username': user.username, 'reset_link': reset_link})
             send_mail("Reset Account Request", '', from_email, [user.email], html_message=html_message)

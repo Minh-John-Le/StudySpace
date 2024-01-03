@@ -4,3 +4,4 @@ myenv/
 frontend/.env
 backend/chat/.env
 backend/backend/.env
+backend/authentication/.env

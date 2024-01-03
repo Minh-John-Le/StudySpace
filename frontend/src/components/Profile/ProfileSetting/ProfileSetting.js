@@ -18,6 +18,7 @@ const ProfileSetting = (props) => {
   const [profile, setProfile] = useState([""]);
   const [sentVerifyEmail, setSentVerifyEmail] = useState(false);
   const [sentUnbindEmail, setSentUnbindEmail] = useState(false);
+  const [isSuccessUpdateProfile, setIsSuccessUpdateProfile] = useState(false);
 
   //----------------------------------- Profile --------------------------------------
   const [errorMessage, setErrorMessage] = useState("Please fill in the form!");
@@ -131,7 +132,14 @@ const ProfileSetting = (props) => {
       setHasSubmitError(false);
       setProfile(profile);
       ctx.changeDisplayName(profile.display_name);
-      navigate(`/user/${profile.user}`);
+
+      setIsSuccessUpdateProfile(true);
+
+      // Reset the button text to its original state after 3 seconds
+      setTimeout(() => {
+        setIsSuccessUpdateProfile(false);
+        navigate(`/user/${profile.user}`);
+      }, 5000);
     } catch (error) {
       // Handle any other errors (e.g., network issues)
       console.error("An error occurred:", error);
@@ -353,6 +361,13 @@ const ProfileSetting = (props) => {
             errorMessage={""}
           ></Input>
 
+          {isSuccessUpdateProfile && (
+            <div className={classes["success"]}>
+              Successfully update your profile. Auto navigate to progile page in
+              5 seconds.
+            </div>
+          )}
+
           <div className={classes["account-btn-group"]}>
             <Button type="button" onClick={cancelHandler}>
               <div>Cancel</div>
@@ -434,7 +449,6 @@ const ProfileSetting = (props) => {
           <div>Edit</div>
         </Button>
       </FormCard>
-
     </React.Fragment>
   );
 };
