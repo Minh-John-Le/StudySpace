@@ -7,7 +7,7 @@ backend/backend/.env
 backend/authentication/.env
 
 # Ignore the SQLite database file
-db.sqlite3
+backend/db.sqlite3
 
 # Ignore the migrations folder
 /migrations/
