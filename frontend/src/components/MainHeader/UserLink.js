@@ -37,7 +37,14 @@ const UserLink = (props) => {
         }
 
         const profileRS = await response.json();
+
+        const defaultTimezone = "Etc/GMT+0";
         setProfile(profileRS);
+        if (profileRS && profileRS.timezone) {
+          Cookies.set("userTimezone", profileRS.timezone, { expires: 7 });
+        } else {
+          Cookies.set("userTimezone", defaultTimezone, { expires: 7 });
+        }
       } catch (error) {
         console.error("Error fetching profile:", error);
       }

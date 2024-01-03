@@ -13,6 +13,7 @@ class UserProfile(models.Model):
     avatar_name = models.CharField(max_length=20, validators=[validate_non_empty])
     bio = models.CharField(default="", max_length=250)
     email_verified = models.BooleanField(default=False)
+    timezone = models.CharField(max_length=50, default='Etc/GMT+0')
 
     def __str__(self):
         return self.display_name

@@ -67,7 +67,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['user', 'bio', 'display_name',
-                  'avatar_name', 'email', 'username', 'email_verified']
+                  'avatar_name', 'email', 'username', 'email_verified', 'timezone']
 
 
 class SingleUserProfileSerializer(serializers.ModelSerializer):

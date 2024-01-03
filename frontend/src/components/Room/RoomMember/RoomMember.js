@@ -15,6 +15,7 @@ const RoomMember = () => {
 
   //--------------------------------- API--------------------------------------
   const authToken = Cookies.get("authToken");
+  const userTimezone = Cookies.get("userTimezone") || "Etc/GMT+0";
   const { roomId } = useParams();
   const backendUrl =
     process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
@@ -100,7 +101,7 @@ const RoomMember = () => {
 
     // Set the time zone to 'GMT+7'
     const options = {
-      timeZone: "Etc/GMT+7",
+      timeZone: userTimezone,
       year: "numeric",
       month: "short",
       day: "2-digit",
