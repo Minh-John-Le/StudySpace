@@ -12,6 +12,7 @@ import Avatar from "../../UI/Avatar/Avatar";
 import FormCard from "../../UI/FormCard/FormCard";
 import ErrorCard from "../../UI/ErrorCard/ErrorCard";
 import AuthenticateChecker from "../../Home/AuthenticateChecker";
+import SelectInput from "../../UI/Input/SelectInput";
 
 const ProfileSetting = (props) => {
   //==================================== VARIABLE =====================
@@ -19,12 +20,14 @@ const ProfileSetting = (props) => {
   const [sentVerifyEmail, setSentVerifyEmail] = useState(false);
   const [sentUnbindEmail, setSentUnbindEmail] = useState(false);
   const [isSuccessUpdateProfile, setIsSuccessUpdateProfile] = useState(false);
+  const [selectedTimeZone, setSelectedTimeZone] = useState("");
 
   //----------------------------------- Profile --------------------------------------
   const [errorMessage, setErrorMessage] = useState("Please fill in the form!");
   const [hasSubmitError, setHasSubmitError] = useState(false);
 
   //----------------------------------- API --------------------------------------
+  const authToken = Cookies.get("authToken");
   const ctx = useContext(AuthContext);
   const backendUrl =
     process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
@@ -77,6 +80,17 @@ const ProfileSetting = (props) => {
   } = useInput((value) => value.trim().length > 0 && value.trim().length <= 32);
   //====================================== FUNCTION =========================
   //-------------------------------- Account Form Button ----------------------------
+
+  // Function to fetch time zones
+  const getTimeZones = () => {
+    const timeZones = [];
+    for (let i = -12; i <= 12; i++) {
+      const timeZone = i >= 0 ? `Etc/GMT+${i}` : `Etc/GMT${i}`;
+      timeZones.push(timeZone);
+    }
+    return timeZones;
+  };
+
   // Going back to user profile main page
   const cancelHandler = (event) => {
     event.preventDefault();
@@ -90,6 +104,7 @@ const ProfileSetting = (props) => {
       bio: enteredBio,
       display_name: enteredDisplayName,
       avatar_name: enteredAvatarName,
+      timezone: selectedTimeZone,
     };
 
     try {
@@ -275,7 +290,6 @@ const ProfileSetting = (props) => {
   };
   //===================================== GET DATA =============================
   // Get user data so it initially fill in all the field
-  const authToken = Cookies.get("authToken");
   useEffect(() => {
     const apiUrl = `${backendUrl}/api/auth/profile/`;
 
@@ -307,6 +321,8 @@ const ProfileSetting = (props) => {
     resetAvatarNameInput(profile.avatar_name);
     resetEmailInput(profile.email);
     resetUsernameInput(profile.username);
+    setSelectedTimeZone(profile.timezone);
+    Cookies.set("userTimezone", profile.timezone, { expires: 7 });
   }, [
     authToken,
     profile.display_name,
@@ -315,6 +331,7 @@ const ProfileSetting = (props) => {
     profile.email,
     profile.username,
     profile.email_verified,
+    profile.timezone,
   ]);
 
   //====================================== RETURN COMPONENTS =================================
@@ -361,9 +378,17 @@ const ProfileSetting = (props) => {
             errorMessage={""}
           ></Input>
 
+          <SelectInput
+            id="timezone"
+            label="Time Zone"
+            value={selectedTimeZone}
+            onChange={(e) => setSelectedTimeZone(e.target.value)}
+            options={getTimeZones()}
+          />
+
           {isSuccessUpdateProfile && (
             <div className={classes["success"]}>
-              Successfully update your profile. Auto navigate to progile page in
+              Successfully update your profile. Auto navigate to profile page in
               5 seconds.
             </div>
           )}

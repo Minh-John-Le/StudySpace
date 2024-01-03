@@ -1,0 +1,48 @@
+.select-label {
+  margin: 1rem 0;
+}
+.select-label label {
+  font-weight: bold;
+  flex: 1;
+  color: var(--color-light-gray);
+}
+
+.select-box {
+  border: 1px solid var(--color-dark-light);
+  background: var(--color-dark-medium);
+  color: var(--color-light);
+  font-size: 120%;
+  font: inherit;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.select-box:focus {
+  text-align: left;
+  outline: none;
+  border-color: var(--color-main);
+  background: var(--color-dark-medium);
+}
+
+.select-box:hover {
+    text-align: left;
+    outline: none;
+    border-color: var(--color-main);
+    background: var(--color-dark-medium);
+  }
+
+  
+.select-box::-webkit-scrollbar {
+  width: 12px;
+}
+
+.select-box::-webkit-scrollbar-thumb {
+  background-color: var(--color-dark-light);
+  border-radius: 6px;
+}
+
+.select-box::-webkit-scrollbar-track {
+  background-color: var(--color-dark-medium);
+}
+
+
