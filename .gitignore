@@ -5,3 +5,9 @@ frontend/.env
 backend/chat/.env
 backend/backend/.env
 backend/authentication/.env
+
+# Ignore the SQLite database file
+db.sqlite3
+
+# Ignore the migrations folder
+/migrations/
