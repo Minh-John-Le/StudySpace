@@ -138,9 +138,14 @@ const Login = (props) => {
               }
             ></Input>
           }
+          <div className={classes["forgot-password"]}>
+            <Link to="/forgot-account/" className={classes["signup-link"]}>
+              Forgot Password?
+            </Link>
+          </div>
 
-          <div className={classes.actions}>
-            <Button type="submit" className={classes.btn}>
+          <div>
+            <Button type="submit">
               <div>Login</div>
             </Button>
           </div>

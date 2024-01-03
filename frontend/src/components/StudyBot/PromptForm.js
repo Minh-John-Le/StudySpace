@@ -74,12 +74,12 @@ const PromptForm = (props) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   //--------------------------- Voice Input Variable ------------------------------------
-  const [isVoiceOn, setIsVoiceOn] = useState(false);
   const {
     transcript,
     resetTranscript,
     browserSupportsSpeechRecognition,
     isMicrophoneAvailable,
+    listening,
   } = useSpeechRecognition();
 
   //--------------------------- Bot Option -----------------------
@@ -126,7 +126,9 @@ const PromptForm = (props) => {
     }
 
     setIsLoading(true);
-    setIsVoiceOn(false);
+    SpeechRecognition.stopListening();
+    resetTranscript();
+
     setEnterMessage("AI Bot is thinking. Please wait ....");
 
     const content = {
@@ -177,7 +179,8 @@ const PromptForm = (props) => {
     if (!selectedImage) return;
 
     setIsLoading(true);
-    setIsVoiceOn(false);
+    SpeechRecognition.stopListening();
+    resetTranscript();
 
     setEnterMessage("AI Bot is reading your file. Please wait ....");
 
@@ -212,19 +215,15 @@ const PromptForm = (props) => {
 
   //---------------------- Voice Function -------------------------------
 
-  useEffect(() => {
-    if (isVoiceOn) {
-      setEnterMessage("");
-      SpeechRecognition.startListening({ continuous: true });
-    } else {
-      SpeechRecognition.stopListening();
-    }
-  }, [isVoiceOn]);
-
   const handleOnClickVoiceButton = (event) => {
     event.preventDefault();
-    setIsVoiceOn((prevIsVoiceOn) => !prevIsVoiceOn);
-    resetTranscript(); // Reset the transcript when toggling voice on/off
+    if (listening) {
+      SpeechRecognition.stopListening();
+    } else {
+      setEnterMessage("");
+      SpeechRecognition.startListening({ continuous: true });
+    }
+    resetTranscript();
   };
 
   useEffect(() => {
@@ -263,7 +262,7 @@ const PromptForm = (props) => {
                 handleFormSubmit(e);
               }
             }}
-            disabled={isLoading || isVoiceOn} // Disable input during loading
+            disabled={isLoading || listening} // Disable input during loading
           />
         </div>
       </Card>
@@ -293,12 +292,12 @@ const PromptForm = (props) => {
         {browserSupportsSpeechRecognition && isMicrophoneAvailable && (
           <IconButton
             buttonClassName={`${
-              isVoiceOn
+              listening
                 ? classes["action-button-selected"]
                 : classes["action-button"]
             }`}
             iconClassName={`${
-              isVoiceOn
+              listening
                 ? classes["button-icon-selected"]
                 : classes["button-icon"]
             }`}

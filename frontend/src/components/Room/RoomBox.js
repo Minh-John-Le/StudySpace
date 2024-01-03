@@ -26,6 +26,8 @@ const RoomBox = (props) => {
 
   //--------------------------------------- API ------------------------------------
   const authToken = Cookies.get("authToken");
+  const userTimezone = Cookies.get("userTimezone") || "Etc/GMT+0";
+
   const { id } = useParams();
   const navigate = useNavigate();
   // const wsURL = process.env.REACT_APP_WEBSOCKET_URL;
@@ -148,7 +150,7 @@ const RoomBox = (props) => {
 
     // Set the time zone to 'GMT+7'
     const options = {
-      timeZone: "Etc/GMT+7",
+      timeZone: userTimezone,
       year: "numeric",
       month: "2-digit",
       day: "2-digit",

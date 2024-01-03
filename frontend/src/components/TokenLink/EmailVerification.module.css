@@ -1,0 +1,52 @@
+.message-card {
+  width: 90%;
+  max-width: 35rem;
+  min-width: 35rem;
+  padding: 3rem;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.message-card h2 {
+  text-align: center;
+  color: var(--color-light);
+}
+
+.general-layout {
+  margin-top: 5rem;
+}
+
+.success {
+  color: var(--color-light);
+  background-color: var(--color-bg-green);
+  border: solid 1px var(--color-border-green);
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+  padding: 1rem 1rem;
+  margin-top: 1rem;
+}
+
+.error {
+  color: var(--color-light);
+  background-color: var(--color-bg-red);
+  border: solid 1px var(--color-border-red);
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+  padding: 1rem 1rem;
+}
+
+/* ======================= MEDIA QUERIES ( MEDIUM DEVICES) ==========*/
+@media screen and (max-width: 1024px) {
+}
+
+/* ======================= MEDIA QUERIES ( SMALL DEVICES) ==========*/
+@media screen and (max-width: 600px) {
+  .message-card {
+    width: 90%;
+    max-width: 18rem;
+    min-width: 18rem;
+    padding: 3rem;
+    margin: 2rem auto;
+    text-align: center;
+  }
+}
