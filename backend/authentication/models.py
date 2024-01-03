@@ -11,7 +11,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     display_name = models.CharField(max_length=20, validators=[validate_non_empty])
     avatar_name = models.CharField(max_length=20, validators=[validate_non_empty])
-    bio = models.CharField(default="", max_length=250)
+    bio = models.CharField(max_length=250, blank=True, null=True, default="")
     email_verified = models.BooleanField(default=False)
     timezone = models.CharField(max_length=50, default='Etc/GMT+0')
 
